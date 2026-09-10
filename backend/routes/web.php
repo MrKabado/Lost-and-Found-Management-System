@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClaimController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FoundItemController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ItemStatusController;
@@ -40,6 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/found-items/{foundItem}/claims', [ClaimController::class, 'store']);
 
     Route::middleware('admin')->group(function () {
+        Route::get('/admin/dashboard/statistics', [DashboardController::class, 'statistics']);
         Route::post('/categories', [CategoryController::class, 'store']);
         Route::put('/categories/{category}', [CategoryController::class, 'update']);
         Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
