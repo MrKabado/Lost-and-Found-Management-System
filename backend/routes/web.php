@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\FoundItemController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ItemStatusController;
 use App\Http\Controllers\LostItemController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,7 +45,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
         Route::get('/admin/lost-items', [LostItemController::class, 'adminIndex']);
         Route::delete('/admin/lost-items/{lostItem}', [LostItemController::class, 'adminDestroy']);
+        Route::patch('/admin/lost-items/{lostItem}/status', [ItemStatusController::class, 'updateLost']);
         Route::get('/admin/found-items', [FoundItemController::class, 'adminIndex']);
+        Route::patch('/admin/found-items/{foundItem}/status', [ItemStatusController::class, 'updateFound']);
         Route::get('/admin/claims', [ClaimController::class, 'adminIndex']);
         Route::get('/admin/claims/{claim}', [ClaimController::class, 'adminShow']);
         Route::post('/admin/claims/{claim}/approve', [ClaimController::class, 'approve']);

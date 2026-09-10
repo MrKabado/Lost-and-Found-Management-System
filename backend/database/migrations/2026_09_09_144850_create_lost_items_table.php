@@ -29,7 +29,15 @@ return new class extends Migration
 
             $table->string('image')->nullable();
 
-            $table->enum('status', ['lost', 'found', 'closed'])->default('lost');
+            $table->enum('status', [
+                'lost',
+                'found',
+                'claimed',
+                'verified',
+                'returned',
+                'rejected',
+                'closed',
+            ])->default('lost');
 
             $table->timestamps();
         });

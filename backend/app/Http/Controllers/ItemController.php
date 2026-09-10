@@ -18,7 +18,7 @@ class ItemController extends Controller
             'category' => ['sometimes', 'string', 'max:255'],
             'date' => ['sometimes', 'date'],
             'location' => ['sometimes', 'string', 'max:255'],
-            'status' => ['sometimes', 'string', 'in:lost,found,claimed,closed'],
+            'status' => ['sometimes', 'string', 'in:lost,found,claimed,verified,returned,rejected,closed'],
         ]);
 
         $lostItems = $this->queryItems(LostItem::query(), $validated, 'lost');

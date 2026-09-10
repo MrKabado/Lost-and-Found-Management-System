@@ -34,7 +34,7 @@ class FoundItemController extends Controller
             'location_found' => ['required', 'string', 'max:255'],
             'date_found' => ['required', 'date'],
             'image' => ['nullable', 'string', 'max:2048'],
-            'status' => ['sometimes', 'in:found,claimed,closed'],
+            'status' => ['sometimes', 'in:found'],
         ]);
 
         $foundItem = $request->user()->foundItems()->create($validated);
@@ -66,7 +66,7 @@ class FoundItemController extends Controller
             'location_found' => ['sometimes', 'string', 'max:255'],
             'date_found' => ['sometimes', 'date'],
             'image' => ['nullable', 'string', 'max:2048'],
-            'status' => ['sometimes', 'in:found,claimed,closed'],
+            'status' => ['sometimes', 'in:lost,found,claimed,verified,returned,rejected,closed'],
         ]);
 
         $foundItem->update($validated);

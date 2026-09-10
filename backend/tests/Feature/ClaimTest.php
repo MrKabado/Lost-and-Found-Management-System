@@ -101,7 +101,7 @@ it('allows admins to view, approve, and reject claims', function () {
         ->assertOk()
         ->assertJsonPath('status', 'approved');
 
-    expect($foundItem->refresh()->status)->toBe('closed');
+    expect($foundItem->refresh()->status)->toBe('claimed');
 
     $secondFoundItem = createFoundItemForClaim($owner);
     $secondClaim = Claim::create([

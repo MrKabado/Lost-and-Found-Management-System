@@ -34,7 +34,7 @@ class LostItemController extends Controller
             'location_lost' => ['required', 'string', 'max:255'],
             'date_lost' => ['required', 'date'],
             'image' => ['nullable', 'string', 'max:2048'],
-            'status' => ['sometimes', 'in:lost,found,closed'],
+            'status' => ['sometimes', 'in:lost'],
         ]);
 
         $lostItem = $request->user()->lostItems()->create($validated);
@@ -66,7 +66,7 @@ class LostItemController extends Controller
             'location_lost' => ['sometimes', 'string', 'max:255'],
             'date_lost' => ['sometimes', 'date'],
             'image' => ['nullable', 'string', 'max:2048'],
-            'status' => ['sometimes', 'in:lost,found,closed'],
+            'status' => ['sometimes', 'in:lost,found,claimed,verified,returned,rejected,closed'],
         ]);
 
         $lostItem->update($validated);

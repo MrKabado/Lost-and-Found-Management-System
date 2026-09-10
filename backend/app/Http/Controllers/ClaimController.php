@@ -91,7 +91,7 @@ class ClaimController extends Controller
         }
 
         $claim->update(['status' => 'approved']);
-        $claim->foundItem()->update(['status' => 'closed']);
+        $claim->foundItem()->update(['status' => 'claimed']);
 
         return response()->json($claim->refresh()->load('foundItem.category'));
     }
