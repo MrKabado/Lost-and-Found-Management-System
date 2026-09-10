@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('user_id')
-              ->constrained()
-              ->cascadeOnDelete();
+                ->constrained()
+                ->cascadeOnDelete();
 
             $table->string('title');
             $table->text('description');
 
-            $table->string('category');
+            $table->unsignedBigInteger('category_id');
 
             $table->string('location_lost');
 
@@ -29,16 +29,7 @@ return new class extends Migration
 
             $table->string('image')->nullable();
 
-            $table->enum('status', [
-                'lost',
-                'found',
-                'claimed',
-                'verified',
-                'returned',
-                'closed'
-            ])->default('lost');
-
-
+            $table->enum('status', ['lost', 'found', 'closed'])->default('lost');
 
             $table->timestamps();
         });

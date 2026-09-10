@@ -14,7 +14,7 @@ class LostItem extends Model
         'location_lost',
         'date_lost',
         'image',
-        'status'
+        'status',
     ];
 
     public function user()
