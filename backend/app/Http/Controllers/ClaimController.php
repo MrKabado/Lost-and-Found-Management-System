@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Claim;
+use App\Models\FoundItem;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ClaimController extends Controller
@@ -10,56 +12,95 @@ class ClaimController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request): JsonResponse
     {
-        //
+        return response()->json(
+            Claim::with(['foundItem.category', 'foundItem.user'])
+                ->where('user_id', $request->user()->id)
+                ->latest()
+                ->get()
+        );
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function store(Request $request, FoundItem $foundItem): JsonResponse
     {
-        //
-    }
+        if ($foundItem->user_id === $request->user()->id) {
+            abort(403, 'You cannot claim your own found item.');
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+        $validated = $request->validate([
+            'claim_reason' => ['required', 'string', 'max:5000'],
+            'proof' => ['nullable', 'string', 'max:5000'],
+        ]);
+
+        $alreadyClaimed = Claim::query()
+            ->where('found_item_id', $foundItem->id)
+            ->where('user_id', $request->user()->id)
+            ->whereIn('status', ['pending', 'approved'])
+            ->exists();
+
+        if ($alreadyClaimed) {
+            return response()->json([
+                'message' => 'You already have an active claim for this item.',
+            ], 422);
+        }
+
+        $claim = $request->user()->claims()->create([
+            ...$validated,
+            'found_item_id' => $foundItem->id,
+        ]);
+
+        return response()->json($claim->refresh()->load('foundItem.category'), 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Claim $claim)
+    public function show(Request $request, Claim $claim): JsonResponse
     {
-        //
+        abort_unless($claim->user_id === $request->user()->id, 403);
+
+        return response()->json($claim->load('foundItem.category'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Claim $claim)
+    public function adminIndex(): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Claim $claim)
-    {
-        //
+        return response()->json(Claim::with(['user', 'foundItem.category', 'foundItem.user'])->latest()->get());
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Claim $claim)
+    public function approve(Claim $claim): JsonResponse
     {
-        //
+        if ($claim->status !== 'pending') {
+            return response()->json([
+                'message' => 'Only pending claims can be approved.',
+            ], 422);
+        }
+
+        $claim->update(['status' => 'approved']);
+        $claim->foundItem()->update(['status' => 'closed']);
+
+        return response()->json($claim->refresh()->load('foundItem.category'));
+    }
+
+    public function reject(Claim $claim): JsonResponse
+    {
+        if ($claim->status !== 'pending') {
+            return response()->json([
+                'message' => 'Only pending claims can be rejected.',
+            ], 422);
+        }
+
+        $claim->update(['status' => 'rejected']);
+
+        return response()->json($claim->refresh()->load('foundItem.category'));
     }
 }

@@ -6,6 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Claim extends Model
 {
+    protected $fillable = [
+        'user_id',
+        'found_item_id',
+        'claim_reason',
+        'proof',
+        'status',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
