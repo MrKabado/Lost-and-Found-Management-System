@@ -46,6 +46,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/admin/lost-items/{lostItem}', [LostItemController::class, 'adminDestroy']);
         Route::get('/admin/found-items', [FoundItemController::class, 'adminIndex']);
         Route::get('/admin/claims', [ClaimController::class, 'adminIndex']);
+        Route::get('/admin/claims/{claim}', [ClaimController::class, 'adminShow']);
         Route::post('/admin/claims/{claim}/approve', [ClaimController::class, 'approve']);
         Route::post('/admin/claims/{claim}/reject', [ClaimController::class, 'reject']);
     });

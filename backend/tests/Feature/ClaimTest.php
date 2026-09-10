@@ -89,6 +89,14 @@ it('allows admins to view, approve, and reject claims', function () {
         ->assertJsonCount(1);
 
     $this->actingAs($admin, 'sanctum')
+        ->getJson("/admin/claims/{$claim->id}")
+        ->assertOk()
+        ->assertJsonPath('claim_reason', 'This wallet belongs to me.')
+        ->assertJsonPath('user.id', $claimant->id)
+        ->assertJsonPath('found_item.user.id', $owner->id)
+        ->assertJsonPath('found_item.category.name', 'Wallet');
+
+    $this->actingAs($admin, 'sanctum')
         ->postJson("/admin/claims/{$claim->id}/approve")
         ->assertOk()
         ->assertJsonPath('status', 'approved');

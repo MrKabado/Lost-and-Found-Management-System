@@ -74,6 +74,11 @@ class ClaimController extends Controller
         return response()->json(Claim::with(['user', 'foundItem.category', 'foundItem.user'])->latest()->get());
     }
 
+    public function adminShow(Claim $claim): JsonResponse
+    {
+        return response()->json($claim->load(['user', 'foundItem.category', 'foundItem.user']));
+    }
+
     /**
      * Remove the specified resource from storage.
      */
