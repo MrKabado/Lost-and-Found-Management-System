@@ -18,19 +18,22 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
 
-            $table->foreignId('found_item_id')
-                ->constrained()
-                ->cascadeOnDelete();
+            $table->unsignedBigInteger('category_id');
 
-            $table->text('claim_reason');
+            $table->string('title');
+            $table->text('description');
 
-            $table->text('proof')->nullable();
+            $table->string('location_found');
+
+            $table->date('date_found');
+
+            $table->string('image')->nullable();
 
             $table->enum('status', [
-                'pending',
-                'approved',
-                'rejected'
-            ])->default('pending');
+                'found',
+                'claimed',
+                'closed',
+            ])->default('found');
 
             $table->timestamps();
         });

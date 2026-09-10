@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FoundItemController;
 use App\Http\Controllers\LostItemController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,11 +25,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::match(['put', 'patch'], '/lost-items/{lostItem}', [LostItemController::class, 'update']);
     Route::delete('/lost-items/{lostItem}', [LostItemController::class, 'destroy']);
 
+    Route::get('/found-items', [FoundItemController::class, 'index']);
+    Route::post('/found-items', [FoundItemController::class, 'store']);
+    Route::get('/found-items/{foundItem}', [FoundItemController::class, 'show']);
+    Route::match(['put', 'patch'], '/found-items/{foundItem}', [FoundItemController::class, 'update']);
+    Route::delete('/found-items/{foundItem}', [FoundItemController::class, 'destroy']);
+
     Route::middleware('admin')->group(function () {
         Route::post('/categories', [CategoryController::class, 'store']);
         Route::put('/categories/{category}', [CategoryController::class, 'update']);
         Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
         Route::get('/admin/lost-items', [LostItemController::class, 'adminIndex']);
         Route::delete('/admin/lost-items/{lostItem}', [LostItemController::class, 'adminDestroy']);
+        Route::get('/admin/found-items', [FoundItemController::class, 'adminIndex']);
     });
 });
