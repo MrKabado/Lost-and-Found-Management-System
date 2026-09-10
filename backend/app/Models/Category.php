@@ -6,5 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    //
+    protected $fillable = [
+        'name'
+    ];
+
+    public function lostItems()
+    {
+        return $this->hasMany(LostItem::class);
+    }
+
+    public function foundItems()
+    {
+        return $this->hasMany(FoundItem::class);
+    }
 }

@@ -13,6 +13,25 @@ return new class extends Migration
     {
         Schema::create('found_items', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
+            $table->foreignId('found_item_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
+            $table->text('claim_reason');
+
+            $table->text('proof')->nullable();
+
+            $table->enum('status', [
+                'pending',
+                'approved',
+                'rejected'
+            ])->default('pending');
+
             $table->timestamps();
         });
     }
