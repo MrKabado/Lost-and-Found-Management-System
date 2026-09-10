@@ -30,7 +30,7 @@ it('allows a user to submit and view a claim for a found item', function () {
     $foundItem = createFoundItemForClaim($owner);
 
     $this->actingAs($claimant, 'sanctum')
-        ->postJson("/found-items/{$foundItem->id}/claims", [
+        ->postJson("/api/found-items/{$foundItem->id}/claims", [
             'claim_reason' => 'I believe this wallet belongs to me.',
         ])
         ->assertCreated()
@@ -38,7 +38,7 @@ it('allows a user to submit and view a claim for a found item', function () {
         ->assertJsonPath('found_item_id', $foundItem->id);
 
     $this->actingAs($claimant, 'sanctum')
-        ->getJson('/claims')
+        ->getJson('/api/claims')
         ->assertOk()
         ->assertJsonCount(1)
         ->assertJsonPath('0.claim_reason', 'I believe this wallet belongs to me.');
@@ -50,20 +50,20 @@ it('prevents self claims and duplicate active claims', function () {
     $foundItem = createFoundItemForClaim($owner);
 
     $this->actingAs($owner, 'sanctum')
-        ->postJson("/found-items/{$foundItem->id}/claims", [
+        ->postJson("/api/found-items/{$foundItem->id}/claims", [
             'claim_reason' => 'This is mine.',
         ])
         ->assertForbidden();
 
     $claimant = User::factory()->create();
     $this->actingAs($claimant, 'sanctum')
-        ->postJson("/found-items/{$foundItem->id}/claims", [
+        ->postJson("/api/found-items/{$foundItem->id}/claims", [
             'claim_reason' => 'First claim.',
         ])
         ->assertCreated();
 
     $this->actingAs($claimant, 'sanctum')
-        ->postJson("/found-items/{$foundItem->id}/claims", [
+        ->postJson("/api/found-items/{$foundItem->id}/claims", [
             'claim_reason' => 'Duplicate claim.',
         ])
         ->assertUnprocessable();
@@ -83,12 +83,12 @@ it('allows admins to view, approve, and reject claims', function () {
     ]);
 
     $this->actingAs($admin, 'sanctum')
-        ->getJson('/admin/claims')
+        ->getJson('/api/admin/claims')
         ->assertOk()
         ->assertJsonCount(1);
 
     $this->actingAs($admin, 'sanctum')
-        ->getJson("/admin/claims/{$claim->id}")
+        ->getJson("/api/admin/claims/{$claim->id}")
         ->assertOk()
         ->assertJsonPath('claim_reason', 'This wallet belongs to me.')
         ->assertJsonPath('user.id', $claimant->id)
@@ -96,7 +96,7 @@ it('allows admins to view, approve, and reject claims', function () {
         ->assertJsonPath('found_item.category.name', 'Wallet');
 
     $this->actingAs($admin, 'sanctum')
-        ->postJson("/admin/claims/{$claim->id}/approve")
+        ->postJson("/api/admin/claims/{$claim->id}/approve")
         ->assertOk()
         ->assertJsonPath('status', 'approved');
 
@@ -110,7 +110,7 @@ it('allows admins to view, approve, and reject claims', function () {
     ]);
 
     $this->actingAs($admin, 'sanctum')
-        ->postJson("/admin/claims/{$secondClaim->id}/reject")
+        ->postJson("/api/admin/claims/{$secondClaim->id}/reject")
         ->assertOk()
         ->assertJsonPath('status', 'rejected');
 });

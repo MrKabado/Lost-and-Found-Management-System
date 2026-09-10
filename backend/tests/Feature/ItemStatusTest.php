@@ -24,7 +24,7 @@ it('tracks an item through the lifecycle', function () {
 
     foreach (['claimed', 'verified', 'returned'] as $status) {
         $this->actingAs($admin, 'sanctum')
-            ->patchJson("/admin/found-items/{$item->id}/status", ['status' => $status])
+            ->patchJson("/api/admin/found-items/{$item->id}/status", ['status' => $status])
             ->assertOk()
             ->assertJsonPath('status', $status);
     }
@@ -45,12 +45,12 @@ it('supports rejection followed by closure', function () {
     ]);
 
     $this->actingAs($admin, 'sanctum')
-        ->patchJson("/admin/found-items/{$item->id}/status", ['status' => 'rejected'])
+        ->patchJson("/api/admin/found-items/{$item->id}/status", ['status' => 'rejected'])
         ->assertOk()
         ->assertJsonPath('status', 'rejected');
 
     $this->actingAs($admin, 'sanctum')
-        ->patchJson("/admin/found-items/{$item->id}/status", ['status' => 'closed'])
+        ->patchJson("/api/admin/found-items/{$item->id}/status", ['status' => 'closed'])
         ->assertOk()
         ->assertJsonPath('status', 'closed');
 });
@@ -70,6 +70,6 @@ it('rejects invalid status transitions', function () {
     ]);
 
     $this->actingAs($admin, 'sanctum')
-        ->patchJson("/admin/found-items/{$item->id}/status", ['status' => 'returned'])
+        ->patchJson("/api/admin/found-items/{$item->id}/status", ['status' => 'returned'])
         ->assertUnprocessable();
 });

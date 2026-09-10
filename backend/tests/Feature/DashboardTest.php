@@ -42,7 +42,7 @@ it('returns dashboard statistics for admins', function () {
     ]);
 
     $this->actingAs($admin, 'sanctum')
-        ->getJson('/admin/dashboard/statistics')
+        ->getJson('/api/admin/dashboard/statistics')
         ->assertOk()
         ->assertExactJson([
             'total_users' => 2,
@@ -58,6 +58,6 @@ it('rejects dashboard statistics for non-admin users', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user, 'sanctum')
-        ->getJson('/admin/dashboard/statistics')
+        ->getJson('/api/admin/dashboard/statistics')
         ->assertForbidden();
 });

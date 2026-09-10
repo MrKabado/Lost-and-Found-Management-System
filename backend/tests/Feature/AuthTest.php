@@ -7,7 +7,7 @@ uses(RefreshDatabase::class);
 
 it('registers, authenticates, returns, and logs out a user with a Sanctum token', function () {
     /** @var Tests\TestCase $this */
-    $registration = $this->postJson('/register', [
+    $registration = $this->postJson('/api/register', [
         'name' => 'Jane Doe',
         'email' => 'jane@example.com',
         'password' => 'password',
@@ -20,7 +20,7 @@ it('registers, authenticates, returns, and logs out a user with a Sanctum token'
         ->assertJsonPath('user.role', 'user')
         ->assertJsonStructure(['user', 'token']);
 
-    $login = $this->postJson('/login', [
+    $login = $this->postJson('/api/login', [
         'email' => 'jane@example.com',
         'password' => 'password',
     ]);
@@ -29,19 +29,19 @@ it('registers, authenticates, returns, and logs out a user with a Sanctum token'
     $token = $login->json('token');
 
     $this->withHeader('Authorization', "Bearer {$token}")
-        ->getJson('/user')
+        ->getJson('/api/user')
         ->assertOk()
         ->assertJsonPath('email', 'jane@example.com');
 
     $this->withHeader('Authorization', "Bearer {$token}")
-        ->postJson('/logout')
+        ->postJson('/api/logout')
         ->assertOk()
         ->assertJson(['message' => 'Logged out successfully.']);
 
     $this->app['auth']->forgetGuards();
 
     $this->withHeader('Authorization', "Bearer {$token}")
-        ->getJson('/user')
+        ->getJson('/api/user')
         ->assertUnauthorized();
 });
 
@@ -52,7 +52,7 @@ it('rejects invalid login credentials', function () {
         'password' => 'password',
     ]);
 
-    $this->postJson('/login', [
+    $this->postJson('/api/login', [
         'email' => 'jane@example.com',
         'password' => 'wrong-password',
     ])->assertUnprocessable()->assertJsonValidationErrors('email');

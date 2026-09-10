@@ -18,7 +18,7 @@ it('uploads lost and found item images to public storage', function () {
     $user = User::factory()->create();
     $category = Category::create(['name' => 'Electronics']);
 
-    $lostResponse = $this->actingAs($user, 'sanctum')->post('/lost-items', [
+    $lostResponse = $this->actingAs($user, 'sanctum')->post('/api/lost-items', [
         'category_id' => $category->id,
         'title' => 'Lost camera',
         'description' => 'A camera.',
@@ -32,7 +32,7 @@ it('uploads lost and found item images to public storage', function () {
     expect(Storage::disk('public')->exists($lostItem->image))->toBeTrue();
     expect($lostItem->image)->toStartWith('lost-items/');
 
-    $foundResponse = $this->actingAs($user, 'sanctum')->post('/found-items', [
+    $foundResponse = $this->actingAs($user, 'sanctum')->post('/api/found-items', [
         'category_id' => $category->id,
         'title' => 'Found phone',
         'description' => 'A phone.',
@@ -63,7 +63,7 @@ it('uploads claim proof images to public storage', function () {
     ]);
 
     $this->actingAs($claimant, 'sanctum')
-        ->post("/found-items/{$foundItem->id}/claims", [
+        ->post("/api/found-items/{$foundItem->id}/claims", [
             'claim_reason' => 'I believe this wallet belongs to me.',
             'proof' => UploadedFile::fake()->create('wallet-proof.jpg', 100, 'image/jpeg'),
         ])
@@ -80,7 +80,7 @@ it('deletes the old item image when replaced', function () {
     $user = User::factory()->create();
     $category = Category::create(['name' => 'Bag']);
 
-    $this->actingAs($user, 'sanctum')->post('/lost-items', [
+    $this->actingAs($user, 'sanctum')->post('/api/lost-items', [
         'category_id' => $category->id,
         'title' => 'Lost bag',
         'description' => 'A bag.',
@@ -93,7 +93,7 @@ it('deletes the old item image when replaced', function () {
     $oldImage = $lostItem->image;
 
     $this->actingAs($user, 'sanctum')
-        ->put("/lost-items/{$lostItem->id}", [
+        ->put("/api/lost-items/{$lostItem->id}", [
             'image' => UploadedFile::fake()->create('new-bag.jpg', 100, 'image/jpeg'),
         ])
         ->assertOk();

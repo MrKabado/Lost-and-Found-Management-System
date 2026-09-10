@@ -37,7 +37,7 @@ beforeEach(function () {
 
 it('searches items by keyword', function () {
     /** @var TestCase $this */
-    $this->getJson('/items?search=wallet')
+    $this->getJson('/api/items?search=wallet')
         ->assertOk()
         ->assertJsonCount(1)
         ->assertJsonPath('0.title', 'Black wallet')
@@ -46,22 +46,22 @@ it('searches items by keyword', function () {
 
 it('filters items by category, date, location, and status', function () {
     /** @var TestCase $this */
-    $this->getJson('/items?category=electronics')
+    $this->getJson('/api/items?category=electronics')
         ->assertOk()
         ->assertJsonCount(1)
         ->assertJsonPath('0.title', 'Blue headphones');
 
-    $this->getJson('/items?date=2026-09-09')
+    $this->getJson('/api/items?date=2026-09-09')
         ->assertOk()
         ->assertJsonCount(1)
         ->assertJsonPath('0.title', 'Black wallet');
 
-    $this->getJson('/items?location=cafeteria')
+    $this->getJson('/api/items?location=cafeteria')
         ->assertOk()
         ->assertJsonCount(1)
         ->assertJsonPath('0.title', 'Blue headphones');
 
-    $this->getJson('/items?status=lost')
+    $this->getJson('/api/items?status=lost')
         ->assertOk()
         ->assertJsonCount(1)
         ->assertJsonPath('0.title', 'Black wallet');
@@ -69,12 +69,12 @@ it('filters items by category, date, location, and status', function () {
 
 it('combines filters and rejects invalid filter values', function () {
     /** @var TestCase $this */
-    $this->getJson('/items?search=headphones&category=electronics&status=found')
+    $this->getJson('/api/items?search=headphones&category=electronics&status=found')
         ->assertOk()
         ->assertJsonCount(1)
         ->assertJsonPath('0.title', 'Blue headphones');
 
-    $this->getJson('/items?status=invalid')
+    $this->getJson('/api/items?status=invalid')
         ->assertUnprocessable()
         ->assertJsonValidationErrors('status');
 });

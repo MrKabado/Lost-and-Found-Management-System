@@ -14,7 +14,7 @@ it('allows a user to create, view, update, and delete their own found item', fun
     $category = Category::create(['name' => 'Electronics']);
 
     $this->actingAs($user, 'sanctum')
-        ->postJson('/found-items', [
+        ->postJson('/api/found-items', [
             'category_id' => $category->id,
             'title' => 'Black umbrella',
             'description' => 'A black umbrella found near the entrance.',
@@ -28,17 +28,17 @@ it('allows a user to create, view, update, and delete their own found item', fun
     $foundItem = FoundItem::firstOrFail();
 
     $this->actingAs($user, 'sanctum')
-        ->getJson('/found-items')
+        ->getJson('/api/found-items')
         ->assertOk()
         ->assertJsonCount(1);
 
     $this->actingAs($user, 'sanctum')
-        ->getJson("/found-items/{$foundItem->id}")
+        ->getJson("/api/found-items/{$foundItem->id}")
         ->assertOk()
         ->assertJsonPath('id', $foundItem->id);
 
     $this->actingAs($user, 'sanctum')
-        ->putJson("/found-items/{$foundItem->id}", [
+        ->putJson("/api/found-items/{$foundItem->id}", [
             'title' => 'Black umbrella with strap',
             'status' => 'claimed',
         ])
@@ -47,7 +47,7 @@ it('allows a user to create, view, update, and delete their own found item', fun
         ->assertJsonPath('status', 'claimed');
 
     $this->actingAs($user, 'sanctum')
-        ->deleteJson("/found-items/{$foundItem->id}")
+        ->deleteJson("/api/found-items/{$foundItem->id}")
         ->assertOk()
         ->assertJson(['message' => 'Found item deleted successfully.']);
 
@@ -69,11 +69,11 @@ it('prevents users from managing another users found item', function () {
     ]);
 
     $this->actingAs($otherUser, 'sanctum')
-        ->getJson("/found-items/{$foundItem->id}")
+        ->getJson("/api/found-items/{$foundItem->id}")
         ->assertForbidden();
 
     $this->actingAs($otherUser, 'sanctum')
-        ->deleteJson("/found-items/{$foundItem->id}")
+        ->deleteJson("/api/found-items/{$foundItem->id}")
         ->assertForbidden();
 });
 
@@ -93,7 +93,7 @@ it('allows admins to view all found items', function () {
     ]);
 
     $this->actingAs($admin, 'sanctum')
-        ->getJson('/admin/found-items')
+        ->getJson('/api/admin/found-items')
         ->assertOk()
         ->assertJsonCount(1)
         ->assertJsonPath('0.title', 'Green backpack');
@@ -105,7 +105,7 @@ it('rejects invalid found item statuses', function () {
     $category = Category::create(['name' => 'Others']);
 
     $this->actingAs($user, 'sanctum')
-        ->postJson('/found-items', [
+        ->postJson('/api/found-items', [
             'category_id' => $category->id,
             'title' => 'Unknown item',
             'description' => 'Description',

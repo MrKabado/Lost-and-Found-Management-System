@@ -11,7 +11,7 @@ it('lists the seeded categories', function () {
     /** @var TestCase $this */
     $this->seed();
 
-    $this->getJson('/categories')
+    $this->getJson('/api/categories')
         ->assertOk()
         ->assertJsonCount(6)
         ->assertJsonFragment(['name' => 'Electronics'])
@@ -24,19 +24,19 @@ it('allows an admin to create, update, and delete a category', function () {
     $admin->forceFill(['role' => 'admin'])->save();
 
     $this->actingAs($admin, 'sanctum')
-        ->postJson('/categories', ['name' => 'Phone Accessories'])
+        ->postJson('/api/categories', ['name' => 'Phone Accessories'])
         ->assertCreated()
         ->assertJsonPath('name', 'Phone Accessories');
 
     $category = Category::where('name', 'Phone Accessories')->firstOrFail();
 
     $this->actingAs($admin, 'sanctum')
-        ->putJson("/categories/{$category->id}", ['name' => 'Accessories'])
+        ->putJson("/api/categories/{$category->id}", ['name' => 'Accessories'])
         ->assertOk()
         ->assertJsonPath('name', 'Accessories');
 
     $this->actingAs($admin, 'sanctum')
-        ->deleteJson("/categories/{$category->id}")
+        ->deleteJson("/api/categories/{$category->id}")
         ->assertOk()
         ->assertJson(['message' => 'Category deleted successfully.']);
 
@@ -48,6 +48,6 @@ it('rejects category changes from non-admin users', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user, 'sanctum')
-        ->postJson('/categories', ['name' => 'Restricted'])
+        ->postJson('/api/categories', ['name' => 'Restricted'])
         ->assertForbidden();
 });

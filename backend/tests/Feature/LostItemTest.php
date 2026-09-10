@@ -13,7 +13,7 @@ it('allows a user to create, view, update, and delete their own lost item', func
     $user = User::factory()->create();
     $category = Category::create(['name' => 'Electronics']);
 
-    $response = $this->actingAs($user, 'sanctum')->postJson('/lost-items', [
+    $response = $this->actingAs($user, 'sanctum')->postJson('/api/lost-items', [
         'category_id' => $category->id,
         'title' => 'Blue headphones',
         'description' => 'Over-ear headphones with a blue case.',
@@ -29,17 +29,17 @@ it('allows a user to create, view, update, and delete their own lost item', func
     $lostItem = LostItem::firstOrFail();
 
     $this->actingAs($user, 'sanctum')
-        ->getJson('/lost-items')
+        ->getJson('/api/lost-items')
         ->assertOk()
         ->assertJsonCount(1);
 
     $this->actingAs($user, 'sanctum')
-        ->getJson("/lost-items/{$lostItem->id}")
+        ->getJson("/api/lost-items/{$lostItem->id}")
         ->assertOk()
         ->assertJsonPath('id', $lostItem->id);
 
     $this->actingAs($user, 'sanctum')
-        ->putJson("/lost-items/{$lostItem->id}", [
+        ->putJson("/api/lost-items/{$lostItem->id}", [
             'title' => 'Blue headphones case',
             'status' => 'found',
         ])
@@ -48,7 +48,7 @@ it('allows a user to create, view, update, and delete their own lost item', func
         ->assertJsonPath('status', 'found');
 
     $this->actingAs($user, 'sanctum')
-        ->deleteJson("/lost-items/{$lostItem->id}")
+        ->deleteJson("/api/lost-items/{$lostItem->id}")
         ->assertOk()
         ->assertJson(['message' => 'Lost item deleted successfully.']);
 
@@ -70,11 +70,11 @@ it('prevents users from managing another users lost item', function () {
     ]);
 
     $this->actingAs($otherUser, 'sanctum')
-        ->getJson("/lost-items/{$lostItem->id}")
+        ->getJson("/api/lost-items/{$lostItem->id}")
         ->assertForbidden();
 
     $this->actingAs($otherUser, 'sanctum')
-        ->deleteJson("/lost-items/{$lostItem->id}")
+        ->deleteJson("/api/lost-items/{$lostItem->id}")
         ->assertForbidden();
 });
 
@@ -94,13 +94,13 @@ it('allows admins to view all lost items and delete invalid reports', function (
     ]);
 
     $this->actingAs($admin, 'sanctum')
-        ->getJson('/admin/lost-items')
+        ->getJson('/api/admin/lost-items')
         ->assertOk()
         ->assertJsonCount(1)
         ->assertJsonPath('0.title', 'Red bag');
 
     $this->actingAs($admin, 'sanctum')
-        ->deleteJson("/admin/lost-items/{$lostItem->id}")
+        ->deleteJson("/api/admin/lost-items/{$lostItem->id}")
         ->assertOk();
 
     expect(LostItem::find($lostItem->id))->toBeNull();
@@ -112,7 +112,7 @@ it('rejects statuses outside the lost item workflow', function () {
     $category = Category::create(['name' => 'Others']);
 
     $this->actingAs($user, 'sanctum')
-        ->postJson('/lost-items', [
+        ->postJson('/api/lost-items', [
             'category_id' => $category->id,
             'title' => 'Unknown item',
             'description' => 'Description',

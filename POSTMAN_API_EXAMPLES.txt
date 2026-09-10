@@ -1,0 +1,498 @@
+POSTMAN API EXAMPLES
+====================
+
+Base URL:
+http://localhost:8000
+
+For protected JSON requests, add these headers:
+
+Authorization: Bearer YOUR_TOKEN
+Content-Type: application/json
+
+Get YOUR_TOKEN from the login response.
+
+
+1. AUTHENTICATION
+=================
+
+REGISTER
+--------
+Method: POST
+URL: /register
+Body: raw JSON
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123",
+  "password_confirmation": "password123"
+}
+
+
+LOGIN
+-----
+Method: POST
+URL: /login
+Body: raw JSON
+
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+
+Copy the token from the response and use it as:
+
+Authorization: Bearer YOUR_TOKEN
+
+
+CURRENT USER
+------------
+Method: GET
+URL: /user
+Body: none
+
+
+LOGOUT
+------
+Method: POST
+URL: /logout
+Body: none
+
+
+2. CATEGORIES
+=============
+
+VIEW CATEGORIES
+---------------
+Method: GET
+URL: /categories
+Body: none
+
+
+VIEW ONE CATEGORY
+-----------------
+Method: GET
+URL: /categories/1
+Body: none
+
+
+CREATE CATEGORY
+---------------
+Admin only
+Method: POST
+URL: /categories
+Body: raw JSON
+
+{
+  "name": "Documents"
+}
+
+
+UPDATE CATEGORY
+---------------
+Admin only
+Method: PUT
+URL: /categories/1
+Body: raw JSON
+
+{
+  "name": "Important Documents"
+}
+
+
+DELETE CATEGORY
+---------------
+Admin only
+Method: DELETE
+URL: /categories/1
+Body: none
+
+
+3. LOST ITEMS
+=============
+
+CREATE LOST ITEM
+----------------
+Method: POST
+URL: /lost-items
+Body: raw JSON
+
+{
+  "category_id": 2,
+  "title": "Black Wallet",
+  "description": "Black leather wallet with identification cards.",
+  "location_lost": "Library",
+  "date_lost": "2026-09-10"
+}
+
+
+VIEW MY LOST ITEMS
+------------------
+Method: GET
+URL: /lost-items
+Body: none
+
+
+VIEW ONE LOST ITEM
+------------------
+Method: GET
+URL: /lost-items/1
+Body: none
+
+
+UPDATE LOST ITEM
+----------------
+Method: PUT
+URL: /lost-items/1
+Body: raw JSON
+
+{
+  "title": "Black Leather Wallet",
+  "description": "Updated wallet description.",
+  "location_lost": "Main Library",
+  "date_lost": "2026-09-10"
+}
+
+
+DELETE LOST ITEM
+----------------
+Method: DELETE
+URL: /lost-items/1
+Body: none
+
+
+ADMIN VIEW ALL LOST ITEMS
+-------------------------
+Admin only
+Method: GET
+URL: /admin/lost-items
+Body: none
+
+
+ADMIN DELETE LOST ITEM
+----------------------
+Admin only
+Method: DELETE
+URL: /admin/lost-items/1
+Body: none
+
+
+4. FOUND ITEMS
+==============
+
+CREATE FOUND ITEM
+-----------------
+Method: POST
+URL: /found-items
+Body: raw JSON
+
+{
+  "category_id": 1,
+  "title": "Blue Headphones",
+  "description": "Wireless blue headphones.",
+  "location_found": "Cafeteria",
+  "date_found": "2026-09-10"
+}
+
+
+VIEW MY FOUND ITEMS
+-------------------
+Method: GET
+URL: /found-items
+Body: none
+
+
+VIEW ONE FOUND ITEM
+-------------------
+Method: GET
+URL: /found-items/1
+Body: none
+
+
+UPDATE FOUND ITEM
+-----------------
+Method: PUT
+URL: /found-items/1
+Body: raw JSON
+
+{
+  "title": "Blue Wireless Headphones",
+  "description": "Updated headphone description.",
+  "location_found": "Main Cafeteria"
+}
+
+
+DELETE FOUND ITEM
+-----------------
+Method: DELETE
+URL: /found-items/1
+Body: none
+
+
+ADMIN VIEW ALL FOUND ITEMS
+--------------------------
+Admin only
+Method: GET
+URL: /admin/found-items
+Body: none
+
+
+5. SEARCH AND FILTERS
+=====================
+
+Search by keyword:
+
+GET /items?search=wallet
+
+Filter by category:
+
+GET /items?category=electronics
+
+Filter by date:
+
+GET /items?date=2026-09-10
+
+Filter by location:
+
+GET /items?location=library
+
+Filter by status:
+
+GET /items?status=lost
+
+Combine filters:
+
+GET /items?search=wallet&category=wallet&status=lost
+
+Search requests do not need a request body.
+
+
+6. CLAIMS
+=========
+
+SUBMIT CLAIM
+------------
+Method: POST
+URL: /found-items/1/claims
+Body: raw JSON
+
+{
+  "claim_reason": "I believe this wallet belongs to me because it contains my identification cards.",
+  "proof": null
+}
+
+
+VIEW MY CLAIMS
+--------------
+Method: GET
+URL: /claims
+Body: none
+
+
+VIEW ONE CLAIM
+--------------
+Method: GET
+URL: /claims/1
+Body: none
+
+
+ADMIN VIEW ALL CLAIMS
+---------------------
+Admin only
+Method: GET
+URL: /admin/claims
+Body: none
+
+
+ADMIN VIEW CLAIM DETAILS
+------------------------
+Admin only
+Method: GET
+URL: /admin/claims/1
+Body: none
+
+
+APPROVE CLAIM
+-------------
+Admin only
+Method: POST
+URL: /admin/claims/1/approve
+Body: none
+
+
+REJECT CLAIM
+------------
+Admin only
+Method: POST
+URL: /admin/claims/1/reject
+Body: none
+
+
+7. ITEM STATUS LIFECYCLE
+=========================
+
+Normal lifecycle:
+
+Lost -> Found -> Claimed -> Verified -> Returned
+
+Rejected branch:
+
+Lost or Found or Claimed or Verified -> Rejected -> Closed
+
+
+UPDATE LOST ITEM STATUS
+-----------------------
+Admin only
+Method: PATCH
+URL: /admin/lost-items/1/status
+Body: raw JSON
+
+{
+  "status": "found"
+}
+
+
+UPDATE FOUND ITEM STATUS
+------------------------
+Admin only
+Method: PATCH
+URL: /admin/found-items/1/status
+Body: raw JSON
+
+{
+  "status": "verified"
+}
+
+Allowed status values:
+
+lost
+found
+claimed
+verified
+returned
+rejected
+closed
+
+Only valid lifecycle transitions are accepted.
+
+
+8. DASHBOARD STATISTICS
+=======================
+
+ADMIN DASHBOARD COUNTS
+----------------------
+Admin only
+Method: GET
+URL: /admin/dashboard/statistics
+Body: none
+
+Example response:
+
+{
+  "total_users": 5,
+  "total_lost_items": 3,
+  "total_found_items": 4,
+  "pending_claims": 2,
+  "returned_items": 1
+}
+
+
+9. IMAGE UPLOADS
+================
+
+Important:
+Use Body -> form-data in Postman.
+Do not use raw JSON when uploading files.
+Do not manually set Content-Type. Postman will set multipart/form-data automatically.
+
+Supported formats:
+jpg, jpeg, png, webp
+
+Maximum size:
+5 MB
+
+
+CREATE LOST ITEM WITH IMAGE
+---------------------------
+Method: POST
+URL: /lost-items
+Body: form-data
+
+Key              Type    Value
+category_id      Text    2
+title            Text    Black Wallet
+description      Text    Black leather wallet
+location_lost    Text    Library
+date_lost        Text    2026-09-10
+image            File    wallet.jpg
+
+
+CREATE FOUND ITEM WITH IMAGE
+----------------------------
+Method: POST
+URL: /found-items
+Body: form-data
+
+Key              Type    Value
+category_id      Text    1
+title            Text    Blue Headphones
+description      Text    Wireless headphones
+location_found   Text    Cafeteria
+date_found       Text    2026-09-10
+image            File    headphones.jpg
+
+
+SUBMIT CLAIM WITH PROOF IMAGE
+-----------------------------
+Method: POST
+URL: /found-items/1/claims
+Body: form-data
+
+Key              Type    Value
+claim_reason     Text    I believe this item belongs to me.
+proof            File    proof.jpg
+
+
+10. COMMON HTTP RESPONSES
+=========================
+
+200 OK
+Request completed successfully.
+
+201 Created
+A new record was created.
+
+401 Unauthorized
+Missing or invalid bearer token.
+
+403 Forbidden
+User is authenticated but is not an admin or does not own the item.
+
+404 Not Found
+The requested record does not exist.
+
+422 Unprocessable Entity
+Validation failed or an invalid status transition was requested.
+
+
+11. POSTMAN TESTING ORDER
+=========================
+
+1. POST /register
+2. POST /login
+3. Save the returned token
+4. GET /user
+5. GET /categories
+6. POST /lost-items
+7. POST /found-items
+8. GET /items?search=wallet
+9. POST /found-items/{foundItem}/claims
+10. Login with an admin account
+11. GET /admin/claims
+12. GET /admin/claims/{claim}
+13. POST /admin/claims/{claim}/approve
+14. PATCH /admin/found-items/{foundItem}/status
+15. GET /admin/dashboard/statistics
+
+Admin requests must use an admin user's token.
+
