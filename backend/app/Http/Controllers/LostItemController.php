@@ -6,6 +6,7 @@ use App\Models\LostItem;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class LostItemController extends Controller
 {
@@ -33,9 +34,13 @@ class LostItemController extends Controller
             'description' => ['required', 'string'],
             'location_lost' => ['required', 'string', 'max:255'],
             'date_lost' => ['required', 'date'],
-            'image' => ['nullable', 'string', 'max:2048'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'status' => ['sometimes', 'in:lost'],
         ]);
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('lost-items', 'public');
+        }
 
         $lostItem = $request->user()->lostItems()->create($validated);
 
@@ -65,11 +70,21 @@ class LostItemController extends Controller
             'description' => ['sometimes', 'string'],
             'location_lost' => ['sometimes', 'string', 'max:255'],
             'date_lost' => ['sometimes', 'date'],
-            'image' => ['nullable', 'string', 'max:2048'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'status' => ['sometimes', 'in:lost,found,claimed,verified,returned,rejected,closed'],
         ]);
 
+        $oldImage = $lostItem->image;
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('lost-items', 'public');
+        }
+
         $lostItem->update($validated);
+
+        if ($request->hasFile('image') && $oldImage) {
+            Storage::disk('public')->delete($oldImage);
+        }
 
         return response()->json($lostItem->refresh()->load('category'));
     }
@@ -80,7 +95,12 @@ class LostItemController extends Controller
     public function destroy(Request $request, LostItem $lostItem): JsonResponse
     {
         $this->ensureOwner($request->user(), $lostItem);
+        $image = $lostItem->image;
         $lostItem->delete();
+
+        if ($image) {
+            Storage::disk('public')->delete($image);
+        }
 
         return response()->json([
             'message' => 'Lost item deleted successfully.',
@@ -94,7 +114,12 @@ class LostItemController extends Controller
 
     public function adminDestroy(LostItem $lostItem): JsonResponse
     {
+        $image = $lostItem->image;
         $lostItem->delete();
+
+        if ($image) {
+            Storage::disk('public')->delete($image);
+        }
 
         return response()->json([
             'message' => 'Lost item deleted successfully.',

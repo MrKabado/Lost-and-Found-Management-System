@@ -32,7 +32,6 @@ it('allows a user to submit and view a claim for a found item', function () {
     $this->actingAs($claimant, 'sanctum')
         ->postJson("/found-items/{$foundItem->id}/claims", [
             'claim_reason' => 'I believe this wallet belongs to me.',
-            'proof' => 'My initials are inside the wallet.',
         ])
         ->assertCreated()
         ->assertJsonPath('status', 'pending')

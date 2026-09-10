@@ -33,8 +33,12 @@ class ClaimController extends Controller
 
         $validated = $request->validate([
             'claim_reason' => ['required', 'string', 'max:5000'],
-            'proof' => ['nullable', 'string', 'max:5000'],
+            'proof' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
         ]);
+
+        if ($request->hasFile('proof')) {
+            $validated['proof'] = $request->file('proof')->store('claim-proofs', 'public');
+        }
 
         $alreadyClaimed = Claim::query()
             ->where('found_item_id', $foundItem->id)

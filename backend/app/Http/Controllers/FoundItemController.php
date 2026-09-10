@@ -6,6 +6,7 @@ use App\Models\FoundItem;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class FoundItemController extends Controller
 {
@@ -33,9 +34,13 @@ class FoundItemController extends Controller
             'description' => ['required', 'string'],
             'location_found' => ['required', 'string', 'max:255'],
             'date_found' => ['required', 'date'],
-            'image' => ['nullable', 'string', 'max:2048'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'status' => ['sometimes', 'in:found'],
         ]);
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('found-items', 'public');
+        }
 
         $foundItem = $request->user()->foundItems()->create($validated);
 
@@ -65,11 +70,21 @@ class FoundItemController extends Controller
             'description' => ['sometimes', 'string'],
             'location_found' => ['sometimes', 'string', 'max:255'],
             'date_found' => ['sometimes', 'date'],
-            'image' => ['nullable', 'string', 'max:2048'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'status' => ['sometimes', 'in:lost,found,claimed,verified,returned,rejected,closed'],
         ]);
 
+        $oldImage = $foundItem->image;
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('found-items', 'public');
+        }
+
         $foundItem->update($validated);
+
+        if ($request->hasFile('image') && $oldImage) {
+            Storage::disk('public')->delete($oldImage);
+        }
 
         return response()->json($foundItem->refresh()->load('category'));
     }
@@ -80,7 +95,12 @@ class FoundItemController extends Controller
     public function destroy(Request $request, FoundItem $foundItem): JsonResponse
     {
         $this->ensureOwner($request->user(), $foundItem);
+        $image = $foundItem->image;
         $foundItem->delete();
+
+        if ($image) {
+            Storage::disk('public')->delete($image);
+        }
 
         return response()->json([
             'message' => 'Found item deleted successfully.',
