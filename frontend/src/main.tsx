@@ -2,6 +2,7 @@ import { createRoot } from "react-dom/client"
 import "./styles/index.css"
 import { ThemeProvider } from "@/components/theme-provider.tsx"
 import { BrowserRouter, Routes, Route, Navigate } from "react-router"
+import { Toaster } from "sonner"
 
 import { AuthProvider } from "@/auth/AuthContext"
 import LoginClient from "@/auth/client/LoginClient.tsx"
@@ -27,6 +28,7 @@ createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
     <ThemeProvider>
       <AuthProvider>
+        <Toaster richColors position="top-right" />
         <Routes>
           <Route element={<PublicOnlyRoute redirectTo="/dashboard" />}>
             <Route path="/login" element={<LoginClient />} />

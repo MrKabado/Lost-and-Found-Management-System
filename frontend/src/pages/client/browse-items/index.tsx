@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { Search, MapPin, CalendarDays, Send } from "lucide-react"
+import { toast } from "sonner"
 import { api } from "@/lib/api"
 import { formatDate, getApiError, getCategories, getItems, type Category, type Item } from "@/lib/client"
 import ClientPage, { EmptyState, ErrorState, LoadingState, StatusBadge } from "@/pages/client/ClientPage"
@@ -37,8 +38,11 @@ export default function BrowseItems() {
       await api.post(`/found-items/${item.id}/claims`, { claim_reason: claimReason })
       setClaimingId(null)
       setClaimReason("")
+      toast.success("Claim submitted for review.")
     } catch (requestError) {
-      setError(getApiError(requestError, "Unable to submit your claim."))
+      const message = getApiError(requestError, "Unable to submit your claim.")
+      toast.error(message)
+      setError(message)
     }
   }
 

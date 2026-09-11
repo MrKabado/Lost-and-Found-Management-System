@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router"
 import { useAuth } from "@/auth/useAuth"
 import { clearAuthSession } from "@/lib/auth"
+import { toast } from "sonner"
 import AuthLayout from "./AuthLayoutAdmin"
 
 export default function AdminLogin() {
@@ -32,12 +33,14 @@ export default function AdminLogin() {
         localStorage.removeItem("auth_remember_me")
       }
 
+      toast.success("Welcome to the admin console.")
       navigate("/admin")
     } catch (err) {
       const message =
         err instanceof Error
           ? err.message
           : "Unable to sign in. Please check your credentials."
+      toast.error(message)
       setError(message)
     } finally {
       setIsSubmitting(false)

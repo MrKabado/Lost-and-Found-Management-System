@@ -12,6 +12,7 @@ import { NavLink, useNavigate } from "react-router";
 import { useAuth } from "@/auth/useAuth";
 import { useEffect, useState } from "react";
 import { getClaims, getFoundItems, getLostItems } from "@/lib/client";
+import { toast } from "sonner";
 
 export default function SidebarClient() {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ export default function SidebarClient() {
 
   const handleLogout = async () => {
     await logout();
+    toast.success("You have been logged out.");
     navigate("/login", { replace: true });
   };
 

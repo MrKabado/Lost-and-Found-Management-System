@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router"
 import { useAuth } from "@/auth/useAuth"
+import { toast } from "sonner"
 import AuthBrandClient from "./AuthBrandClient"
 import AuthLayoutClient from "./AuthLayoutClient"
 
@@ -44,18 +45,20 @@ export default function RegisterClient() {
     setIsSubmitting(true)
 
     try {
-      await register(
+      const currentUser = await register(
         `${form.firstName} ${form.lastName}`.trim(),
         form.email,
         form.password,
         form.confirmPassword,
       )
-      navigate("/dashboard")
+      toast.success("Account created successfully.")
+      navigate(currentUser.role === "admin" ? "/admin" : "/client")
     } catch (err) {
       const message =
         err instanceof Error
           ? err.message
           : "Unable to create your account right now. Please try again."
+      toast.error(message)
       setError(message)
     } finally {
       setIsSubmitting(false)

@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react"
 import { Link, useNavigate, useSearchParams } from "react-router"
 import { ArrowLeft, CheckCircle2 } from "lucide-react"
+import { toast } from "sonner"
 import { api } from "@/lib/api"
 import { getApiError, getCategories, type Category } from "@/lib/client"
 import ClientPage, { ErrorState } from "@/pages/client/ClientPage"
@@ -30,9 +31,12 @@ export default function ReportItem({ type }: { type: "lost" | "found" }) {
         [type === "lost" ? "location_lost" : "location_found"]: form.location,
         [type === "lost" ? "date_lost" : "date_found"]: form.date,
       })
+      toast.success(`${type === "lost" ? "Lost" : "Found"} item report submitted.`)
       navigate(type === "lost" ? "/client/lost-reports" : "/client/found-reports")
     } catch (requestError) {
-      setError(getApiError(requestError, "Unable to submit this report."))
+      const message = getApiError(requestError, "Unable to submit this report.")
+      toast.error(message)
+      setError(message)
     } finally {
       setSaving(false)
     }

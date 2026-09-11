@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router"
 import { useAuth } from "@/auth/useAuth"
+import { toast } from "sonner"
 import AuthBrandClient from "./AuthBrandClient"
 import AuthLayoutClient from "./AuthLayoutClient"
 
@@ -27,12 +28,14 @@ export default function LoginClient() {
         localStorage.removeItem("auth_remember_me")
       }
 
+      toast.success("Welcome back!")
       navigate(currentUser.role === "admin" ? "/admin" : "/client")
     } catch (err) {
       const message =
         err instanceof Error
           ? err.message
           : "Unable to sign in. Please check your credentials."
+      toast.error(message)
       setError(message)
     } finally {
       setIsSubmitting(false)
