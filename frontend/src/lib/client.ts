@@ -157,3 +157,10 @@ export async function updateCategory(id: number, name: string): Promise<Category
   const response = await api.put<Category>(`/categories/${id}`, { name })
   return response.data
 }
+
+export function getStorageUrl(path?: string | null): string | null {
+  if (!path) return null
+
+  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api"
+  return `${apiUrl.replace(/\/api\/?$/, "")}/storage/${path}`
+}

@@ -25,7 +25,7 @@ import ClientDashboard from "@/pages/client/dashboard"
 import MyLostReports from "@/pages/client/my-lost-report/index.tsx"
 import MyFoundReports from "@/pages/client/my-found-reports/index.tsx"
 import MyClaims from "@/pages/client/my-claims/index.tsx"
-import BrowseItems from "@/pages/client/browse-items/index.tsx"
+import BrowseItems from "@/pages/client/browse-items"
 import ClientProfile from "@/pages/client/profile/index.tsx"
 import ReportItem from "@/pages/client/ReportItem.tsx"
 

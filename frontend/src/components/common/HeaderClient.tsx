@@ -1,4 +1,3 @@
-import { Search } from "lucide-react";
 import { useAuth } from "@/auth/useAuth";
 
 export default function HeaderClient() {
