@@ -6,8 +6,10 @@ import {
   formatDate,
   getApiError,
   getCategories,
+  getClaims,
   getItems,
   type Category,
+  type Claim,
   type Item,
 } from "@/lib/client";
 import ClientPage, {
@@ -20,6 +22,7 @@ import ClientPage, {
 export default function BrowseItems() {
   const [items, setItems] = useState<Item[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [claims, setClaims] = useState<Claim[]>([]);
   const [filters, setFilters] = useState({ search: "", category: "" });
   const [claimingId, setClaimingId] = useState<number | null>(null);
   const [claimReason, setClaimReason] = useState("");
@@ -28,10 +31,13 @@ export default function BrowseItems() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    getCategories()
-      .then(setCategories)
+    Promise.all([getCategories(), getClaims()])
+      .then(([loadedCategories, loadedClaims]) => {
+        setCategories(loadedCategories);
+        setClaims(loadedClaims);
+      })
       .catch((requestError) =>
-        setError(getApiError(requestError, "Unable to load categories.")),
+        setError(getApiError(requestError, "Unable to load browse data.")),
       );
   }, []);
 
@@ -62,10 +68,14 @@ export default function BrowseItems() {
       formData.append("claim_reason", claimReason.trim());
       if (proof) formData.append("proof", proof);
 
-      await api.post(`/found-items/${item.id}/claims`, formData);
+      const response = await api.post<Claim>(
+        `/found-items/${item.id}/claims`,
+        formData,
+      );
       setClaimingId(null);
       setClaimReason("");
       setProof(null);
+      setClaims((current) => [...current, response.data]);
       toast.success("Claim submitted for review.");
     } catch (requestError) {
       const message = getApiError(requestError, "Unable to submit your claim.");
@@ -141,7 +151,32 @@ export default function BrowseItems() {
               </div>
               {item.type === "found" && (
                 <>
-                  {claimingId === item.id ? (
+                  {(() => {
+                    const existingClaim = claims.find(
+                      (claim) =>
+                        claim.foundItem?.id === item.id &&
+                        ["pending", "approved"].includes(
+                          claim.status.toLowerCase(),
+                        ),
+                    );
+
+                    if (item.status.toLowerCase() === "claimed") {
+                      return (
+                        <div className="mt-5 rounded-lg bg-[#E7EEEC] px-4 py-2.5 text-center text-sm font-semibold text-[#3F6C63]">
+                          This item has already been claimed
+                        </div>
+                      );
+                    }
+
+                    if (existingClaim) {
+                      return (
+                        <div className="mt-5 rounded-lg bg-[#E7EEEC] px-4 py-2.5 text-center text-sm font-semibold text-[#3F6C63]">
+                          Claim already submitted
+                        </div>
+                      );
+                    }
+
+                    return claimingId === item.id ? (
                     <div className="mt-4">
                       <textarea
                         value={claimReason}
@@ -177,7 +212,8 @@ export default function BrowseItems() {
                     >
                       This is mine
                     </button>
-                  )}
+                    );
+                  })()}
                 </>
               )}
             </div>
