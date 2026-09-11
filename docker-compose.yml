@@ -25,18 +25,6 @@ services:
       mysql:
         condition: service_healthy
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    working_dir: /app
-    command: sh -c "npm ci && npm run dev -- --host 0.0.0.0"
-    ports:
-      - "5173:5173"
-    volumes:
-      - ./frontend:/app
-      - frontend_node_modules:/app/node_modules
-
   mysql:
     image: mysql:8.0
     environment:
@@ -66,5 +54,4 @@ services:
 
 volumes:
   backend_vendor:
-  frontend_node_modules:
   mysql_data:
