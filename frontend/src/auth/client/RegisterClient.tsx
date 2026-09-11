@@ -1,32 +1,66 @@
-import { useState } from "react";
-import AuthBrandClient from "./AuthBrandClient";
-import AuthLayoutClient from "./AuthLayoutClient";
+import { useState } from "react"
+import { Link, useNavigate } from "react-router"
+import { useAuth } from "@/auth/useAuth"
+import AuthBrandClient from "./AuthBrandClient"
+import AuthLayoutClient from "./AuthLayoutClient"
 
 export default function RegisterClient() {
+  const navigate = useNavigate()
+  const { register } = useAuth()
   const [form, setForm] = useState({
-    firstName: "Juan",
-    lastName: "Dela Cruz",
+    firstName: "",
+    lastName: "",
     email: "",
-    contact: "",
     password: "",
     confirmPassword: "",
-    agree: true,
-  });
+    agree: false,
+  })
+  const [error, setError] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked } = e.target
 
     setForm((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
-    }));
-  };
+    }))
+  }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setError("")
 
-    console.log(form);
-  };
+    if (!form.agree) {
+      setError("Please agree to the verification process before continuing.")
+      return
+    }
+
+    if (form.password !== form.confirmPassword) {
+      setError("Passwords do not match.")
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      await register(
+        `${form.firstName} ${form.lastName}`.trim(),
+        form.email,
+        form.password,
+        form.confirmPassword,
+      )
+      navigate("/dashboard")
+    } catch (err) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : "Unable to create your account right now. Please try again."
+      setError(message)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   return (
     <AuthLayoutClient
@@ -36,24 +70,19 @@ export default function RegisterClient() {
           <br />
           We&apos;ll help it find
           <br />
-          its way{" "}
-          <em className="not-italic text-[#E3963E]">back</em>.
+          its way <em className="not-italic text-[#E3963E]">back</em>.
         </>
       }
       ticketContent={
         <div>
           <div className="flex justify-between border-b border-[#313C49] py-[5px] text-xs text-[#A8A296]">
             <span>This week</span>
-            <b className="font-semibold text-[#EDEAE1]">
-              34 items reported
-            </b>
+            <b className="font-semibold text-[#EDEAE1]">34 items reported</b>
           </div>
 
           <div className="flex justify-between border-b border-[#313C49] py-[5px] text-xs text-[#A8A296]">
             <span>Matched to owners</span>
-            <b className="font-semibold text-[#EDEAE1]">
-              21 returned
-            </b>
+            <b className="font-semibold text-[#EDEAE1]">21 returned</b>
           </div>
 
           <div className="flex justify-between py-[5px] text-xs text-[#A8A296]">
@@ -66,7 +95,7 @@ export default function RegisterClient() {
       <div>
         <AuthBrandClient />
 
-        <h2 className="mb-1.5 font-[Georgia,serif] text-2xl font-semibold tracking-[0.01em] text-[#1B2430]">
+        <h2 className="mb-1.5 font-sans text-2xl font-semibold tracking-[0.01em] text-[#1B2430]">
           Create your account
         </h2>
 
@@ -74,14 +103,16 @@ export default function RegisterClient() {
           Report lost or found items and follow every claim in one place.
         </div>
 
+        {error ? (
+          <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+            {error}
+          </div>
+        ) : null}
+
         <form onSubmit={handleSubmit}>
-          {/* First / Last name */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="mb-4">
-              <label
-                htmlFor="firstName"
-                className="mb-1.5 block text-[12.5px] font-semibold text-[#26313F]"
-              >
+              <label htmlFor="firstName" className="mb-1.5 block text-[12.5px] font-semibold text-[#26313F]">
                 First name
               </label>
 
@@ -92,21 +123,13 @@ export default function RegisterClient() {
                 value={form.firstName}
                 onChange={handleChange}
                 placeholder="Juan"
-                className="
-                  w-full rounded-lg border border-[#E2DDD0] bg-white
-                  px-[13px] py-[11px] text-[13.5px] text-[#1B2430]
-                  outline-none
-                  focus:border-[#E3963E]
-                  focus:ring-4 focus:ring-[#E3963E]/15
-                "
+                required
+                className="w-full rounded-lg border border-[#E2DDD0] bg-white px-[13px] py-[11px] text-[13.5px] text-[#1B2430] outline-none focus:border-[#E3963E] focus:ring-4 focus:ring-[#E3963E]/15"
               />
             </div>
 
             <div className="mb-4">
-              <label
-                htmlFor="lastName"
-                className="mb-1.5 block text-[12.5px] font-semibold text-[#26313F]"
-              >
+              <label htmlFor="lastName" className="mb-1.5 block text-[12.5px] font-semibold text-[#26313F]">
                 Last name
               </label>
 
@@ -117,23 +140,14 @@ export default function RegisterClient() {
                 value={form.lastName}
                 onChange={handleChange}
                 placeholder="Dela Cruz"
-                className="
-                  w-full rounded-lg border border-[#E2DDD0] bg-white
-                  px-[13px] py-[11px] text-[13.5px] text-[#1B2430]
-                  outline-none
-                  focus:border-[#E3963E]
-                  focus:ring-4 focus:ring-[#E3963E]/15
-                "
+                required
+                className="w-full rounded-lg border border-[#E2DDD0] bg-white px-[13px] py-[11px] text-[13.5px] text-[#1B2430] outline-none focus:border-[#E3963E] focus:ring-4 focus:ring-[#E3963E]/15"
               />
             </div>
           </div>
 
-          {/* Email */}
           <div className="mb-4">
-            <label
-              htmlFor="email"
-              className="mb-1.5 block text-[12.5px] font-semibold text-[#26313F]"
-            >
+            <label htmlFor="email" className="mb-1.5 block text-[12.5px] font-semibold text-[#26313F]">
               Email address
             </label>
 
@@ -144,49 +158,14 @@ export default function RegisterClient() {
               value={form.email}
               onChange={handleChange}
               placeholder="juan.delacruz@email.com"
-              className="
-                w-full rounded-lg border border-[#E2DDD0] bg-white
-                px-[13px] py-[11px] text-[13.5px] text-[#1B2430]
-                outline-none
-                focus:border-[#E3963E]
-                focus:ring-4 focus:ring-[#E3963E]/15
-              "
+              required
+              className="w-full rounded-lg border border-[#E2DDD0] bg-white px-[13px] py-[11px] text-[13.5px] text-[#1B2430] outline-none focus:border-[#E3963E] focus:ring-4 focus:ring-[#E3963E]/15"
             />
           </div>
 
-          {/* Contact */}
-          <div className="mb-4">
-            <label
-              htmlFor="contact"
-              className="mb-1.5 block text-[12.5px] font-semibold text-[#26313F]"
-            >
-              Contact number
-            </label>
-
-            <input
-              id="contact"
-              name="contact"
-              type="text"
-              value={form.contact}
-              onChange={handleChange}
-              placeholder="09XX XXX XXXX"
-              className="
-                w-full rounded-lg border border-[#E2DDD0] bg-white
-                px-[13px] py-[11px] text-[13.5px] text-[#1B2430]
-                outline-none
-                focus:border-[#E3963E]
-                focus:ring-4 focus:ring-[#E3963E]/15
-              "
-            />
-          </div>
-
-          {/* Password / Confirm password */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="mb-4">
-              <label
-                htmlFor="password"
-                className="mb-1.5 block text-[12.5px] font-semibold text-[#26313F]"
-              >
+              <label htmlFor="password" className="mb-1.5 block text-[12.5px] font-semibold text-[#26313F]">
                 Password
               </label>
 
@@ -197,21 +176,13 @@ export default function RegisterClient() {
                 value={form.password}
                 onChange={handleChange}
                 placeholder="••••••••"
-                className="
-                  w-full rounded-lg border border-[#E2DDD0] bg-white
-                  px-[13px] py-[11px] text-[13.5px] text-[#1B2430]
-                  outline-none
-                  focus:border-[#E3963E]
-                  focus:ring-4 focus:ring-[#E3963E]/15
-                "
+                required
+                className="w-full rounded-lg border border-[#E2DDD0] bg-white px-[13px] py-[11px] text-[13.5px] text-[#1B2430] outline-none focus:border-[#E3963E] focus:ring-4 focus:ring-[#E3963E]/15"
               />
             </div>
 
             <div className="mb-4">
-              <label
-                htmlFor="confirmPassword"
-                className="mb-1.5 block text-[12.5px] font-semibold text-[#26313F]"
-              >
+              <label htmlFor="confirmPassword" className="mb-1.5 block text-[12.5px] font-semibold text-[#26313F]">
                 Confirm password
               </label>
 
@@ -222,18 +193,12 @@ export default function RegisterClient() {
                 value={form.confirmPassword}
                 onChange={handleChange}
                 placeholder="••••••••"
-                className="
-                  w-full rounded-lg border border-[#E2DDD0] bg-white
-                  px-[13px] py-[11px] text-[13.5px] text-[#1B2430]
-                  outline-none
-                  focus:border-[#E3963E]
-                  focus:ring-4 focus:ring-[#E3963E]/15
-                "
+                required
+                className="w-full rounded-lg border border-[#E2DDD0] bg-white px-[13px] py-[11px] text-[13.5px] text-[#1B2430] outline-none focus:border-[#E3963E] focus:ring-4 focus:ring-[#E3963E]/15"
               />
             </div>
           </div>
 
-          {/* Agreement */}
           <div className="mb-5 flex items-start gap-2.5 text-[12.5px] text-[#83796A]">
             <input
               id="agree"
@@ -245,36 +210,23 @@ export default function RegisterClient() {
             />
 
             <label htmlFor="agree">
-              I agree to the item verification process and understand false
-              claims may be rejected.
+              I agree to the item verification process and understand false claims may be rejected.
             </label>
           </div>
 
-          {/* Submit */}
           <button
             type="submit"
-            className="
-              inline-flex w-full items-center justify-center gap-2
-              rounded-lg bg-[#1B2430] px-[18px] py-2.5
-              text-[13.5px] font-semibold text-white
-              transition hover:bg-[#26313F]
-            "
+            disabled={isSubmitting}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#1B2430] px-[18px] py-2.5 text-[13.5px] font-semibold text-white transition hover:bg-[#26313F] disabled:cursor-not-allowed disabled:opacity-70"
           >
-            Create account
+            {isSubmitting ? "Creating account..." : "Create account"}
           </button>
         </form>
 
-        {/* Login */}
         <div className="mt-[22px] text-center text-[13px] text-[#83796A]">
-          Already registered?{" "}
-          <a
-            href="/login"
-            className="font-bold text-[#C97A28]"
-          >
-            Sign in
-          </a>
+          Already registered? <Link to="/login" className="font-bold text-[#C97A28]">Sign in</Link>
         </div>
       </div>
     </AuthLayoutClient>
-  );
+  )
 }

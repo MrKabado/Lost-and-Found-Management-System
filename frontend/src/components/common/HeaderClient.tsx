@@ -1,12 +1,15 @@
-import { Search, ArrowLeftRight } from "lucide-react";
-import { Link } from "react-router";
+import { Search } from "lucide-react";
+import { useAuth } from "@/auth/useAuth";
 
 export default function HeaderClient() {
+  const { user } = useAuth();
+  const initials = user?.name.split(" ").map((part) => part[0]).join("").slice(0, 2).toUpperCase() ?? "U";
+
   return (
     <header className="sticky top-0 z-10 flex h-[68px] items-center justify-between border-b border-[#E2DDD0] bg-white px-7">
       <div>
-        <h1 className="font-serif text-[19px] font-semibold text-[#1B2430]">
-          Welcome back, Juan
+        <h1 className="font-sans text-[19px] font-semibold text-[#1B2430]">
+          Welcome back, {user?.name?.split(" ")[0] ?? "there"}
         </h1>
 
         <div className="mt-0.5 text-[12.5px] text-[#83796A]">
@@ -26,18 +29,9 @@ export default function HeaderClient() {
           />
         </div>
 
-        {/* Switch */}
-        <Link
-          to="/admin"
-          className="flex items-center gap-2 rounded-lg border border-[#E2DDD0] bg-white px-3.5 py-2 text-[12.5px] font-semibold text-[#26313F] transition hover:border-[#E3963E] hover:text-[#C97A28]"
-        >
-          <ArrowLeftRight size={14} />
-          Switch to Admin
-        </Link>
-
         {/* Avatar */}
-        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-linear-to-br from-[#3F6C63] to-[#2C4D46] font-serif text-sm text-white">
-          JD
+        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-linear-to-br from-[#3F6C63] to-[#2C4D46] font-sans text-sm text-white">
+          {initials}
         </div>
       </div>
     </header>

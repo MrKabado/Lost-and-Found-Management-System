@@ -8,9 +8,27 @@ import {
   LogOut,
   Diamond,
 } from "lucide-react";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
+import { useAuth } from "@/auth/useAuth";
+import { useEffect, useState } from "react";
+import { getClaims, getFoundItems, getLostItems } from "@/lib/client";
 
 export default function SidebarClient() {
+  const navigate = useNavigate();
+  const { logout, user } = useAuth();
+  const [counts, setCounts] = useState({ lost: 0, found: 0, claims: 0 });
+
+  useEffect(() => {
+    Promise.all([getLostItems(), getFoundItems(), getClaims()]).then(([lost, found, claims]) => {
+      setCounts({ lost: lost.length, found: found.length, claims: claims.length });
+    }).catch(() => undefined);
+  }, []);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login", { replace: true });
+  };
+
   const navItems = [
     {
       label: "Dashboard",
@@ -21,19 +39,19 @@ export default function SidebarClient() {
       label: "My Lost Reports",
       to: "/client/lost-reports",
       icon: Heart,
-      count: 4,
+      count: counts.lost,
     },
     {
       label: "My Found Reports",
       to: "/client/found-reports",
       icon: ShoppingBag,
-      count: 2,
+      count: counts.found,
     },
     {
       label: "My Claims",
       to: "/client/claims",
       icon: CircleCheck,
-      count: 1,
+      count: counts.claims,
     },
     {
       label: "Browse Items",
@@ -57,7 +75,7 @@ export default function SidebarClient() {
           className="text-[#E3963E]"
         />
 
-        <div className="font-serif text-[17px] leading-tight">
+        <div className="font-sans text-[17px] leading-tight">
           Lost&Found
 
           <span className="mt-0.5 block font-sans text-[10.5px] tracking-wider text-[#9AA3AC]">
@@ -106,16 +124,17 @@ export default function SidebarClient() {
       <div className="mt-auto border-t border-[#38445466] pt-4">
         <div className="flex items-center gap-2 rounded-lg bg-[#232E3B] px-2.5 py-[9px] text-xs text-[#C7C1B3]">
           <span className="h-[7px] w-[7px] shrink-0 rounded-full bg-[#3F6C63]" />
-          Signed in as Client
+          Signed in as {user?.name ?? "Client"}
         </div>
 
-        <NavLink
-          to="/login"
+        <button
+          type="button"
+          onClick={() => void handleLogout()}
           className="mt-2 flex items-center gap-[11px] rounded-md px-2.5 py-[9px] text-sm text-[#D9D5C9] hover:bg-[#232E3B] hover:text-white"
         >
           <LogOut size={17} strokeWidth={1.8} />
           Log out
-        </NavLink>
+        </button>
       </div>
     </aside>
   );

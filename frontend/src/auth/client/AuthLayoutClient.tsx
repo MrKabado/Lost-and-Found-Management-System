@@ -20,7 +20,7 @@ export default function AuthLayoutClient({
               L
             </div>
             <div>
-              <div className="font-[Georgia,serif] text-[22px] font-semibold">
+              <div className="font-sans text-[22px] font-semibold">
                 Lost&Found
               </div>
               <div className="text-[11px] tracking-[0.12em] text-[#D5D0C8] uppercase">
@@ -30,7 +30,7 @@ export default function AuthLayoutClient({
           </div>
 
           {tagline && (
-            <div className="font-[Georgia,serif] text-4xl leading-tight tracking-tight">
+            <div className="font-sans text-4xl leading-tight tracking-tight">
               {tagline}
             </div>
           )}

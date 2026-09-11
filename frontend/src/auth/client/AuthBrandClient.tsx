@@ -13,7 +13,7 @@ export default function AuthBrand() {
         <circle cx="7.5" cy="7.5" r="1.6" />
       </svg>
 
-      <div className="font-[Georgia,serif] text-[17px] leading-[1.1] text-[#1B2430]">
+      <div className="font-sans text-[17px] leading-[1.1] text-[#1B2430]">
         Lost&Found
 
         <span className="mt-0.5 block font-sans text-[10.5px] tracking-[0.06em] text-[#83796A]">
