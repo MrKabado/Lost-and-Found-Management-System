@@ -12,6 +12,7 @@ import { useAuth } from "@/auth/useAuth";
 import { useEffect, useState } from "react";
 import { getAdminClaims, getAdminFoundItems, getAdminLostItems } from "@/lib/client";
 import { toast } from "sonner";
+import { NavLink } from "react-router";
 
 export default function SidebarAdmin() {
   const navigate = useNavigate();
@@ -61,13 +62,7 @@ export default function SidebarAdmin() {
       </div>
 
       <nav className="flex flex-col gap-0.5">
-        <a
-          href="#"
-          className="flex items-center gap-[11px] rounded-r-[7px] border-l-2 border-[#E3963E] bg-[#232E3B] px-2.5 py-[9px] text-sm text-white"
-        >
-          <LayoutDashboard size={17} />
-          Dashboard
-        </a>
+        <SidebarLink icon={<LayoutDashboard size={17} />} label="Dashboard" to="/admin" />
       </nav>
 
       {/* Manage */}
@@ -79,24 +74,27 @@ export default function SidebarAdmin() {
         <SidebarLink
           icon={<Heart size={17} />}
           label="Lost Items"
+          to="/admin/lost-items"
           count={String(counts.lost)}
         />
 
         <SidebarLink
           icon={<ShoppingBag size={17} />}
           label="Found Items"
+          to="/admin/found-items"
           count={String(counts.found)}
         />
 
         <SidebarLink
           icon={<CircleCheck size={17} />}
           label="Claims"
+          to="/admin/claims"
           count={String(counts.claims)}
         />
 
-        <SidebarLink icon={<Grid2X2 size={17} />} label="Categories" />
+        <SidebarLink icon={<Grid2X2 size={17} />} label="Categories" to="/admin/categories" />
 
-        <SidebarLink icon={<User size={17} />} label="Users" />
+        <SidebarLink icon={<User size={17} />} label="Users" to="/admin/users" />
       </nav>
 
       {/* Bottom */}
@@ -122,26 +120,17 @@ export default function SidebarAdmin() {
 function SidebarLink({
   icon,
   label,
+  to,
   count,
 }: {
   icon: React.ReactNode;
   label: string;
+  to: string;
   count?: string;
 }) {
   return (
-    <a
-      href="#"
-      className="flex items-center gap-[11px] rounded-[7px] border-l-2 border-transparent px-2.5 py-[9px] text-sm text-[#D9D5C9] hover:bg-[#232E3B] hover:text-white"
-    >
-      {icon}
-
-      {label}
-
-      {count && (
-        <span className="ml-auto rounded-full bg-[#313D4C] px-[7px] py-[1px] text-[11px] text-[#C7C1B3]">
-          {count}
-        </span>
-      )}
-    </a>
+    <NavLink to={to} end={to === "/admin"} className={({ isActive }) => `flex items-center gap-[11px] rounded-[7px] border-l-2 px-2.5 py-[9px] text-sm ${isActive ? "border-[#E3963E] bg-[#232E3B] text-white" : "border-transparent text-[#D9D5C9] hover:bg-[#232E3B] hover:text-white"}`}>
+      {icon}{label}{count && <span className="ml-auto rounded-full bg-[#313D4C] px-[7px] py-[1px] text-[11px] text-[#C7C1B3]">{count}</span>}
+    </NavLink>
   );
 }

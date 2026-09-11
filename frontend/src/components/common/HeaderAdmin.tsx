@@ -18,17 +18,6 @@ export default function HeaderAdmin() {
       </div>
 
       <div className="flex items-center gap-3">
-        {/* Search */}
-        <div className="flex w-60 items-center gap-2 rounded-lg border border-[#E2DDD0] bg-[#F6F3EC] px-3 py-2 text-[#83796A]">
-          <Search size={15} />
-
-          <input
-            type="text"
-            placeholder="Search records…"
-            className="w-full bg-transparent text-[13px] text-[#1B2430] outline-none placeholder:text-[#83796A]"
-          />
-        </div>
-
         {/* Avatar */}
         <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#E3963E] to-[#C97A28] font-sans text-sm text-white">
           {initials}

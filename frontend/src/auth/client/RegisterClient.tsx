@@ -66,35 +66,7 @@ export default function RegisterClient() {
   }
 
   return (
-    <AuthLayoutClient
-      tagline={
-        <>
-          Report it once.
-          <br />
-          We&apos;ll help it find
-          <br />
-          its way <em className="not-italic text-[#E3963E]">back</em>.
-        </>
-      }
-      ticketContent={
-        <div>
-          <div className="flex justify-between border-b border-[#313C49] py-[5px] text-xs text-[#A8A296]">
-            <span>This week</span>
-            <b className="font-semibold text-[#EDEAE1]">34 items reported</b>
-          </div>
-
-          <div className="flex justify-between border-b border-[#313C49] py-[5px] text-xs text-[#A8A296]">
-            <span>Matched to owners</span>
-            <b className="font-semibold text-[#EDEAE1]">21 returned</b>
-          </div>
-
-          <div className="flex justify-between py-[5px] text-xs text-[#A8A296]">
-            <span>Avg. time to match</span>
-            <b className="font-semibold text-[#EDEAE1]">2.4 days</b>
-          </div>
-        </div>
-      }
-    >
+    <AuthLayoutClient>
       <div>
         <AuthBrandClient />
 

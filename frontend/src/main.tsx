@@ -14,6 +14,11 @@ import AdminOnlyRoute from "@/components/AdminOnlyRoute"
 
 import AdminLayout from "@/pages/admin/AdminLayout.tsx"
 import AdminDashboard from "@/pages/admin/dashboard"
+import AdminLostItems from "@/pages/admin/lost-items"
+import AdminFoundItems from "@/pages/admin/found-items"
+import AdminClaims from "@/pages/admin/claims"
+import AdminCategories from "@/pages/admin/categories"
+import AdminUsers from "@/pages/admin/users"
 
 import ClientLayout from "@/pages/client/ClientLayout.tsx"
 import ClientDashboard from "@/pages/client/dashboard"
@@ -58,6 +63,11 @@ createRoot(document.getElementById("root")!).render(
           <Route element={<AdminOnlyRoute redirectTo="/admin/login" />}>
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
+              <Route path="lost-items" element={<AdminLostItems />} />
+              <Route path="found-items" element={<AdminFoundItems />} />
+              <Route path="claims" element={<AdminClaims />} />
+              <Route path="categories" element={<AdminCategories />} />
+              <Route path="users" element={<AdminUsers />} />
             </Route>
           </Route>
 

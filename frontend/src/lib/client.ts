@@ -30,6 +30,15 @@ export interface OwnedItem {
   status: string
   category?: Category | null
   created_at: string
+  user?: { id: number; name: string; email: string } | null
+}
+
+export interface AdminUser {
+  id: number
+  name: string
+  email: string
+  role: "user" | "admin"
+  created_at: string
 }
 
 export interface Claim {
@@ -121,5 +130,30 @@ export async function approveClaim(id: number): Promise<Claim> {
 
 export async function rejectClaim(id: number): Promise<Claim> {
   const response = await api.post<Claim>(`/admin/claims/${id}/reject`)
+  return response.data
+}
+
+export async function getAdminUsers(): Promise<AdminUser[]> {
+  const response = await api.get<AdminUser[]>("/admin/users")
+  return response.data
+}
+
+export async function updateLostStatus(id: number, status: string): Promise<OwnedItem> {
+  const response = await api.patch<OwnedItem>(`/admin/lost-items/${id}/status`, { status })
+  return response.data
+}
+
+export async function updateFoundStatus(id: number, status: string): Promise<OwnedItem> {
+  const response = await api.patch<OwnedItem>(`/admin/found-items/${id}/status`, { status })
+  return response.data
+}
+
+export async function createCategory(name: string): Promise<Category> {
+  const response = await api.post<Category>("/categories", { name })
+  return response.data
+}
+
+export async function updateCategory(id: number, name: string): Promise<Category> {
+  const response = await api.put<Category>(`/categories/${id}`, { name })
   return response.data
 }

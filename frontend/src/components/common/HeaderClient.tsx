@@ -18,16 +18,6 @@ export default function HeaderClient() {
       </div>
 
       <div className="flex items-center gap-3">
-        {/* Search */}
-        <div className="flex w-60 items-center gap-2 rounded-lg border border-[#E2DDD0] bg-[#F6F3EC] px-3 py-2">
-          <Search size={15} className="shrink-0 text-[#83796A]" />
-
-          <input
-            type="text"
-            placeholder="Search items..."
-            className="w-full bg-transparent text-[13px] text-[#1B2430] outline-none placeholder:text-[#83796A]"
-          />
-        </div>
 
         {/* Avatar */}
         <div className="flex h-9 w-9 items-center justify-center rounded-full bg-linear-to-br from-[#3F6C63] to-[#2C4D46] font-sans text-sm text-white">

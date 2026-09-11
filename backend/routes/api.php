@@ -8,6 +8,7 @@ use App\Http\Controllers\FoundItemController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ItemStatusController;
 use App\Http\Controllers\LostItemController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -50,5 +51,6 @@ Route::middleware('auth:sanctum')->group(function (): void {
         Route::get('/admin/claims/{claim}', [ClaimController::class, 'adminShow']);
         Route::post('/admin/claims/{claim}/approve', [ClaimController::class, 'approve']);
         Route::post('/admin/claims/{claim}/reject', [ClaimController::class, 'reject']);
+        Route::get('/admin/users', [UserController::class, 'adminIndex']);
     });
 });
