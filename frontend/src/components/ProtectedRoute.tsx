@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useLocation } from "react-router"
-import { isAuthenticated } from "@/lib/auth"
+import { getStoredUser, isAuthenticated } from "@/lib/auth"
 
 export default function ProtectedRoute({
   redirectTo = "/login",
@@ -10,6 +10,10 @@ export default function ProtectedRoute({
 
   if (!isAuthenticated()) {
     return <Navigate to={redirectTo} replace state={{ from: location }} />
+  }
+
+  if (getStoredUser()?.role === "admin") {
+    return <Navigate to="/admin" replace />
   }
 
   return <Outlet />

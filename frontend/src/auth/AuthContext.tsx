@@ -26,7 +26,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (token) void Promise.resolve().then(refreshUser)
   }, [refreshUser, token])
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string): Promise<AuthUser> => {
     const response = await api.post("/login", { email, password })
     const nextToken = response.data.token
     const nextUser = response.data.user
@@ -34,6 +34,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setAuthSession(nextUser, nextToken)
     setToken(nextToken)
     setUser(nextUser)
+
+    return nextUser
   }
 
   const register = async (
@@ -41,7 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     email: string,
     password: string,
     passwordConfirmation: string,
-  ) => {
+  ): Promise<AuthUser> => {
     const response = await api.post("/register", {
       name,
       email,
@@ -55,6 +57,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setAuthSession(nextUser, nextToken)
     setToken(nextToken)
     setUser(nextUser)
+
+    return nextUser
   }
 
   const logout = async () => {

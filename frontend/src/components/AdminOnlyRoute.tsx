@@ -9,7 +9,7 @@ export default function AdminOnlyRoute({ redirectTo = "/admin/login" }: { redire
   const user = getStoredUser()
 
   if (!user || user.role !== "admin") {
-    return <Navigate to="/dashboard" replace />
+    return <Navigate to="/client" replace />
   }
 
   return <Outlet />

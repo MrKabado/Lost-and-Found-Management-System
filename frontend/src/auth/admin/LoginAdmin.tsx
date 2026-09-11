@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router"
 import { useAuth } from "@/auth/useAuth"
+import { clearAuthSession } from "@/lib/auth"
 import AuthLayout from "./AuthLayoutAdmin"
 
 export default function AdminLogin() {
@@ -18,11 +19,10 @@ export default function AdminLogin() {
     setIsSubmitting(true)
 
     try {
-      await login(email, password)
-
-      const currentUser = JSON.parse(localStorage.getItem("auth_user") || "null")
+      const currentUser = await login(email, password)
 
       if (!currentUser || currentUser.role !== "admin") {
+        clearAuthSession()
         throw new Error("This account does not have admin privileges.")
       }
 

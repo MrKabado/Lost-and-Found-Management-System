@@ -19,7 +19,7 @@ export default function LoginClient() {
     setIsSubmitting(true)
 
     try {
-      await login(email, password)
+      const currentUser = await login(email, password)
 
       if (rememberMe) {
         localStorage.setItem("auth_remember_me", "true")
@@ -27,7 +27,7 @@ export default function LoginClient() {
         localStorage.removeItem("auth_remember_me")
       }
 
-      navigate("/dashboard")
+      navigate(currentUser.role === "admin" ? "/admin" : "/client")
     } catch (err) {
       const message =
         err instanceof Error

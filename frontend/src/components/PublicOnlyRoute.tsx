@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router"
-import { isAuthenticated } from "@/lib/auth"
+import { getStoredUser, isAuthenticated } from "@/lib/auth"
 
 export default function PublicOnlyRoute({
   redirectTo = "/dashboard",
@@ -7,7 +7,7 @@ export default function PublicOnlyRoute({
   redirectTo?: string
 }) {
   if (isAuthenticated()) {
-    return <Navigate to={redirectTo} replace />
+    return <Navigate to={getStoredUser()?.role === "admin" ? "/admin" : redirectTo} replace />
   }
 
   return <Outlet />
