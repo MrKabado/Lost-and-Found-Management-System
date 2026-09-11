@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router"
 import { getStoredUser, isAuthenticated } from "@/lib/auth"
 
-export default function AdminOnlyRoute({ redirectTo = "/admin/login" }: { redirectTo?: string }) {
+export default function AdminOnlyRoute({ redirectTo = "/login" }: { redirectTo?: string }) {
   if (!isAuthenticated()) {
     return <Navigate to={redirectTo} replace />
   }
