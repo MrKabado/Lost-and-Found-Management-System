@@ -84,7 +84,12 @@ export async function getCategories(): Promise<Category[]> {
 }
 
 export async function getItems(params?: Record<string, string>): Promise<Item[]> {
-  const response = await api.get<Item[]>("/items", { params })
+  const filteredParams = params
+    ? Object.fromEntries(
+        Object.entries(params).filter(([, value]) => value.trim() !== ""),
+      )
+    : undefined
+  const response = await api.get<Item[]>("/items", { params: filteredParams })
   return response.data
 }
 

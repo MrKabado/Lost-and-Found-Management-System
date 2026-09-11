@@ -27,28 +27,29 @@ export default function BrowseItems() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const loadItems = async () => {
-    try {
-      setLoading(true);
-      setItems(await getItems(filters));
-    } catch (requestError) {
-      setError(getApiError(requestError, "Unable to load browse items."));
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    getCategories()
+      .then(setCategories)
+      .catch((requestError) =>
+        setError(getApiError(requestError, "Unable to load categories.")),
+      );
+  }, []);
 
   useEffect(() => {
-    Promise.all([getCategories(), getItems()])
-      .then(([loadedCategories, loadedItems]) => {
-        setCategories(loadedCategories);
-        setItems(loadedItems);
-      })
-      .catch((requestError) =>
-        setError(getApiError(requestError, "Unable to load browse items.")),
-      )
-      .finally(() => setLoading(false));
-  }, []);
+    const timer = window.setTimeout(() => {
+      setLoading(true);
+      setError("");
+
+      getItems(filters)
+        .then(setItems)
+        .catch((requestError) =>
+          setError(getApiError(requestError, "Unable to load browse items.")),
+        )
+        .finally(() => setLoading(false));
+    }, 300);
+
+    return () => window.clearTimeout(timer);
+  }, [filters]);
 
   const submitClaim = async (item: Item) => {
     if (!claimReason.trim()) {
@@ -86,9 +87,6 @@ export default function BrowseItems() {
             onChange={(event) =>
               setFilters({ ...filters, search: event.target.value })
             }
-            onKeyDown={(event) => {
-              if (event.key === "Enter") void loadItems();
-            }}
             placeholder="Search title or description"
             className="w-full text-sm outline-none"
           />
@@ -107,13 +105,6 @@ export default function BrowseItems() {
             </option>
           ))}
         </select>
-        <button
-          type="button"
-          onClick={() => void loadItems()}
-          className="rounded-lg bg-[#1B2430] px-4 py-2 text-sm font-semibold text-white"
-        >
-          Search
-        </button>
       </div>
       {loading ? (
         <LoadingState />
