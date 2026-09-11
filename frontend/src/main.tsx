@@ -33,7 +33,7 @@ createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
     <ThemeProvider>
       <AuthProvider>
-        <Toaster richColors position="top-right" />
+        <Toaster richColors position="top-center" />
         <Routes>
           <Route element={<PublicOnlyRoute redirectTo="/dashboard" />}>
             <Route path="/login" element={<LoginClient />} />
