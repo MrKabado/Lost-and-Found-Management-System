@@ -8,6 +8,7 @@ export interface Category {
 export interface Item {
   id: number
   type: "lost" | "found"
+  user_id: number
   title: string
   description: string
   location: string
@@ -47,6 +48,7 @@ export interface Claim {
   proof: string | null
   status: string
   created_at: string
+  found_item?: OwnedItem | null
   foundItem?: OwnedItem | null
   user?: { id: number; name: string; email: string } | null
 }

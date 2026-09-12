@@ -32,13 +32,28 @@ export default function RegisterClient() {
     e.preventDefault()
     setError("")
 
+    if (!form.firstName.trim() || !form.lastName.trim() || !form.email.trim()) {
+      toast.error("Please complete all required fields.")
+      return
+    }
+
+    if (!form.password || !form.confirmPassword) {
+      toast.error("Please enter and confirm your password.")
+      return
+    }
+
     if (!form.agree) {
-      setError("Please agree to the verification process before continuing.")
+      toast.error("Please agree to the verification process before continuing.")
       return
     }
 
     if (form.password !== form.confirmPassword) {
-      setError("Passwords do not match.")
+      toast.error("Passwords do not match.")
+      return
+    }
+
+    if (form.password.length < 8) {
+      toast.error("Password must be at least 8 characters long.")
       return
     }
 
@@ -84,7 +99,7 @@ export default function RegisterClient() {
           </div>
         ) : null}
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="mb-4">
               <label htmlFor="firstName" className="mb-1.5 block text-[12.5px] font-semibold text-[#26313F]">
@@ -151,6 +166,7 @@ export default function RegisterClient() {
                 value={form.password}
                 onChange={handleChange}
                 placeholder="••••••••"
+                minLength={8}
                 required
                 className="w-full rounded-lg border border-[#E2DDD0] bg-white px-[13px] py-[11px] text-[13.5px] text-[#1B2430] outline-none focus:border-[#E3963E] focus:ring-4 focus:ring-[#E3963E]/15"
               />

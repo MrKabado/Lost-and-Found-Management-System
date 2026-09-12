@@ -31,10 +31,7 @@ export default function LoginClient() {
       toast.success("Welcome back!")
       navigate(currentUser.role === "admin" ? "/admin" : "/client")
     } catch (err) {
-      const message =
-        err instanceof Error
-          ? err.message
-          : "Unable to sign in. Please check your credentials."
+      const message = "Unable to sign in. Please check your credentials."
       toast.error(message)
       setError(message)
     } finally {

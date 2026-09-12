@@ -27,6 +27,7 @@ import MyClaims from "@/pages/client/my-claims/index.tsx"
 import BrowseItems from "@/pages/client/browse-items"
 import ClientProfile from "@/pages/client/profile/index.tsx"
 import ReportItem from "@/pages/client/ReportItem.tsx"
+import LandingPage from "@/pages/LandingPage.tsx"
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
@@ -34,6 +35,8 @@ createRoot(document.getElementById("root")!).render(
       <AuthProvider>
         <Toaster richColors position="top-center" />
         <Routes>
+          <Route path="/" element={<LandingPage />} />
+
           <Route element={<PublicOnlyRoute redirectTo="/dashboard" />}>
             <Route path="/login" element={<LoginClient />} />
             <Route path="/register" element={<RegisterClient />} />
@@ -55,7 +58,6 @@ createRoot(document.getElementById("root")!).render(
               <Route path="report-found" element={<ReportItem type="found" />} />
             </Route>
 
-            <Route path="/" element={<Navigate to="/client" replace />} />
           </Route>
 
           <Route element={<AdminOnlyRoute redirectTo="/login" />}>

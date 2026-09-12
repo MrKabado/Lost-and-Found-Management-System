@@ -132,7 +132,7 @@ export default function SidebarClient() {
         <button
           type="button"
           onClick={() => void handleLogout()}
-          className="mt-2 flex items-center gap-[11px] rounded-md px-2.5 py-[9px] text-sm text-[#D9D5C9] hover:bg-[#232E3B] hover:text-white"
+          className="w-full mt-2 flex items-center gap-[11px] rounded-md px-2.5 py-[9px] text-sm text-[#D9D5C9] hover:bg-[#232E3B] hover:text-white"
         >
           <LogOut size={17} strokeWidth={1.8} />
           Log out
