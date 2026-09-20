@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Laravel\Sanctum\PersonalAccessToken;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OtpMail;
+use App\Models\Otp;
 
 class AuthController extends Controller
 {
@@ -63,5 +66,61 @@ class AuthController extends Controller
     public function user(Request $request): JsonResponse
     {
         return response()->json($request->user());
+    }
+
+    public function sendOtp(Request $request) {
+      $request->validate([
+        'email' => ['required', 'email'],
+      ]);
+
+      $otp = (string) random_int(100000, 999999);
+
+      Otp::updateOrCreate(
+        [
+          'email' => $request->email,
+        ],
+        [
+          'otp' => $otp,
+          'expires_at' => now()->addMinutes(5),
+        ]
+      );
+
+      Mail::to($request->email)
+      ->send(new OtpMail($otp));
+
+      return response()->json([
+        'message' => 'OTP sent successfully'
+      ]);
+    }
+
+    public function verifyOtp(Request $request) {
+      $request->validate([
+        'email' => ['required', 'email'],
+        'otp' => ['required', 'digits:6'],
+      ]);
+
+      $otpRecord = Otp::where('email', $request->email)
+      ->where('otp', $request->otp)
+      ->first();
+
+      if (!$otpRecord) {
+        return response()->json([
+          'message' => 'Invalid OTP',
+        ], 422);
+      }
+
+      if ($otpRecord->expires_at->isPast()) {
+        $otpRecord->delete();
+
+        return response()->json([
+          'message' => 'OTP has expired',
+        ], 422);
+      }
+
+      $otpRecord->delete();
+
+      return response()->json([
+        'message' => 'Email verified successfully.',
+      ]);
     }
 }
