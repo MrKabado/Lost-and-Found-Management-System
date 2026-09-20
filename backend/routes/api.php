@@ -46,6 +46,7 @@ Route::middleware('auth:sanctum')->group(function (): void {
         Route::delete('/admin/lost-items/{lostItem}', [LostItemController::class, 'adminDestroy']);
         Route::patch('/admin/lost-items/{lostItem}/status', [ItemStatusController::class, 'updateLost']);
         Route::get('/admin/found-items', [FoundItemController::class, 'adminIndex']);
+        Route::delete('/admin/found-items/{foundItem}', [FoundItemController::class, 'adminDestroy']);
         Route::patch('/admin/found-items/{foundItem}/status', [ItemStatusController::class, 'updateFound']);
         Route::get('/admin/claims', [ClaimController::class, 'adminIndex']);
         Route::get('/admin/claims/{claim}', [ClaimController::class, 'adminShow']);

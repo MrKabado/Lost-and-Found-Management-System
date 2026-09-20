@@ -155,6 +155,14 @@ export async function updateFoundStatus(id: number, status: string): Promise<Own
   return response.data
 }
 
+export async function deleteAdminLostItem(id: number): Promise<void> {
+  await api.delete(`/admin/lost-items/${id}`)
+}
+
+export async function deleteAdminFoundItem(id: number): Promise<void> {
+  await api.delete(`/admin/found-items/${id}`)
+}
+
 export async function createCategory(name: string): Promise<Category> {
   const response = await api.post<Category>("/categories", { name })
   return response.data

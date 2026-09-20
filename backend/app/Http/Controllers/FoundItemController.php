@@ -112,6 +112,20 @@ class FoundItemController extends Controller
         return response()->json(FoundItem::with(['user', 'category'])->latest()->get());
     }
 
+    public function adminDestroy(FoundItem $foundItem): JsonResponse
+    {
+        $image = $foundItem->image;
+        $foundItem->delete();
+
+        if ($image) {
+            Storage::disk('public')->delete($image);
+        }
+
+        return response()->json([
+            'message' => 'Found item deleted successfully.',
+        ]);
+    }
+
     private function ensureOwner(User $user, FoundItem $foundItem): void
     {
         abort_unless($foundItem->user_id === $user->id, 403, 'You can only manage your own found items.');

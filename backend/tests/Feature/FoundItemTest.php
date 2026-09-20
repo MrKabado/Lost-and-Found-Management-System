@@ -77,13 +77,13 @@ it('prevents users from managing another users found item', function () {
         ->assertForbidden();
 });
 
-it('allows admins to view all found items', function () {
+it('allows admins to view all found items and delete invalid reports', function () {
     /** @var TestCase $this */
     $admin = User::factory()->create();
     $admin->forceFill(['role' => 'admin'])->save();
     $user = User::factory()->create();
     $category = Category::create(['name' => 'Bag']);
-    FoundItem::create([
+    $foundItem = FoundItem::create([
         'user_id' => $user->id,
         'category_id' => $category->id,
         'title' => 'Green backpack',
@@ -97,6 +97,12 @@ it('allows admins to view all found items', function () {
         ->assertOk()
         ->assertJsonCount(1)
         ->assertJsonPath('0.title', 'Green backpack');
+
+    $this->actingAs($admin, 'sanctum')
+        ->deleteJson("/api/admin/found-items/{$foundItem->id}")
+        ->assertOk();
+
+    expect(FoundItem::find($foundItem->id))->toBeNull();
 });
 
 it('rejects invalid found item statuses', function () {
