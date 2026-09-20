@@ -121,6 +121,6 @@ class AuthController extends Controller
 
       return response()->json([
         'message' => 'Email verified successfully.',
-      ]);
+      ], 200);
     }
 }
