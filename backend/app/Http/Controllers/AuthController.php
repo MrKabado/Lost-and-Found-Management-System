@@ -73,6 +73,22 @@ class AuthController extends Controller
         'email' => ['required', 'email'],
       ]);
 
+      $existingOtp = Otp::where('email', $request->email)->first();
+
+      if ($existingOtp && $existingOtp->last_sent_at) {
+          $secondsSinceLastSend = now()->diffInSeconds(
+              $existingOtp->last_sent_at
+          );
+
+          if ($secondsSinceLastSend < 60) {
+              $remaining = 60 - $secondsSinceLastSend;
+
+              return response()->json([
+                  'message' => "Please wait {$remaining} seconds before requesting another OTP.",
+              ], 429);
+          }
+      }
+
       $otp = (string) random_int(100000, 999999);
 
       Otp::updateOrCreate(

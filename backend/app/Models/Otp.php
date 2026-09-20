@@ -14,5 +14,6 @@ class Otp extends Model
 
     protected $casts = [
       'expires_at' => 'datetime',
+      'last_sent_at' => 'datetime',
     ];
 }

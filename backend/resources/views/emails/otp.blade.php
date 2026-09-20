@@ -25,7 +25,7 @@
                         <!-- Temporary Logo -->
                         <!-- Replace this image URL with the actual school logo -->
                         <img
-                            src="/images/cpc-logo.jpg"
+                            src="{{ asset('images/cpc-logo.jpg') }}"
                             alt="Cordova Public College Logo"
                             width="90"
                             height="90"
