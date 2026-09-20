@@ -13,9 +13,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::post('/send-otp', [AuthController::class, 'sendOtp']);
+Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
+
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{category}', [CategoryController::class, 'show']);
 Route::get('/items', [ItemController::class, 'index']);
+
 
 Route::middleware('auth:sanctum')->group(function (): void {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -36,6 +41,8 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::get('/claims', [ClaimController::class, 'index']);
     Route::get('/claims/{claim}', [ClaimController::class, 'show']);
     Route::post('/found-items/{foundItem}/claims', [ClaimController::class, 'store']);
+
+
 
     Route::middleware('admin')->group(function (): void {
         Route::get('/admin/dashboard/statistics', [DashboardController::class, 'statistics']);
