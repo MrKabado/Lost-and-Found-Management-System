@@ -68,12 +68,40 @@ class AuthController extends Controller
         return response()->json($request->user());
     }
 
-    public function sendOtp(Request $request) {
+    public function sendRegisterOtp(Request $request) {
       $request->validate([
         'email' => ['required', 'email'],
       ]);
 
-      $existingOtp = Otp::where('email', $request->email)->first();
+      $user = user::where('email', $request->email)->first();
+
+      if ($user) {
+        return response()->json([
+          'message' => 'Email is already registered.',
+        ], 409);    
+      }
+
+      return $this->sendOtpToEmail($request->email);
+    }
+
+    public function sendForgotPasswordOtp(Request $request) {
+      $request->validate([
+        'email' => ['required', 'email'],
+      ]);
+
+      $user = User::where('email', $request->email)->first();
+
+      if (!$user) {
+        return response()->json([
+          'message' => 'No account found with this email.',
+        ], 404);
+      }
+
+      return $this->sendOtpToEmail($request->email);
+    }
+
+    public function sendOtpToEmail(string $email) {
+      $existingOtp = Otp::where('email', $email)->first();
 
       if ($existingOtp && $existingOtp->last_sent_at) {
           $secondsSinceLastSend = now()->diffInSeconds(
@@ -92,20 +120,18 @@ class AuthController extends Controller
       $otp = (string) random_int(100000, 999999);
 
       Otp::updateOrCreate(
-        [
-          'email' => $request->email,
-        ],
-        [
-          'otp' => $otp,
-          'expires_at' => now()->addMinutes(5),
-        ]
+          ['email' => $email],
+          [
+              'otp' => $otp,
+              'expires_at' => now()->addMinutes(5),
+              'last_sent_at' => now(),
+          ]
       );
 
-      Mail::to($request->email)
-      ->send(new OtpMail($otp));
+      Mail::to($email)->send(new OtpMail($otp));
 
       return response()->json([
-        'message' => 'OTP sent successfully'
+          'message' => 'OTP sent successfully'
       ]);
     }
 

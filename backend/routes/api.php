@@ -14,8 +14,9 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::post('/send-otp', [AuthController::class, 'sendOtp'])->middleware('throttle:5,1');
-Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
+Route::post('/register/send-otp', [AuthController::class, 'sendRegisterOtp'])->middleware('throttle:5,1');
+Route::post('/forgot-password/send-otp', [AuthController::class, 'sendForgotPasswordOtp'])->middleware('throttle:5,1');
+Route::post('verify-otp', [AuthController::class, 'verifyOtp']);
 
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{category}', [CategoryController::class, 'show']);
