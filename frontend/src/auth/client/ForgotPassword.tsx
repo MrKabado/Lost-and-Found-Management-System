@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router"
-import { ArrowLeft, KeyRound, Mail, ShieldCheck } from "lucide-react"
+import { ArrowLeft, Eye, EyeOff, KeyRound, Mail, ShieldCheck } from "lucide-react"
 import { toast } from "sonner"
 import { api } from "@/lib/api"
 import { getApiError } from "@/lib/client"
@@ -12,6 +12,8 @@ export default function ForgotPassword() {
   const [form, setForm] = useState({ email: "", otp: "", password: "", confirmPassword: "" })
   const [isSendingOtp, setIsSendingOtp] = useState(false)
   const [isResetting, setIsResetting] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [error, setError] = useState("")
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,11 +119,21 @@ export default function ForgotPassword() {
           <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
               <label htmlFor="password" className="mb-1.5 block text-[12.5px] font-semibold text-[#041690]">New password</label>
-              <input id="password" name="password" type="password" value={form.password} onChange={handleChange} placeholder="At least 8 characters" minLength={8} required className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] text-[13.5px] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15" />
+              <div className="relative">
+                <input id="password" name="password" type={showPassword ? "text" : "password"} value={form.password} onChange={handleChange} placeholder="At least 8 characters" minLength={8} required className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] pr-10 text-[13.5px] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15" />
+                <button type="button" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? "Hide password" : "Show password"} title={showPassword ? "Hide password" : "Show password"} className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-[#777F9C] transition hover:bg-[#F7F9FC] hover:text-[#031079]">
+                  {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+                </button>
+              </div>
             </div>
             <div>
               <label htmlFor="confirmPassword" className="mb-1.5 block text-[12.5px] font-semibold text-[#041690]">Confirm password</label>
-              <input id="confirmPassword" name="confirmPassword" type="password" value={form.confirmPassword} onChange={handleChange} placeholder="Repeat password" required className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] text-[13.5px] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15" />
+              <div className="relative">
+                <input id="confirmPassword" name="confirmPassword" type={showConfirmPassword ? "text" : "password"} value={form.confirmPassword} onChange={handleChange} placeholder="Repeat password" required className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] pr-10 text-[13.5px] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15" />
+                <button type="button" onClick={() => setShowConfirmPassword((visible) => !visible)} aria-label={showConfirmPassword ? "Hide confirmation password" : "Show confirmation password"} title={showConfirmPassword ? "Hide confirmation password" : "Show confirmation password"} className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-[#777F9C] transition hover:bg-[#F7F9FC] hover:text-[#031079]">
+                  {showConfirmPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+                </button>
+              </div>
             </div>
           </div>
 
