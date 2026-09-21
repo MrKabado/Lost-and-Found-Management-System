@@ -35,14 +35,15 @@ const highlights = [
 ]
 
 export default function LandingPage() {
+  const coverImageUrl = `${(import.meta.env.VITE_API_URL || "http://localhost:8000/api").replace(/\/api\/?$/, "")}/images/cpc-cover.jpg`
+
   return (
     <main className="min-h-screen bg-[#F7F9FC] text-[#092354]">
       <section className="relative min-h-[680px] overflow-hidden bg-[#092354]">
         <div
           className="absolute inset-0 bg-cover bg-center opacity-45"
           style={{
-            backgroundImage:
-              "url(https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=2200&q=85)",
+            backgroundImage: `url(${coverImageUrl})`,
           }}
         />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,#092354_5%,rgba(9,35,84,.86)_42%,rgba(9,35,84,.28)_100%)]" />

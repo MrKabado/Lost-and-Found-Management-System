@@ -11,10 +11,19 @@ export default function AuthLayoutClient({
   tagline,
   ticketContent,
 }: AuthLayoutProps) {
+  const coverImageUrl = `${(import.meta.env.VITE_API_URL || "http://localhost:8000/api").replace(/\/api\/?$/, "")}/images/cpc-cover.jpg`;
+
   return (
     <div className="flex min-h-screen bg-[#092354]">
-      <div className="hidden flex-1 flex-col justify-center bg-[#092354] px-8 py-12 text-white lg:flex">
-        <div className="max-w-[430px]">
+      <div className="relative hidden flex-1 flex-col justify-center overflow-hidden bg-[#092354] px-8 py-12 text-white lg:flex">
+        <img
+          src={coverImageUrl}
+          alt="CPC campus and community collage"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(9,35,84,.96)_0%,rgba(9,35,84,.8)_48%,rgba(9,35,84,.38)_100%)]" />
+
+        <div className="relative max-w-[430px]">
           <div className="mb-10 flex items-center gap-3">
             <img src="/school/logo.png" alt="Cordova Public College" className="h-12 w-12 rounded-full object-cover" />
             <div>
