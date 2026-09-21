@@ -63,13 +63,13 @@ export default function ClientDashboard() {
       <div className="mb-6 flex flex-wrap gap-3">
         <Link
           to="/client/report-lost"
-          className="flex items-center gap-2 rounded-lg bg-[#E3963E] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#C97A28]"
+          className="flex items-center gap-2 rounded-lg bg-[#F5C518] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#D4A80D]"
         >
           <Plus size={15} /> Report a lost item
         </Link>
         <Link
           to="/client/report-found"
-          className="flex items-center gap-2 rounded-lg border border-[#E2DDD0] bg-white px-4 py-2.5 text-sm font-semibold text-[#1B2430] hover:border-[#1B2430]"
+          className="flex items-center gap-2 rounded-lg border border-[#D8DCEF] bg-white px-4 py-2.5 text-sm font-semibold text-[#031079] hover:border-[#031079]"
         >
           <Plus size={15} /> Report a found item
         </Link>
@@ -81,12 +81,12 @@ export default function ClientDashboard() {
       ) : (
         <>
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="font-sans text-lg font-semibold text-[#1B2430]">
+            <h2 className="font-sans text-lg font-semibold text-[#031079]">
               Latest item reports
             </h2>
             <Link
               to="/client/items"
-              className="text-xs font-semibold text-[#C97A28]"
+              className="text-xs font-semibold text-[#D4A80D]"
             >
               See all items
             </Link>
@@ -95,20 +95,20 @@ export default function ClientDashboard() {
             {items.map((item) => (
               <div
                 key={`${item.type}-${item.id}`}
-                className="rounded-xl border border-[#E2DDD0] bg-white p-5"
+                className="rounded-xl border border-[#D8DCEF] bg-white p-5"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <h3 className="font-semibold text-[#1B2430]">
+                    <h3 className="font-semibold text-[#031079]">
                       {item.title}
                     </h3>
-                    <p className="mt-1 text-xs text-[#83796A]">
+                    <p className="mt-1 text-xs text-[#5B6280]">
                       {item.category?.name ?? "Uncategorized"} · {item.type}
                     </p>
                   </div>
                   <StatusBadge status={item.status} />
                 </div>
-                <div className="mt-4 space-y-2 text-xs text-[#83796A]">
+                <div className="mt-4 space-y-2 text-xs text-[#5B6280]">
                   <div className="flex items-center gap-2">
                     <MapPin size={14} />
                     {item.location}
@@ -137,10 +137,10 @@ function StatCard({
   description: string
 }) {
   return (
-    <div className="rounded-xl border border-[#E2DDD0] bg-white px-5 py-4">
-      <div className="text-xs tracking-wide text-[#83796A]">{label}</div>
-      <div className="mt-1 font-sans text-3xl text-[#1B2430]">{number}</div>
-      <div className="mt-2 text-xs text-[#3F6C63]">{description}</div>
+    <div className="rounded-xl border border-[#D8DCEF] bg-white px-5 py-4">
+      <div className="text-xs tracking-wide text-[#5B6280]">{label}</div>
+      <div className="mt-1 font-sans text-3xl text-[#031079]">{number}</div>
+      <div className="mt-2 text-xs text-[#031079]">{description}</div>
     </div>
   )
 }

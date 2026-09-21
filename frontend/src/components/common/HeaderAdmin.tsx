@@ -5,20 +5,20 @@ export default function HeaderAdmin() {
   const initials = user?.name.split(" ").map((part) => part[0]).join("").slice(0, 2).toUpperCase() ?? "U";
 
   return (
-    <header className="sticky top-0 z-10 flex h-[68px] items-center justify-between border-b border-[#E2DDD0] bg-white px-7">
+    <header className="sticky top-0 z-10 flex h-[68px] items-center justify-between border-b border-[#DCE4F0] bg-white px-7">
       <div>
-        <h1 className="font-sans text-[19px] font-semibold tracking-[0.01em] text-[#1B2430]">
+        <h1 className="font-sans text-[19px] font-semibold tracking-[0.01em] text-[#092354]">
           {user?.name ?? "Admin overview"}
         </h1>
 
         <p className="mt-0.5 text-[12.5px] text-[#83796A]">
-          Monitor reports, review claims and keep records tidy.
+          Review campus reports and help return belongings to their owners.
         </p>
       </div>
 
       <div className="flex items-center gap-3">
         {/* Avatar */}
-        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#E3963E] to-[#C97A28] font-sans text-sm text-white">
+        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0B2A6F] font-sans text-sm text-white">
           {initials}
         </div>
       </div>

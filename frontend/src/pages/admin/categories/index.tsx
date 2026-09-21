@@ -80,12 +80,12 @@ export default function AdminCategories() {
             if (event.key === "Enter") void addCategory()
           }}
           placeholder="New category name"
-          className="flex-1 rounded-lg border border-[#E2DDD0] bg-white px-3 py-2.5 text-sm outline-none focus:border-[#E3963E]"
+          className="flex-1 rounded-lg border border-[#D8DCEF] bg-white px-3 py-2.5 text-sm outline-none focus:border-[#F5C518]"
         />
         <button
           type="button"
           onClick={() => void addCategory()}
-          className="flex items-center gap-2 rounded-lg bg-[#E3963E] px-4 py-2.5 text-sm font-semibold text-white"
+          className="flex items-center gap-2 rounded-lg bg-[#F5C518] px-4 py-2.5 text-sm font-semibold text-white"
         >
           <Plus size={15} /> Add
         </button>
@@ -99,7 +99,7 @@ export default function AdminCategories() {
           {categories.map((category, index) => (
             <div
               key={category.id}
-              className="rounded-xl border border-[#E2DDD0] bg-white p-4"
+              className="rounded-xl border border-[#D8DCEF] bg-white p-4"
             >
               {editingId === category.id ? (
                 <div className="flex gap-2">
@@ -107,28 +107,28 @@ export default function AdminCategories() {
                     autoFocus
                     value={editingName}
                     onChange={(event) => setEditingName(event.target.value)}
-                    className="min-w-0 flex-1 rounded border border-[#E2DDD0] px-2 py-1 text-sm"
+                    className="min-w-0 flex-1 rounded border border-[#D8DCEF] px-2 py-1 text-sm"
                   />
                   <button
                     type="button"
                     onClick={() => void saveCategory(category.id)}
-                    className="text-xs font-semibold text-[#3F6C63]"
+                    className="text-xs font-semibold text-[#031079]"
                   >
                     Save
                   </button>
                 </div>
               ) : (
                 <div className="flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-2 text-sm font-semibold text-[#1B2430]">
+                  <div className="flex items-center gap-2 text-sm font-semibold text-[#031079]">
                     <span
                       className="h-2.5 w-2.5 rounded-full"
                       style={{
                         backgroundColor: [
-                          "#3F6C63",
-                          "#E3963E",
+                          "#031079",
+                          "#F5C518",
                           "#B6503A",
-                          "#7A7568",
-                          "#1B2430",
+                          "#5B6280",
+                          "#031079",
                         ][index % 5],
                       }}
                     />
@@ -142,7 +142,7 @@ export default function AdminCategories() {
                         setEditingId(category.id)
                         setEditingName(category.name)
                       }}
-                      className="p-1.5 text-[#83796A] hover:text-[#C97A28]"
+                      className="p-1.5 text-[#5B6280] hover:text-[#D4A80D]"
                     >
                       <Pencil size={14} />
                     </button>

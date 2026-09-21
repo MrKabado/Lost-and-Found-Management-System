@@ -34,8 +34,8 @@ export default function AdminUsers() {
       title="Users"
       description="Review registered accounts and administrator access."
     >
-      <div className="mb-5 flex items-center gap-2 rounded-xl border border-[#E2DDD0] bg-white p-4">
-        <Search size={16} className="text-[#83796A]" />
+      <div className="mb-5 flex items-center gap-2 rounded-xl border border-[#D8DCEF] bg-white p-4">
+        <Search size={16} className="text-[#5B6280]" />
         <input
           value={search}
           onChange={(event) => setSearch(event.target.value)}
@@ -50,10 +50,10 @@ export default function AdminUsers() {
       ) : visibleUsers.length === 0 ? (
         <AdminState>No users found.</AdminState>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-[#E2DDD0] bg-white">
+        <div className="overflow-x-auto rounded-xl border border-[#D8DCEF] bg-white">
           <table className="w-full min-w-[650px] border-collapse text-sm">
             <thead>
-              <tr className="border-b border-[#E2DDD0] text-left text-[11px] tracking-wide text-[#83796A] uppercase">
+              <tr className="border-b border-[#D8DCEF] text-left text-[11px] tracking-wide text-[#5B6280] uppercase">
                 <th className="px-5 py-3">User</th>
                 <th className="px-5 py-3">Email</th>
                 <th className="px-5 py-3">Role</th>
@@ -64,16 +64,16 @@ export default function AdminUsers() {
               {visibleUsers.map((user) => (
                 <tr
                   key={user.id}
-                  className="border-b border-[#E2DDD0] last:border-0"
+                  className="border-b border-[#D8DCEF] last:border-0"
                 >
-                  <td className="px-5 py-4 font-semibold text-[#1B2430]">
+                  <td className="px-5 py-4 font-semibold text-[#031079]">
                     {user.name}
                   </td>
-                  <td className="px-5 py-4 text-[#5F5A50]">{user.email}</td>
+                  <td className="px-5 py-4 text-[#4A5170]">{user.email}</td>
                   <td className="px-5 py-4">
                     <AdminBadge value={user.role} />
                   </td>
-                  <td className="px-5 py-4 text-[#83796A]">
+                  <td className="px-5 py-4 text-[#5B6280]">
                     {formatDate(user.created_at)}
                   </td>
                 </tr>

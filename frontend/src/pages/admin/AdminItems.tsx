@@ -84,8 +84,8 @@ export default function AdminItems({ type }: { type: "lost" | "found" }) {
       title={`${type === "lost" ? "Lost" : "Found"} items`}
       description={`Review and manage all ${type} item reports.`}
     >
-      <div className="mb-5 flex items-center gap-2 rounded-xl border border-[#E2DDD0] bg-white p-4">
-        <Search size={16} className="text-[#83796A]" />
+      <div className="mb-5 flex items-center gap-2 rounded-xl border border-[#D8DCEF] bg-white p-4">
+        <Search size={16} className="text-[#5B6280]" />
         <input
           value={search}
           onChange={(event) => setSearch(event.target.value)}
@@ -100,10 +100,10 @@ export default function AdminItems({ type }: { type: "lost" | "found" }) {
       ) : visibleItems.length === 0 ? (
         <AdminState>No items found.</AdminState>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-[#E2DDD0] bg-white">
+        <div className="overflow-x-auto rounded-xl border border-[#D8DCEF] bg-white">
           <table className="w-full min-w-[900px] border-collapse text-sm">
             <thead>
-              <tr className="border-b border-[#E2DDD0] text-left text-[11px] tracking-wide text-[#83796A] uppercase">
+              <tr className="border-b border-[#D8DCEF] text-left text-[11px] tracking-wide text-[#5B6280] uppercase">
                 <th className="px-5 py-3">Item</th>
                 <th className="px-5 py-3">Reporter</th>
                 <th className="px-5 py-3">Location</th>
@@ -116,28 +116,28 @@ export default function AdminItems({ type }: { type: "lost" | "found" }) {
               {visibleItems.map((item) => (
                 <tr
                   key={item.id}
-                  className="border-b border-[#E2DDD0] last:border-0"
+                  className="border-b border-[#D8DCEF] last:border-0"
                 >
                   <td className="px-5 py-4">
-                    <div className="font-semibold text-[#1B2430]">
+                    <div className="font-semibold text-[#031079]">
                       {item.title}
                     </div>
-                    <div className="mt-1 text-xs text-[#83796A]">
+                    <div className="mt-1 text-xs text-[#5B6280]">
                       {item.category?.name ?? "Uncategorized"}
                     </div>
                   </td>
                   <td className="px-5 py-4">
-                    <div className="text-[#1B2430]">
+                    <div className="text-[#031079]">
                       {item.user?.name ?? "Unknown"}
                     </div>
-                    <div className="text-xs text-[#83796A]">
+                    <div className="text-xs text-[#5B6280]">
                       {item.user?.email}
                     </div>
                   </td>
-                  <td className="px-5 py-4 text-[#5F5A50]">
+                  <td className="px-5 py-4 text-[#4A5170]">
                     {item.location_lost ?? item.location_found}
                   </td>
-                  <td className="px-5 py-4 text-[#5F5A50]">
+                  <td className="px-5 py-4 text-[#4A5170]">
                     {formatDate(item.date_lost ?? item.date_found)}
                   </td>
                   <td className="px-5 py-4">
@@ -150,7 +150,7 @@ export default function AdminItems({ type }: { type: "lost" | "found" }) {
                         onChange={(event) =>
                           void changeStatus(item, event.target.value)
                         }
-                        className="rounded-md border border-[#E2DDD0] bg-white px-2 py-1.5 text-xs"
+                        className="rounded-md border border-[#D8DCEF] bg-white px-2 py-1.5 text-xs"
                       >
                         <option value={item.status}>{item.status}</option>
                         {statusOptions
@@ -165,7 +165,7 @@ export default function AdminItems({ type }: { type: "lost" | "found" }) {
                         type="button"
                         title="Delete item"
                         onClick={() => void deleteItem(item.id)}
-                        className="rounded-md border border-[#E2DDD0] p-2 text-[#B6503A] hover:border-[#B6503A]"
+                        className="rounded-md border border-[#D8DCEF] p-2 text-[#B6503A] hover:border-[#B6503A]"
                       >
                         <Trash2 size={14} />
                       </button>

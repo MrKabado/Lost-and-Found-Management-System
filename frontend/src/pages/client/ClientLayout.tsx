@@ -4,7 +4,7 @@ import HeaderClient from "@/components/common/HeaderClient";
 
 export default function ClientLayout() {
   return (
-    <div className="flex min-h-screen bg-[#F6F3EC]">
+    <div className="flex min-h-screen bg-[#FAFAFA]">
       <SidebarClient />
 
       <div className="min-w-0 flex-1">

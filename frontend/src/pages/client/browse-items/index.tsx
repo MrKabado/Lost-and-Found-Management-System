@@ -104,9 +104,9 @@ export default function BrowseItems() {
       title="Browse items"
       description="Search reported items and submit a claim when you recognize one."
     >
-      <div className="mb-5 flex flex-wrap gap-3 rounded-xl border border-[#E2DDD0] bg-white p-4">
-        <div className="flex min-w-60 flex-1 items-center gap-2 rounded-lg border border-[#E2DDD0] px-3 py-2">
-          <Search size={16} className="text-[#83796A]" />
+      <div className="mb-5 flex flex-wrap gap-3 rounded-xl border border-[#D8DCEF] bg-white p-4">
+        <div className="flex min-w-60 flex-1 items-center gap-2 rounded-lg border border-[#D8DCEF] px-3 py-2">
+          <Search size={16} className="text-[#5B6280]" />
           <input
             value={filters.search}
             onChange={(event) =>
@@ -121,7 +121,7 @@ export default function BrowseItems() {
           onChange={(event) =>
             setFilters({ ...filters, category: event.target.value })
           }
-          className="rounded-lg border border-[#E2DDD0] bg-white px-3 py-2 text-sm"
+          className="rounded-lg border border-[#D8DCEF] bg-white px-3 py-2 text-sm"
         >
           <option value="">All categories</option>
           {categories.map((category) => (
@@ -135,7 +135,7 @@ export default function BrowseItems() {
           onChange={(event) =>
             setFilters({ ...filters, status: event.target.value })
           }
-          className="rounded-lg border border-[#E2DDD0] bg-white px-3 py-2 text-sm"
+          className="rounded-lg border border-[#D8DCEF] bg-white px-3 py-2 text-sm"
         >
           <option value="">All statuses</option>
           <option value="lost">Lost</option>
@@ -158,19 +158,19 @@ export default function BrowseItems() {
           {items.map((item) => (
             <div
               key={`${item.type}-${item.id}`}
-              className="rounded-xl border border-[#E2DDD0] bg-white p-5"
+              className="rounded-xl border border-[#D8DCEF] bg-white p-5"
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h3 className="font-semibold text-[#1B2430]">{item.title}</h3>
-                  <p className="mt-1 text-xs text-[#83796A]">
+                  <h3 className="font-semibold text-[#031079]">{item.title}</h3>
+                  <p className="mt-1 text-xs text-[#5B6280]">
                     {item.category?.name ?? "Uncategorized"} · {item.type}
                   </p>
                 </div>
                 <StatusBadge status={item.status} />
               </div>
-              <p className="mt-4 text-sm text-[#5F5A50]">{item.description}</p>
-              <div className="mt-4 space-y-2 text-xs text-[#83796A]">
+              <p className="mt-4 text-sm text-[#4A5170]">{item.description}</p>
+              <div className="mt-4 space-y-2 text-xs text-[#5B6280]">
                 <div className="flex items-center gap-2">
                   <MapPin size={14} />
                   {item.location}
@@ -193,7 +193,7 @@ export default function BrowseItems() {
 
                     if (item.user_id === user?.id) {
                       return (
-                        <div className="mt-5 rounded-lg bg-[#F6F3EC] px-4 py-2.5 text-center text-sm font-semibold text-[#83796A]">
+                        <div className="mt-5 rounded-lg bg-[#F5F6FC] px-4 py-2.5 text-center text-sm font-semibold text-[#5B6280]">
                           Your reported item
                         </div>
                       );
@@ -201,7 +201,7 @@ export default function BrowseItems() {
 
                     if (item.status.toLowerCase() === "claimed") {
                       return (
-                        <div className="mt-5 rounded-lg bg-[#E7EEEC] px-4 py-2.5 text-center text-sm font-semibold text-[#3F6C63]">
+                        <div className="mt-5 rounded-lg bg-[#E8EAF8] px-4 py-2.5 text-center text-sm font-semibold text-[#031079]">
                           This item has already been claimed
                         </div>
                       );
@@ -209,22 +209,22 @@ export default function BrowseItems() {
 
                     if (existingClaim) {
                       return (
-                        <div className="mt-5 rounded-lg bg-[#E7EEEC] px-4 py-2.5 text-center text-sm font-semibold text-[#3F6C63]">
+                        <div className="mt-5 rounded-lg bg-[#E8EAF8] px-4 py-2.5 text-center text-sm font-semibold text-[#031079]">
                           Claim already submitted
                         </div>
                       );
                     }
 
                     return claimingId === item.id ? (
-                    <div className="mt-4 rounded-lg border border-[#E2DDD0] bg-[#FBFAF6] p-3">
+                    <div className="mt-4 rounded-lg border border-[#D8DCEF] bg-[#F8F9FF] p-3">
                       <textarea
                         value={claimReason}
                         onChange={(event) => setClaimReason(event.target.value)}
                         rows={3}
                         placeholder="Explain why this item belongs to you"
-                        className="w-full resize-y rounded-lg border border-[#E2DDD0] bg-white p-2.5 text-sm text-[#1B2430] outline-none placeholder:text-[#9AA3AC] focus:border-[#E3963E] focus:ring-2 focus:ring-[#E3963E]/15"
+                        className="w-full resize-y rounded-lg border border-[#D8DCEF] bg-white p-2.5 text-sm text-[#031079] outline-none placeholder:text-[#8B92B0] focus:border-[#F5C518] focus:ring-2 focus:ring-[#F5C518]/15"
                       />
-                      <label className="mt-2 block text-xs font-semibold text-[#5F5A50]">
+                      <label className="mt-2 block text-xs font-semibold text-[#4A5170]">
                         Proof image (optional)
                         <input
                           ref={proofInputRef}
@@ -237,7 +237,7 @@ export default function BrowseItems() {
                         />
                       </label>
                       {proof && (
-                        <div className="mt-2 flex items-center justify-between gap-3 rounded-md bg-white px-2.5 py-2 text-xs text-[#5F5A50]">
+                        <div className="mt-2 flex items-center justify-between gap-3 rounded-md bg-white px-2.5 py-2 text-xs text-[#4A5170]">
                           <span className="min-w-0 truncate">{proof.name}</span>
                           <button type="button" onClick={removeProof} className="inline-flex shrink-0 items-center gap-1 font-semibold text-[#B6503A] hover:underline" title="Remove attached image">
                             <X size={13} /> Remove
@@ -248,14 +248,14 @@ export default function BrowseItems() {
                         <button
                           type="button"
                           onClick={() => void submitClaim(item)}
-                          className="flex items-center gap-2 rounded-lg bg-[#E3963E] px-3 py-2 text-xs font-semibold text-white"
+                          className="flex items-center gap-2 rounded-lg bg-[#F5C518] px-3 py-2 text-xs font-semibold text-white"
                         >
                           <Send size={13} /> Submit claim
                         </button>
                         <button
                           type="button"
                           onClick={cancelClaim}
-                          className="rounded-lg border border-[#E2DDD0] bg-white px-3 py-2 text-xs font-semibold text-[#5F5A50] hover:border-[#1B2430] hover:text-[#1B2430]"
+                          className="rounded-lg border border-[#D8DCEF] bg-white px-3 py-2 text-xs font-semibold text-[#4A5170] hover:border-[#031079] hover:text-[#031079]"
                         >
                           Cancel
                         </button>
@@ -265,7 +265,7 @@ export default function BrowseItems() {
                     <button
                       type="button"
                       onClick={() => setClaimingId(item.id)}
-                      className="mt-5 w-full rounded-lg bg-[#1B2430] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#26313F] focus:outline-none focus:ring-2 focus:ring-[#E3963E] focus:ring-offset-2"
+                      className="mt-5 w-full rounded-lg bg-[#031079] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#041690] focus:outline-none focus:ring-2 focus:ring-[#F5C518] focus:ring-offset-2"
                     >
                       This is mine
                     </button>

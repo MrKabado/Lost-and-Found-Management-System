@@ -15,10 +15,10 @@ export default function ClientPage({
     <div className="pb-16">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h2 className="font-sans text-2xl font-semibold text-[#1B2430]">
+          <h2 className="font-sans text-2xl font-semibold text-[#171717]">
             {title}
           </h2>
-          <p className="mt-1 text-[13px] text-[#83796A]">{description}</p>
+          <p className="mt-1 text-[13px] text-[#6B6B6B]">{description}</p>
         </div>
         {action}
       </div>
@@ -29,7 +29,7 @@ export default function ClientPage({
 
 export function LoadingState() {
   return (
-    <div className="rounded-xl border border-[#E2DDD0] bg-white p-8 text-center text-sm text-[#83796A]">
+    <div className="rounded-xl border border-[#E6E6E6] bg-white p-8 text-center text-sm text-[#6B6B6B]">
       Loading data...
     </div>
   )
@@ -45,7 +45,7 @@ export function ErrorState({ message }: { message: string }) {
 
 export function EmptyState({ message }: { message: string }) {
   return (
-    <div className="rounded-xl border border-dashed border-[#E2DDD0] bg-white p-10 text-center text-sm text-[#83796A]">
+    <div className="rounded-xl border border-dashed border-[#E6E6E6] bg-white p-10 text-center text-sm text-[#6B6B6B]">
       {message}
     </div>
   )
@@ -56,10 +56,10 @@ export function StatusBadge({ status }: { status: string }) {
   const tone = ["APPROVED", "FOUND", "VERIFIED", "RETURNED"].includes(
     normalizedStatus
   )
-    ? "bg-[#E7EEEC] text-[#3F6C63]"
+    ? "bg-[#F4F4F4] text-[#171717]"
     : normalizedStatus === "REJECTED"
       ? "bg-[#F5E7E3] text-[#B6503A]"
-      : "bg-[#FCEFD8] text-[#C97A28]"
+      : "bg-[#F4F4F4] text-[#171717]"
 
   return (
     <span

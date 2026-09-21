@@ -48,7 +48,7 @@ export default function MyLostReports() {
       action={
         <Link
           to="/client/report-lost"
-          className="flex items-center gap-2 rounded-lg bg-[#E3963E] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#C97A28]"
+          className="flex items-center gap-2 rounded-lg bg-[#F5C518] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#D4A80D]"
         >
           <Plus size={15} /> Report lost item
         </Link>
@@ -65,19 +65,19 @@ export default function MyLostReports() {
           {items.map((item) => (
             <div
               key={item.id}
-              className="rounded-xl border border-[#E2DDD0] bg-white p-5"
+              className="rounded-xl border border-[#D8DCEF] bg-white p-5"
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h3 className="font-semibold text-[#1B2430]">{item.title}</h3>
-                  <p className="mt-1 text-xs text-[#83796A]">
+                  <h3 className="font-semibold text-[#031079]">{item.title}</h3>
+                  <p className="mt-1 text-xs text-[#5B6280]">
                     {item.category?.name ?? "Uncategorized"}
                   </p>
                 </div>
                 <StatusBadge status={item.status} />
               </div>
-              <p className="mt-4 text-sm text-[#5F5A50]">{item.description}</p>
-              <div className="mt-4 flex flex-col gap-2 text-xs text-[#83796A]">
+              <p className="mt-4 text-sm text-[#4A5170]">{item.description}</p>
+              <div className="mt-4 flex flex-col gap-2 text-xs text-[#5B6280]">
                 <span className="flex items-center gap-2">
                   <MapPin size={14} />
                   {item.location_lost}

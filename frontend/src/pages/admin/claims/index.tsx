@@ -64,8 +64,8 @@ export default function AdminClaims() {
       title="Claims"
       description="Review ownership claims, proof images, and decide which requests to approve."
     >
-      <div className="mb-5 flex items-center gap-2 rounded-xl border border-[#E2DDD0] bg-white p-4">
-        <Search size={16} className="text-[#83796A]" />
+      <div className="mb-5 flex items-center gap-2 rounded-xl border border-[#D8DCEF] bg-white p-4">
+        <Search size={16} className="text-[#5B6280]" />
         <input
           value={search}
           onChange={(event) => setSearch(event.target.value)}
@@ -80,10 +80,10 @@ export default function AdminClaims() {
       ) : visibleClaims.length === 0 ? (
         <AdminState>No claims found.</AdminState>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-[#E2DDD0] bg-white">
+        <div className="overflow-x-auto rounded-xl border border-[#D8DCEF] bg-white">
           <table className="w-full min-w-[1000px] border-collapse text-sm">
             <thead>
-              <tr className="border-b border-[#E2DDD0] text-left text-[11px] tracking-wide text-[#83796A] uppercase">
+              <tr className="border-b border-[#D8DCEF] text-left text-[11px] tracking-wide text-[#5B6280] uppercase">
                 <th className="px-5 py-3">Claimant</th>
                 <th className="px-5 py-3">Item</th>
                 <th className="px-5 py-3">Reason</th>
@@ -97,20 +97,20 @@ export default function AdminClaims() {
               {visibleClaims.map((claim) => (
                 <tr
                   key={claim.id}
-                  className="border-b border-[#E2DDD0] last:border-0"
+                  className="border-b border-[#D8DCEF] last:border-0"
                 >
                   <td className="px-5 py-4">
-                    <div className="font-semibold text-[#1B2430]">
+                    <div className="font-semibold text-[#031079]">
                       {claim.user?.name ?? "Unknown"}
                     </div>
-                    <div className="text-xs text-[#83796A]">
+                    <div className="text-xs text-[#5B6280]">
                       {claim.user?.email}
                     </div>
                   </td>
-                  <td className="px-5 py-4 text-[#1B2430]">
+                  <td className="px-5 py-4 text-[#031079]">
                     {claim.found_item?.title ?? "Unknown item"}
                   </td>
-                  <td className="max-w-xs px-5 py-4 text-xs text-[#5F5A50]">
+                  <td className="max-w-xs px-5 py-4 text-xs text-[#4A5170]">
                     {claim.claim_reason}
                   </td>
                   <td className="px-5 py-4">
@@ -119,17 +119,17 @@ export default function AdminClaims() {
                         href={getStorageUrl(claim.proof) ?? "#"}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#C97A28] hover:underline"
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#D4A80D] hover:underline"
                       >
                         View proof <ExternalLink size={13} />
                       </a>
                     ) : (
-                      <span className="text-xs text-[#9AA3AC]">
+                      <span className="text-xs text-[#8B92B0]">
                         Not provided
                       </span>
                     )}
                   </td>
-                  <td className="px-5 py-4 text-[#5F5A50]">
+                  <td className="px-5 py-4 text-[#4A5170]">
                     {formatDate(claim.created_at)}
                   </td>
                   <td className="px-5 py-4">
@@ -143,7 +143,7 @@ export default function AdminClaims() {
                             type="button"
                             title="Approve claim"
                             onClick={() => void updateClaim(claim, "approve")}
-                            className="rounded-md border border-[#E2DDD0] p-2 text-[#3F6C63] hover:border-[#3F6C63]"
+                            className="rounded-md border border-[#D8DCEF] p-2 text-[#031079] hover:border-[#031079]"
                           >
                             <Check size={15} />
                           </button>
@@ -151,7 +151,7 @@ export default function AdminClaims() {
                             type="button"
                             title="Reject claim"
                             onClick={() => void updateClaim(claim, "reject")}
-                            className="rounded-md border border-[#E2DDD0] p-2 text-[#B6503A] hover:border-[#B6503A]"
+                            className="rounded-md border border-[#D8DCEF] p-2 text-[#B6503A] hover:border-[#B6503A]"
                           >
                             <X size={15} />
                           </button>

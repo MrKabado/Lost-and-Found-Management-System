@@ -44,28 +44,28 @@ export default function MyClaims() {
           {claims.map((claim) => (
             <div
               key={claim.id}
-              className="rounded-xl border border-[#E2DDD0] bg-white p-5"
+              className="rounded-xl border border-[#D8DCEF] bg-white p-5"
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#E7EEEC] text-[#3F6C63]">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#E8EAF8] text-[#031079]">
                     <PackageCheck size={20} />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#1B2430]">
+                    <h3 className="font-semibold text-[#031079]">
                       {claim.foundItem?.title ?? "Found item"}
                     </h3>
-                    <p className="mt-1 text-xs text-[#83796A]">
+                    <p className="mt-1 text-xs text-[#5B6280]">
                       {claim.foundItem?.category?.name ?? "Uncategorized"}
                     </p>
                   </div>
                 </div>
                 <StatusBadge status={claim.status} />
               </div>
-              <p className="mt-4 text-sm text-[#5F5A50]">
+              <p className="mt-4 text-sm text-[#4A5170]">
                 {claim.claim_reason}
               </p>
-              <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-[#83796A]">
+              <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-[#5B6280]">
                 <span className="flex items-center gap-2">
                   <CalendarDays size={14} /> Submitted{" "}
                   {formatDate(claim.created_at)}
@@ -75,7 +75,7 @@ export default function MyClaims() {
                     href={getStorageUrl(claim.proof) ?? "#"}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1 font-semibold text-[#C97A28] hover:underline"
+                    className="inline-flex items-center gap-1 font-semibold text-[#D4A80D] hover:underline"
                   >
                     View submitted proof <ExternalLink size={13} />
                   </a>

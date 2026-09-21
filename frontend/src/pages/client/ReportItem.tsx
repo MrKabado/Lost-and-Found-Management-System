@@ -63,7 +63,7 @@ export default function ReportItem({ type }: { type: "lost" | "found" }) {
       action={
         <Link
           to="/client"
-          className="flex items-center gap-2 text-sm font-semibold text-[#C97A28]"
+          className="flex items-center gap-2 text-sm font-semibold text-[#D4A80D]"
         >
           <ArrowLeft size={15} /> Back to dashboard
         </Link>
@@ -71,7 +71,7 @@ export default function ReportItem({ type }: { type: "lost" | "found" }) {
     >
       <form
         onSubmit={handleSubmit}
-        className="max-w-2xl rounded-xl border border-[#E2DDD0] bg-white p-6"
+        className="max-w-2xl rounded-xl border border-[#D8DCEF] bg-white p-6"
       >
         {error && (
           <div className="mb-5">
@@ -79,7 +79,7 @@ export default function ReportItem({ type }: { type: "lost" | "found" }) {
           </div>
         )}
         <div className="grid gap-5 sm:grid-cols-2">
-          <label className="text-sm font-semibold text-[#26313F]">
+          <label className="text-sm font-semibold text-[#041690]">
             Title
             <input
               required
@@ -87,11 +87,11 @@ export default function ReportItem({ type }: { type: "lost" | "found" }) {
               onChange={(event) =>
                 setForm({ ...form, title: event.target.value })
               }
-              className="mt-2 w-full rounded-lg border border-[#E2DDD0] px-3 py-2.5 font-normal outline-none focus:border-[#E3963E]"
+              className="mt-2 w-full rounded-lg border border-[#D8DCEF] px-3 py-2.5 font-normal outline-none focus:border-[#F5C518]"
               placeholder="e.g. Black backpack"
             />
           </label>
-          <label className="text-sm font-semibold text-[#26313F]">
+          <label className="text-sm font-semibold text-[#041690]">
             Category
             <select
               required
@@ -99,7 +99,7 @@ export default function ReportItem({ type }: { type: "lost" | "found" }) {
               onChange={(event) =>
                 setForm({ ...form, category_id: event.target.value })
               }
-              className="mt-2 w-full rounded-lg border border-[#E2DDD0] bg-white px-3 py-2.5 font-normal outline-none focus:border-[#E3963E]"
+              className="mt-2 w-full rounded-lg border border-[#D8DCEF] bg-white px-3 py-2.5 font-normal outline-none focus:border-[#F5C518]"
             >
               <option value="">Choose a category</option>
               {categories.map((category) => (
@@ -109,7 +109,7 @@ export default function ReportItem({ type }: { type: "lost" | "found" }) {
               ))}
             </select>
           </label>
-          <label className="text-sm font-semibold text-[#26313F]">
+          <label className="text-sm font-semibold text-[#041690]">
             Location
             <input
               required
@@ -117,11 +117,11 @@ export default function ReportItem({ type }: { type: "lost" | "found" }) {
               onChange={(event) =>
                 setForm({ ...form, location: event.target.value })
               }
-              className="mt-2 w-full rounded-lg border border-[#E2DDD0] px-3 py-2.5 font-normal outline-none focus:border-[#E3963E]"
+              className="mt-2 w-full rounded-lg border border-[#D8DCEF] px-3 py-2.5 font-normal outline-none focus:border-[#F5C518]"
               placeholder="Where was it seen?"
             />
           </label>
-          <label className="text-sm font-semibold text-[#26313F]">
+          <label className="text-sm font-semibold text-[#041690]">
             Date
             <input
               required
@@ -130,11 +130,11 @@ export default function ReportItem({ type }: { type: "lost" | "found" }) {
               onChange={(event) =>
                 setForm({ ...form, date: event.target.value })
               }
-              className="mt-2 w-full rounded-lg border border-[#E2DDD0] px-3 py-2.5 font-normal outline-none focus:border-[#E3963E]"
+              className="mt-2 w-full rounded-lg border border-[#D8DCEF] px-3 py-2.5 font-normal outline-none focus:border-[#F5C518]"
             />
           </label>
         </div>
-        <label className="mt-5 block text-sm font-semibold text-[#26313F]">
+        <label className="mt-5 block text-sm font-semibold text-[#041690]">
           Description
           <textarea
             required
@@ -143,14 +143,14 @@ export default function ReportItem({ type }: { type: "lost" | "found" }) {
               setForm({ ...form, description: event.target.value })
             }
             rows={5}
-            className="mt-2 w-full rounded-lg border border-[#E2DDD0] px-3 py-2.5 font-normal outline-none focus:border-[#E3963E]"
+            className="mt-2 w-full rounded-lg border border-[#D8DCEF] px-3 py-2.5 font-normal outline-none focus:border-[#F5C518]"
             placeholder="Add color, brand, identifying marks, and other useful details."
           />
         </label>
         <button
           disabled={saving}
           type="submit"
-          className="mt-6 flex items-center gap-2 rounded-lg bg-[#1B2430] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#26313F] disabled:opacity-60"
+          className="mt-6 flex items-center gap-2 rounded-lg bg-[#031079] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#041690] disabled:opacity-60"
         >
           {saving ? (
             "Submitting..."

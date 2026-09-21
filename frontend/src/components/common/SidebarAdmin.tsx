@@ -32,26 +32,15 @@ export default function SidebarAdmin() {
   };
 
   return (
-    <aside className="sticky top-0 flex h-screen w-60 shrink-0 flex-col bg-[#1B2430] px-4 py-[22px] text-[#EDEAE1]">
+    <aside className="sticky top-0 flex h-screen w-60 shrink-0 flex-col bg-[#092354] px-4 py-[22px] text-[#F5F8FC]">
       {/* Brand */}
-      <div className="mb-[18px] flex items-center gap-2.5 border-b border-[#38445466] px-2 pb-[22px]">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-          className="shrink-0 text-[#E3963E]"
-        >
-          <path d="M12 2 L21 11 L11 21 L2 12 Z" />
-          <circle cx="7.5" cy="7.5" r="1.6" />
-        </svg>
+      <div className="mb-[18px] flex items-center gap-2.5 border-b border-[#FFFFFF26] px-2 pb-[18px]">
+        <img src="/school/logo.png" alt="Cordova Public College" className="h-10 w-10 rounded-full object-cover" />
 
         <div className="font-sans text-[17px] leading-[1.1]">
-          Lost&Found
+          CPC Item Desk
           <span className="mt-0.5 block font-sans text-[10.5px] tracking-wider text-[#9AA3AC]">
-            Admin Console
+            Cordova Public College
           </span>
         </div>
       </div>
@@ -98,16 +87,16 @@ export default function SidebarAdmin() {
       </nav>
 
       {/* Bottom */}
-      <div className="mt-auto border-t border-[#38445466] pt-4">
-        <div className="flex items-center gap-2 rounded-lg bg-[#232E3B] px-2.5 py-[9px] text-[12.5px] text-[#C7C1B3]">
-          <span className="h-[7px] w-[7px] shrink-0 rounded-full bg-[#E3963E]" />
+      <div className="mt-auto border-t border-[#FFFFFF26] pt-4">
+        <div className="flex items-center gap-2 rounded-lg bg-[#15366F] px-2.5 py-[9px] text-[12.5px] text-[#D6E0EF]">
+          <span className="h-[7px] w-[7px] shrink-0 rounded-full bg-[#D9B85A]" />
           Signed in as {user?.name ?? "Admin"}
         </div>
 
         <button
           type="button"
           onClick={() => void handleLogout()}
-          className="w-full mt-2 flex items-center gap-[11px] rounded-[7px] px-2.5 py-[9px] text-sm text-[#D9D5C9] hover:bg-[#232E3B] hover:text-white"
+          className="mt-2 w-full flex items-center gap-[11px] rounded-[7px] px-2.5 py-[9px] text-sm text-[#D6E0EF] hover:bg-[#15366F] hover:text-white"
         >
           <LogOut size={17} />
           Log out
@@ -129,7 +118,7 @@ function SidebarLink({
   count?: string;
 }) {
   return (
-    <NavLink to={to} end={to === "/admin"} className={({ isActive }) => `flex items-center gap-[11px] rounded-[7px] border-l-2 px-2.5 py-[9px] text-sm ${isActive ? "border-[#E3963E] bg-[#232E3B] text-white" : "border-transparent text-[#D9D5C9] hover:bg-[#232E3B] hover:text-white"}`}>
+    <NavLink to={to} end={to === "/admin"} className={({ isActive }) => `flex items-center gap-[11px] rounded-[7px] border-l-2 px-2.5 py-[9px] text-sm ${isActive ? "border-[#D9B85A] bg-[#15366F] text-white" : "border-transparent text-[#D6E0EF] hover:bg-[#15366F] hover:text-white"}`}>
       {icon}{label}{count && <span className="ml-auto rounded-full bg-[#313D4C] px-[7px] py-[1px] text-[11px] text-[#C7C1B3]">{count}</span>}
     </NavLink>
   );

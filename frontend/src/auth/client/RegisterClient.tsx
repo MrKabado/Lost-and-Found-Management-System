@@ -85,12 +85,12 @@ export default function RegisterClient() {
       <div>
         <AuthBrandClient />
 
-        <h2 className="mb-1.5 font-sans text-2xl font-semibold tracking-[0.01em] text-[#1B2430]">
+        <h2 className="mb-1.5 font-sans text-2xl font-semibold tracking-[0.01em] text-[#031079]">
           Create your account
         </h2>
 
-        <div className="mb-[26px] text-[13.5px] text-[#83796A]">
-          Report lost or found items and follow every claim in one place.
+        <div className="mb-[26px] text-[13.5px] text-[#5B6280]">
+          Create your CPC account to report, search, and safely return items.
         </div>
 
         {error ? (
@@ -102,7 +102,7 @@ export default function RegisterClient() {
         <form onSubmit={handleSubmit} noValidate>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="mb-4">
-              <label htmlFor="firstName" className="mb-1.5 block text-[12.5px] font-semibold text-[#26313F]">
+              <label htmlFor="firstName" className="mb-1.5 block text-[12.5px] font-semibold text-[#041690]">
                 First name
               </label>
 
@@ -114,12 +114,12 @@ export default function RegisterClient() {
                 onChange={handleChange}
                 placeholder="Juan"
                 required
-                className="w-full rounded-lg border border-[#E2DDD0] bg-white px-[13px] py-[11px] text-[13.5px] text-[#1B2430] outline-none focus:border-[#E3963E] focus:ring-4 focus:ring-[#E3963E]/15"
+                className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] text-[13.5px] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15"
               />
             </div>
 
             <div className="mb-4">
-              <label htmlFor="lastName" className="mb-1.5 block text-[12.5px] font-semibold text-[#26313F]">
+              <label htmlFor="lastName" className="mb-1.5 block text-[12.5px] font-semibold text-[#041690]">
                 Last name
               </label>
 
@@ -131,13 +131,13 @@ export default function RegisterClient() {
                 onChange={handleChange}
                 placeholder="Dela Cruz"
                 required
-                className="w-full rounded-lg border border-[#E2DDD0] bg-white px-[13px] py-[11px] text-[13.5px] text-[#1B2430] outline-none focus:border-[#E3963E] focus:ring-4 focus:ring-[#E3963E]/15"
+                className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] text-[13.5px] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15"
               />
             </div>
           </div>
 
           <div className="mb-4">
-            <label htmlFor="email" className="mb-1.5 block text-[12.5px] font-semibold text-[#26313F]">
+            <label htmlFor="email" className="mb-1.5 block text-[12.5px] font-semibold text-[#041690]">
               Email address
             </label>
 
@@ -149,13 +149,13 @@ export default function RegisterClient() {
               onChange={handleChange}
               placeholder="juan.delacruz@email.com"
               required
-              className="w-full rounded-lg border border-[#E2DDD0] bg-white px-[13px] py-[11px] text-[13.5px] text-[#1B2430] outline-none focus:border-[#E3963E] focus:ring-4 focus:ring-[#E3963E]/15"
+              className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] text-[13.5px] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15"
             />
           </div>
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="mb-4">
-              <label htmlFor="password" className="mb-1.5 block text-[12.5px] font-semibold text-[#26313F]">
+              <label htmlFor="password" className="mb-1.5 block text-[12.5px] font-semibold text-[#041690]">
                 Password
               </label>
 
@@ -168,12 +168,12 @@ export default function RegisterClient() {
                 placeholder="••••••••"
                 minLength={8}
                 required
-                className="w-full rounded-lg border border-[#E2DDD0] bg-white px-[13px] py-[11px] text-[13.5px] text-[#1B2430] outline-none focus:border-[#E3963E] focus:ring-4 focus:ring-[#E3963E]/15"
+                className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] text-[13.5px] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15"
               />
             </div>
 
             <div className="mb-4">
-              <label htmlFor="confirmPassword" className="mb-1.5 block text-[12.5px] font-semibold text-[#26313F]">
+              <label htmlFor="confirmPassword" className="mb-1.5 block text-[12.5px] font-semibold text-[#041690]">
                 Confirm password
               </label>
 
@@ -185,19 +185,19 @@ export default function RegisterClient() {
                 onChange={handleChange}
                 placeholder="••••••••"
                 required
-                className="w-full rounded-lg border border-[#E2DDD0] bg-white px-[13px] py-[11px] text-[13.5px] text-[#1B2430] outline-none focus:border-[#E3963E] focus:ring-4 focus:ring-[#E3963E]/15"
+                className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] text-[13.5px] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15"
               />
             </div>
           </div>
 
-          <div className="mb-5 flex items-start gap-2.5 text-[12.5px] text-[#83796A]">
+          <div className="mb-5 flex items-start gap-2.5 text-[12.5px] text-[#5B6280]">
             <input
               id="agree"
               name="agree"
               type="checkbox"
               checked={form.agree}
               onChange={handleChange}
-              className="mt-0.5 h-4 w-4 accent-[#E3963E]"
+              className="mt-0.5 h-4 w-4 accent-[#F5C518]"
             />
 
             <label htmlFor="agree">
@@ -208,14 +208,14 @@ export default function RegisterClient() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#1B2430] px-[18px] py-2.5 text-[13.5px] font-semibold text-white transition hover:bg-[#26313F] disabled:cursor-not-allowed disabled:opacity-70"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#031079] px-[18px] py-2.5 text-[13.5px] font-semibold text-white transition hover:bg-[#041690] disabled:cursor-not-allowed disabled:opacity-70"
           >
             {isSubmitting ? "Creating account..." : "Create account"}
           </button>
         </form>
 
-        <div className="mt-[22px] text-center text-[13px] text-[#83796A]">
-          Already registered? <Link to="/login" className="font-bold text-[#C97A28]">Sign in</Link>
+        <div className="mt-[22px] text-center text-[13px] text-[#5B6280]">
+          Already registered? <Link to="/login" className="font-bold text-[#D4A80D]">Sign in</Link>
         </div>
       </div>
     </AuthLayoutClient>
