@@ -16,12 +16,12 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::post('/register/send-otp', [AuthController::class, 'sendRegisterOtp'])->middleware('throttle:5,1');
 Route::post('/forgot-password/send-otp', [AuthController::class, 'sendForgotPasswordOtp'])->middleware('throttle:5,1');
+Route::post('/forgot-password/reset', [AuthController::class, 'resetPassword']);
 Route::post('verify-otp', [AuthController::class, 'verifyOtp']);
 
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{category}', [CategoryController::class, 'show']);
 Route::get('/items', [ItemController::class, 'index']);
-
 
 Route::middleware('auth:sanctum')->group(function (): void {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -42,8 +42,6 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::get('/claims', [ClaimController::class, 'index']);
     Route::get('/claims/{claim}', [ClaimController::class, 'show']);
     Route::post('/found-items/{foundItem}/claims', [ClaimController::class, 'store']);
-
-
 
     Route::middleware('admin')->group(function (): void {
         Route::get('/admin/dashboard/statistics', [DashboardController::class, 'statistics']);

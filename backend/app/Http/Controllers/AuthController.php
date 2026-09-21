@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OtpMail;
+use App\Models\Otp;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Laravel\Sanctum\PersonalAccessToken;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\OtpMail;
-use App\Models\Otp;
 
 class AuthController extends Controller
 {
@@ -68,101 +68,149 @@ class AuthController extends Controller
         return response()->json($request->user());
     }
 
-    public function sendRegisterOtp(Request $request) {
-      $request->validate([
-        'email' => ['required', 'email'],
-      ]);
+    public function sendRegisterOtp(Request $request)
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+        ]);
 
-      $user = user::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
-      if ($user) {
-        return response()->json([
-          'message' => 'Email is already registered.',
-        ], 409);    
-      }
+        if ($user) {
+            return response()->json([
+                'message' => 'Email is already registered.',
+            ], 409);
+        }
 
-      return $this->sendOtpToEmail($request->email);
+        return $this->sendOtpToEmail($request->email);
     }
 
-    public function sendForgotPasswordOtp(Request $request) {
-      $request->validate([
-        'email' => ['required', 'email'],
-      ]);
+    public function sendForgotPasswordOtp(Request $request)
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+        ]);
 
-      $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
-      if (!$user) {
-        return response()->json([
-          'message' => 'No account found with this email.',
-        ], 404);
-      }
+        if (! $user) {
+            return response()->json([
+                'message' => 'No account found with this email.',
+            ], 404);
+        }
 
-      return $this->sendOtpToEmail($request->email);
+        return $this->sendOtpToEmail($request->email);
     }
 
-    public function sendOtpToEmail(string $email) {
-      $existingOtp = Otp::where('email', $email)->first();
+    public function resetPassword(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'email' => ['required', 'email'],
+            'otp' => ['required', 'digits:6'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
 
-      if ($existingOtp && $existingOtp->last_sent_at) {
-          $secondsSinceLastSend = now()->diffInSeconds(
-              $existingOtp->last_sent_at
-          );
+        $user = User::where('email', $validated['email'])->first();
 
-          if ($secondsSinceLastSend < 60) {
-              $remaining = 60 - $secondsSinceLastSend;
+        if (! $user) {
+            return response()->json([
+                'message' => 'No account found with this email.',
+            ], 404);
+        }
 
-              return response()->json([
-                  'message' => "Please wait {$remaining} seconds before requesting another OTP.",
-              ], 429);
-          }
-      }
+        $otpRecord = Otp::where('email', $validated['email'])
+            ->where('otp', $validated['otp'])
+            ->first();
 
-      $otp = (string) random_int(100000, 999999);
+        if (! $otpRecord) {
+            return response()->json([
+                'message' => 'Invalid OTP',
+            ], 422);
+        }
 
-      Otp::updateOrCreate(
-          ['email' => $email],
-          [
-              'otp' => $otp,
-              'expires_at' => now()->addMinutes(5),
-              'last_sent_at' => now(),
-          ]
-      );
+        if ($otpRecord->expires_at->isPast()) {
+            $otpRecord->delete();
 
-      Mail::to($email)->send(new OtpMail($otp));
+            return response()->json([
+                'message' => 'OTP has expired',
+            ], 422);
+        }
 
-      return response()->json([
-          'message' => 'OTP sent successfully'
-      ]);
-    }
-
-    public function verifyOtp(Request $request) {
-      $request->validate([
-        'email' => ['required', 'email'],
-        'otp' => ['required', 'digits:6'],
-      ]);
-
-      $otpRecord = Otp::where('email', $request->email)
-      ->where('otp', $request->otp)
-      ->first();
-
-      if (!$otpRecord) {
-        return response()->json([
-          'message' => 'Invalid OTP',
-        ], 422);
-      }
-
-      if ($otpRecord->expires_at->isPast()) {
+        $user->update([
+            'password' => Hash::make($validated['password']),
+        ]);
         $otpRecord->delete();
 
         return response()->json([
-          'message' => 'OTP has expired',
-        ], 422);
-      }
+            'message' => 'Password reset successfully.',
+        ]);
+    }
 
-      $otpRecord->delete();
+    public function sendOtpToEmail(string $email)
+    {
+        $existingOtp = Otp::where('email', $email)->first();
 
-      return response()->json([
-        'message' => 'Email verified successfully.',
-      ], 200);
+        if ($existingOtp && $existingOtp->last_sent_at) {
+            $secondsSinceLastSend = now()->diffInSeconds(
+                $existingOtp->last_sent_at
+            );
+
+            if ($secondsSinceLastSend < 60) {
+                $remaining = 60 - $secondsSinceLastSend;
+
+                return response()->json([
+                    'message' => "Please wait {$remaining} seconds before requesting another OTP.",
+                ], 429);
+            }
+        }
+
+        $otp = (string) random_int(100000, 999999);
+
+        Otp::updateOrCreate(
+            ['email' => $email],
+            [
+                'otp' => $otp,
+                'expires_at' => now()->addMinutes(5),
+                'last_sent_at' => now(),
+            ]
+        );
+
+        Mail::to($email)->send(new OtpMail($otp));
+
+        return response()->json([
+            'message' => 'OTP sent successfully',
+        ]);
+    }
+
+    public function verifyOtp(Request $request)
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+            'otp' => ['required', 'digits:6'],
+        ]);
+
+        $otpRecord = Otp::where('email', $request->email)
+            ->where('otp', $request->otp)
+            ->first();
+
+        if (! $otpRecord) {
+            return response()->json([
+                'message' => 'Invalid OTP',
+            ], 422);
+        }
+
+        if ($otpRecord->expires_at->isPast()) {
+            $otpRecord->delete();
+
+            return response()->json([
+                'message' => 'OTP has expired',
+            ], 422);
+        }
+
+        $otpRecord->delete();
+
+        return response()->json([
+            'message' => 'Email verified successfully.',
+        ], 200);
     }
 }

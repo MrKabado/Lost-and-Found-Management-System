@@ -7,6 +7,7 @@ import { Toaster } from "sonner"
 import { AuthProvider } from "@/auth/AuthContext"
 import LoginClient from "@/auth/client/LoginClient.tsx"
 import RegisterClient from "@/auth/client/RegisterClient.tsx"
+import ForgotPassword from "@/auth/client/ForgotPassword.tsx"
 import ProtectedRoute from "@/components/ProtectedRoute"
 import PublicOnlyRoute from "@/components/PublicOnlyRoute"
 import AdminOnlyRoute from "@/components/AdminOnlyRoute"
@@ -40,6 +41,7 @@ createRoot(document.getElementById("root")!).render(
           <Route element={<PublicOnlyRoute redirectTo="/dashboard" />}>
             <Route path="/login" element={<LoginClient />} />
             <Route path="/register" element={<RegisterClient />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
           </Route>
 
           <Route element={<ProtectedRoute redirectTo="/login" />}>
