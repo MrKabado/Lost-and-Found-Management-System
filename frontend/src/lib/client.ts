@@ -179,3 +179,38 @@ export function getStorageUrl(path?: string | null): string | null {
   const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api"
   return `${apiUrl.replace(/\/api\/?$/, "")}/storage/${path}`
 }
+
+export function getApiRetryAfter(error: unknown): number {
+  if (typeof error === "object" && error !== null && "response" in error) {
+    const response = (error as { response?: { data?: { retry_after?: number } } }).response
+    if (typeof response?.data?.retry_after === "number") return response.data.retry_after
+  }
+
+  const message = getApiError(error, "")
+  const match = message.match(/wait (\d+) seconds?/i)
+
+  return match ? Number(match[1]) : 0
+}
+
+const otpCooldownStoragePrefix = "otp_cooldown:"
+
+export function getOtpCooldown(email: string): number {
+  const key = `${otpCooldownStoragePrefix}${email.trim().toLowerCase()}`
+  const deadline = Number(localStorage.getItem(key) || 0)
+  const remaining = Math.max(Math.ceil((deadline - Date.now()) / 1000), 0)
+
+  if (remaining === 0) localStorage.removeItem(key)
+
+  return remaining
+}
+
+export function setOtpCooldown(email: string, seconds: number): void {
+  const key = `${otpCooldownStoragePrefix}${email.trim().toLowerCase()}`
+
+  if (seconds <= 0) {
+    localStorage.removeItem(key)
+    return
+  }
+
+  localStorage.setItem(key, String(Date.now() + seconds * 1000))
+}

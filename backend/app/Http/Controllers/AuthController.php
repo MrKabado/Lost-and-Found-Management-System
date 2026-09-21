@@ -7,6 +7,7 @@ use App\Models\Otp;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
@@ -148,38 +149,42 @@ class AuthController extends Controller
 
     public function sendOtpToEmail(string $email)
     {
-        $existingOtp = Otp::where('email', $email)->first();
+        $lockKey = 'otp-send:'.hash('sha256', strtolower(trim($email)));
 
-        if ($existingOtp && $existingOtp->last_sent_at) {
-            $secondsSinceLastSend = now()->diffInSeconds(
-                $existingOtp->last_sent_at
+        return Cache::lock($lockKey, 10)->block(5, function () use ($email) {
+            $existingOtp = Otp::where('email', $email)->first();
+
+            if ($existingOtp && $existingOtp->last_sent_at) {
+                $secondsSinceLastSend = now()->diffInSeconds($existingOtp->last_sent_at);
+
+                if ($secondsSinceLastSend < 60) {
+                    $remaining = 60 - $secondsSinceLastSend;
+
+                    return response()->json([
+                        'message' => "Please wait {$remaining} seconds before requesting another OTP.",
+                        'retry_after' => $remaining,
+                    ], 429);
+                }
+            }
+
+            $otp = (string) random_int(100000, 999999);
+
+            Otp::updateOrCreate(
+                ['email' => $email],
+                [
+                    'otp' => $otp,
+                    'expires_at' => now()->addMinutes(5),
+                    'last_sent_at' => now(),
+                ]
             );
 
-            if ($secondsSinceLastSend < 60) {
-                $remaining = 60 - $secondsSinceLastSend;
+            Mail::to($email)->send(new OtpMail($otp));
 
-                return response()->json([
-                    'message' => "Please wait {$remaining} seconds before requesting another OTP.",
-                ], 429);
-            }
-        }
-
-        $otp = (string) random_int(100000, 999999);
-
-        Otp::updateOrCreate(
-            ['email' => $email],
-            [
-                'otp' => $otp,
-                'expires_at' => now()->addMinutes(5),
-                'last_sent_at' => now(),
-            ]
-        );
-
-        Mail::to($email)->send(new OtpMail($otp));
-
-        return response()->json([
-            'message' => 'OTP sent successfully',
-        ]);
+            return response()->json([
+                'message' => 'OTP sent successfully',
+                'retry_after' => 60,
+            ]);
+        });
     }
 
     public function verifyOtp(Request $request)

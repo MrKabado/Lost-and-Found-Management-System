@@ -1,9 +1,9 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router"
 import { Eye, EyeOff } from "lucide-react"
 import { useAuth } from "@/auth/useAuth"
 import { api } from "@/lib/api"
-import { getApiError } from "@/lib/client"
+import { getApiError, getApiRetryAfter, getOtpCooldown, setOtpCooldown as persistOtpCooldown } from "@/lib/client"
 import { toast } from "sonner"
 import AuthBrandClient from "./AuthBrandClient"
 import AuthLayoutClient from "./AuthLayoutClient"
@@ -23,6 +23,7 @@ export default function RegisterClient() {
   const [error, setError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSendingOtp, setIsSendingOtp] = useState(false)
+  const [otpCooldown, setOtpCooldown] = useState(0)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
@@ -33,7 +34,19 @@ export default function RegisterClient() {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }))
+
+    if (name === "email") setOtpCooldown(getOtpCooldown(value))
   }
+
+  useEffect(() => {
+    if (otpCooldown <= 0) return
+
+    const timer = window.setInterval(() => {
+      setOtpCooldown((remaining) => Math.max(remaining - 1, 0))
+    }, 1000)
+
+    return () => window.clearInterval(timer)
+  }, [otpCooldown])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -91,12 +104,22 @@ export default function RegisterClient() {
       return
     }
 
+    if (otpCooldown > 0) {
+      toast.error(`Please wait ${otpCooldown} seconds before requesting another OTP.`)
+      return
+    }
+
     setIsSendingOtp(true)
 
     try {
-      const response = await api.post<{ message: string }>("/register/send-otp", { email: form.email })
+      const response = await api.post<{ message: string; retry_after: number }>("/register/send-otp", { email: form.email })
+      setOtpCooldown(response.data.retry_after)
+      persistOtpCooldown(form.email, response.data.retry_after)
       toast.success(response.data.message)
     } catch (err) {
+      const retryAfter = getApiRetryAfter(err)
+      setOtpCooldown(retryAfter)
+      persistOtpCooldown(form.email, retryAfter)
       toast.error(getApiError(err, "Unable to send the verification code."))
     } finally {
       setIsSendingOtp(false)
@@ -178,10 +201,10 @@ export default function RegisterClient() {
               <button
                 type="button"
                 onClick={handleSendOtp}
-                disabled={isSendingOtp}
+                disabled={isSendingOtp || otpCooldown > 0}
                 className="rounded-lg bg-[#D4A80D] px-3 text-[12px] font-bold text-[#031079] transition hover:bg-[#F5C518] disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {isSendingOtp ? "Sending..." : "Send OTP"}
+                {isSendingOtp ? "Sending..." : otpCooldown > 0 ? `Wait ${otpCooldown}s` : "Send OTP"}
               </button>
             </div>
           </div>

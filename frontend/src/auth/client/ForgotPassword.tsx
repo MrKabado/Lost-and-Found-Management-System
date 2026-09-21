@@ -1,9 +1,9 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router"
 import { ArrowLeft, Eye, EyeOff, KeyRound, Mail, ShieldCheck } from "lucide-react"
 import { toast } from "sonner"
 import { api } from "@/lib/api"
-import { getApiError } from "@/lib/client"
+import { getApiError, getApiRetryAfter, getOtpCooldown, setOtpCooldown as persistOtpCooldown } from "@/lib/client"
 import AuthBrandClient from "./AuthBrandClient"
 import AuthLayoutClient from "./AuthLayoutClient"
 
@@ -11,6 +11,7 @@ export default function ForgotPassword() {
   const navigate = useNavigate()
   const [form, setForm] = useState({ email: "", otp: "", password: "", confirmPassword: "" })
   const [isSendingOtp, setIsSendingOtp] = useState(false)
+  const [otpCooldown, setOtpCooldown] = useState(0)
   const [isResetting, setIsResetting] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -19,7 +20,19 @@ export default function ForgotPassword() {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setForm((current) => ({ ...current, [event.target.name]: event.target.value }))
     setError("")
+
+    if (event.target.name === "email") setOtpCooldown(getOtpCooldown(event.target.value))
   }
+
+  useEffect(() => {
+    if (otpCooldown <= 0) return
+
+    const timer = window.setInterval(() => {
+      setOtpCooldown((remaining) => Math.max(remaining - 1, 0))
+    }, 1000)
+
+    return () => window.clearInterval(timer)
+  }, [otpCooldown])
 
   const handleSendOtp = async () => {
     if (!form.email.trim()) {
@@ -27,12 +40,22 @@ export default function ForgotPassword() {
       return
     }
 
+    if (otpCooldown > 0) {
+      toast.error(`Please wait ${otpCooldown} seconds before requesting another OTP.`)
+      return
+    }
+
     setIsSendingOtp(true)
 
     try {
-      const response = await api.post<{ message: string }>("/forgot-password/send-otp", { email: form.email })
+      const response = await api.post<{ message: string; retry_after: number }>("/forgot-password/send-otp", { email: form.email })
+      setOtpCooldown(response.data.retry_after)
+      persistOtpCooldown(form.email, response.data.retry_after)
       toast.success(response.data.message)
     } catch (err) {
+      const retryAfter = getApiRetryAfter(err)
+      setOtpCooldown(retryAfter)
+      persistOtpCooldown(form.email, retryAfter)
       toast.error(getApiError(err, "Unable to send the verification code."))
     } finally {
       setIsSendingOtp(false)
@@ -103,7 +126,7 @@ export default function ForgotPassword() {
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8B93AE]" size={16} />
                 <input id="email" name="email" type="email" value={form.email} onChange={handleChange} placeholder="juan.delacruz@email.com" required className="w-full rounded-lg border border-[#D8DCEF] bg-white py-[11px] pl-9 pr-[13px] text-[13.5px] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15" />
               </div>
-              <button type="button" onClick={handleSendOtp} disabled={isSendingOtp} className="rounded-lg bg-[#D4A80D] px-3 text-[12px] font-bold text-[#031079] transition hover:bg-[#F5C518] disabled:cursor-not-allowed disabled:opacity-60">{isSendingOtp ? "Sending..." : "Send OTP"}</button>
+              <button type="button" onClick={handleSendOtp} disabled={isSendingOtp || otpCooldown > 0} className="rounded-lg bg-[#D4A80D] px-3 text-[12px] font-bold text-[#031079] transition hover:bg-[#F5C518] disabled:cursor-not-allowed disabled:opacity-60">{isSendingOtp ? "Sending..." : otpCooldown > 0 ? `Wait ${otpCooldown}s` : "Send OTP"}</button>
             </div>
           </div>
 
