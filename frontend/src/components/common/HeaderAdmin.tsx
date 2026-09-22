@@ -1,4 +1,5 @@
 import { useAuth } from "@/auth/useAuth";
+import { getStorageUrl } from "@/lib/client";
 
 export default function HeaderAdmin() {
   const { user } = useAuth();
@@ -18,8 +19,18 @@ export default function HeaderAdmin() {
 
       <div className="flex items-center gap-3">
         {/* Avatar */}
-        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0B2A6F] font-sans text-sm text-white">
-          {initials}
+        <div className="h-9 w-9 overflow-hidden rounded-full bg-[#0B2A6F] font-sans text-sm text-white">
+          {user?.student_profile?.profile_image ? (
+            <img
+              src={getStorageUrl(user.student_profile.profile_image) ?? undefined}
+              alt={`${user.name}'s profile`}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center">
+              {initials}
+            </div>
+          )}
         </div>
       </div>
     </header>

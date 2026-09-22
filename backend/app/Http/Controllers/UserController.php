@@ -11,6 +11,7 @@ class UserController extends Controller
     {
         return response()->json(
             User::query()
+                ->with('studentProfile')
                 ->select(['id', 'name', 'email', 'role', 'created_at'])
                 ->latest()
                 ->get()

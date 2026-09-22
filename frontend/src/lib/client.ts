@@ -42,6 +42,9 @@ export interface AdminUser {
   email: string
   role: "user" | "admin"
   created_at: string
+  student_profile?: {
+    profile_image?: string | null
+  } | null
 }
 
 export interface Claim {

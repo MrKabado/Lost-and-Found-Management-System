@@ -4,6 +4,7 @@ import {
   getAdminUsers,
   getApiError,
   formatDate,
+  getStorageUrl,
   type AdminUser,
 } from "@/lib/client"
 import AdminPage, { AdminBadge, AdminState } from "@/pages/admin/AdminPage"
@@ -66,8 +67,28 @@ export default function AdminUsers() {
                   key={user.id}
                   className="border-b border-[#D8DCEF] last:border-0"
                 >
-                  <td className="px-5 py-4 font-semibold text-[#031079]">
-                    {user.name}
+                  <td className="px-5 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="h-9 w-9 overflow-hidden rounded-full bg-[#031079] text-xs font-semibold text-white">
+                        {user.student_profile?.profile_image ? (
+                          <img
+                            src={getStorageUrl(user.student_profile.profile_image) ?? undefined}
+                            alt={`${user.name}'s profile`}
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center">
+                            {user.name
+                              .split(" ")
+                              .map((part) => part[0])
+                              .join("")
+                              .slice(0, 2)
+                              .toUpperCase()}
+                          </div>
+                        )}
+                      </div>
+                      <span className="font-semibold text-[#031079]">{user.name}</span>
+                    </div>
                   </td>
                   <td className="px-5 py-4 text-[#4A5170]">{user.email}</td>
                   <td className="px-5 py-4">

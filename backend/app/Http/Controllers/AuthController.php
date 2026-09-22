@@ -24,10 +24,10 @@ class AuthController extends Controller
         ]);
 
         $user = User::create($validated);
-        $user->refresh();
+        $user->refresh()->load('studentProfile');
 
         return response()->json([
-            'user' => $user,
+            'user' => $user->load('studentProfile'),
             'token' => $user->createToken('auth-token')->plainTextToken,
         ], 201);
     }
@@ -66,7 +66,7 @@ class AuthController extends Controller
 
     public function user(Request $request): JsonResponse
     {
-        return response()->json($request->user());
+        return response()->json($request->user()->load('studentProfile'));
     }
 
     public function sendRegisterOtp(Request $request)

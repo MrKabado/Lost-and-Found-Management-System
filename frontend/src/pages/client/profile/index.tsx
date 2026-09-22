@@ -84,6 +84,7 @@ export default function ClientProfile() {
       )
       setProfile(saved)
       setProfileImage(null)
+      await refreshUser()
       toast.success("Student profile saved.")
     } catch (requestError) {
       const message = getApiError(requestError, "Unable to save your profile.")
@@ -129,8 +130,18 @@ export default function ClientProfile() {
       <div className="grid max-w-4xl gap-5 lg:grid-cols-[1fr_0.9fr]">
         <div className="rounded-xl border border-[#D8DCEF] bg-white p-6">
           <div className="flex items-center gap-4 border-b border-[#D8DCEF] pb-6">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#031079] text-lg font-semibold text-white">
-              {initials}
+            <div className="h-14 w-14 overflow-hidden rounded-full bg-[#031079] text-lg font-semibold text-white">
+              {profile?.profile_image ? (
+                <img
+                  src={getStorageUrl(profile.profile_image) ?? undefined}
+                  alt={`${user?.name ?? "User"}'s profile`}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center">
+                  {initials}
+                </div>
+              )}
             </div>
             <div>
               <h3 className="text-lg font-semibold text-[#031079]">

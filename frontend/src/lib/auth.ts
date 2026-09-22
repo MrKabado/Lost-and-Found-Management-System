@@ -4,6 +4,9 @@ export type AuthUser = {
   email: string
   role?: string
   is_verified?: boolean
+  student_profile?: {
+    profile_image?: string | null
+  } | null
 }
 
 const AUTH_TOKEN_KEY = 'auth_token'
