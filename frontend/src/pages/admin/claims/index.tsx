@@ -86,6 +86,7 @@ export default function AdminClaims() {
               <tr className="border-b border-[#D8DCEF] text-left text-[11px] tracking-wide text-[#5B6280] uppercase">
                 <th className="px-5 py-3">Claimant</th>
                 <th className="px-5 py-3">Item</th>
+                <th className="px-5 py-3">Found by</th>
                 <th className="px-5 py-3">Reason</th>
                 <th className="px-5 py-3">Proof</th>
                 <th className="px-5 py-3">Submitted</th>
@@ -108,7 +109,16 @@ export default function AdminClaims() {
                     </div>
                   </td>
                   <td className="px-5 py-4 text-[#031079]">
+                    {getStorageUrl(claim.found_item?.image) && (
+                      <a href={getStorageUrl(claim.found_item?.image) ?? "#"} target="_blank" rel="noreferrer" className="mb-1 block text-xs font-semibold text-[#D4A80D] hover:underline">
+                        View item image
+                      </a>
+                    )}
                     {claim.found_item?.title ?? "Unknown item"}
+                  </td>
+                  <td className="px-5 py-4">
+                    <div className="text-[#031079]">{claim.found_item?.user?.name ?? "Unknown"}</div>
+                    <div className="text-xs text-[#5B6280]">{claim.found_item?.user?.email}</div>
                   </td>
                   <td className="max-w-xs px-5 py-4 text-xs text-[#4A5170]">
                     {claim.claim_reason}

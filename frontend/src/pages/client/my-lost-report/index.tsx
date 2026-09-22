@@ -7,6 +7,7 @@ import {
   formatDate,
   getApiError,
   getLostItems,
+  getStorageUrl,
   type OwnedItem,
 } from "@/lib/client"
 import ClientPage, {
@@ -77,6 +78,11 @@ export default function MyLostReports() {
                 <StatusBadge status={item.status} />
               </div>
               <p className="mt-4 text-sm text-[#4A5170]">{item.description}</p>
+              {getStorageUrl(item.image) && (
+                <a href={getStorageUrl(item.image) ?? "#"} target="_blank" rel="noreferrer" className="mt-4 inline-block text-xs font-semibold text-[#D4A80D] hover:underline">
+                  View uploaded image
+                </a>
+              )}
               <div className="mt-4 flex flex-col gap-2 text-xs text-[#5B6280]">
                 <span className="flex items-center gap-2">
                   <MapPin size={14} />

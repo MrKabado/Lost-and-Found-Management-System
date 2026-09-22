@@ -17,10 +17,12 @@ export interface Item {
   status: string
   category?: Category | null
   created_at: string
+  user?: { id: number; name: string; email: string } | null
 }
 
 export interface OwnedItem {
   id: number
+  user_id?: number
   title: string
   description: string
   location_lost?: string

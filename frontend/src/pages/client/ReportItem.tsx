@@ -12,6 +12,7 @@ export default function ReportItem({ type }: { type: "lost" | "found" }) {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [categories, setCategories] = useState<Category[]>([])
+  const [image, setImage] = useState<File | null>(null)
   const [form, setForm] = useState(() => ({
     category_id: "",
     title: searchParams.get("title") ?? "",
@@ -36,13 +37,21 @@ export default function ReportItem({ type }: { type: "lost" | "found" }) {
     setError("")
 
     try {
-      await api.post(`/${type}-items`, {
-        category_id: Number(form.category_id),
-        title: form.title,
-        description: form.description,
-        [type === "lost" ? "location_lost" : "location_found"]: form.location,
-        [type === "lost" ? "date_lost" : "date_found"]: form.date,
-      })
+      const formData = new FormData()
+      formData.append("category_id", String(Number(form.category_id)))
+      formData.append("title", form.title)
+      formData.append("description", form.description)
+      formData.append(
+        type === "lost" ? "location_lost" : "location_found",
+        form.location,
+      )
+      formData.append(
+        type === "lost" ? "date_lost" : "date_found",
+        form.date,
+      )
+      if (image) formData.append("image", image)
+
+      await api.post(`/${type}-items`, formData)
       toast.success(
         `${type === "lost" ? "Lost" : "Found"} item report submitted.`
       )
@@ -154,6 +163,15 @@ export default function ReportItem({ type }: { type: "lost" | "found" }) {
             rows={5}
             className="mt-2 w-full rounded-lg border border-[#D8DCEF] px-3 py-2.5 font-normal outline-none focus:border-[#F5C518]"
             placeholder="Add color, brand, identifying marks, and other useful details."
+          />
+        </label>
+        <label className="mt-5 block text-sm font-semibold text-[#041690]">
+          Item image <span className="font-normal text-[#5B6280]">(optional)</span>
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            onChange={(event) => setImage(event.target.files?.[0] ?? null)}
+            className="mt-2 block w-full text-xs font-normal"
           />
         </label>
         <button

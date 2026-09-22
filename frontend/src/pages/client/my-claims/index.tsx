@@ -58,6 +58,9 @@ export default function MyClaims() {
                     <p className="mt-1 text-xs text-[#5B6280]">
                       {claim.foundItem?.category?.name ?? "Uncategorized"}
                     </p>
+                        <p className="mt-1 text-xs text-[#5B6280]">
+                          Found by: {claim.foundItem?.user?.name ?? "Unknown"}
+                        </p>
                   </div>
                 </div>
                 <StatusBadge status={claim.status} />
@@ -70,6 +73,11 @@ export default function MyClaims() {
                   <CalendarDays size={14} /> Submitted{" "}
                   {formatDate(claim.created_at)}
                 </span>
+                {getStorageUrl(claim.foundItem?.image) && (
+                  <a href={getStorageUrl(claim.foundItem?.image) ?? "#"} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-semibold text-[#D4A80D] hover:underline">
+                    View found item image <ExternalLink size={13} />
+                  </a>
+                )}
                 {getStorageUrl(claim.proof) && (
                   <a
                     href={getStorageUrl(claim.proof) ?? "#"}

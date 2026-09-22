@@ -36,7 +36,7 @@ class ItemController extends Controller
         $locationColumn = $type === 'lost' ? 'location_lost' : 'location_found';
         $dateColumn = $type === 'lost' ? 'date_lost' : 'date_found';
 
-        $query->with('category');
+        $query->with(['category', 'user']);
 
         if (isset($filters['search'])) {
             $search = $filters['search'];
@@ -69,6 +69,7 @@ class ItemController extends Controller
                 'id' => $item->id,
                 'type' => $type,
                 'user_id' => $item->user_id,
+                'user' => $item->user,
                 'category' => $item->category,
                 'title' => $item->title,
                 'description' => $item->description,

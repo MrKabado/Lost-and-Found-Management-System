@@ -57,7 +57,7 @@ class ClaimController extends Controller
             'found_item_id' => $foundItem->id,
         ]);
 
-        return response()->json($claim->refresh()->load('foundItem.category'), 201);
+        return response()->json($claim->refresh()->load(['user', 'foundItem.category', 'foundItem.user']), 201);
     }
 
     /**
@@ -67,7 +67,7 @@ class ClaimController extends Controller
     {
         abort_unless($claim->user_id === $request->user()->id, 403);
 
-        return response()->json($claim->load('foundItem.category'));
+        return response()->json($claim->load(['user', 'foundItem.category', 'foundItem.user']));
     }
 
     /**
@@ -97,7 +97,7 @@ class ClaimController extends Controller
         $claim->update(['status' => 'approved']);
         $claim->foundItem()->update(['status' => 'claimed']);
 
-        return response()->json($claim->refresh()->load('foundItem.category'));
+        return response()->json($claim->refresh()->load(['user', 'foundItem.category', 'foundItem.user']));
     }
 
     public function reject(Claim $claim): JsonResponse
@@ -110,6 +110,6 @@ class ClaimController extends Controller
 
         $claim->update(['status' => 'rejected']);
 
-        return response()->json($claim->refresh()->load('foundItem.category'));
+        return response()->json($claim->refresh()->load(['user', 'foundItem.category', 'foundItem.user']));
     }
 }
