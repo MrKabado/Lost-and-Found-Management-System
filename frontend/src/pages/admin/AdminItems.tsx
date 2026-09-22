@@ -75,10 +75,13 @@ export default function AdminItems({ type }: { type: "lost" | "found" }) {
       .toLowerCase()
       .includes(search.toLowerCase())
   )
-  const statusOptions =
-    type === "lost"
-      ? ["lost", "found", "rejected", "closed"]
-      : ["found", "claimed", "rejected", "closed"]
+  const statusOptions = [
+    "available",
+    "awaiting_pickup",
+    "returned",
+    "unclaimed",
+    "archived",
+  ]
 
   return (
     <AdminPage

@@ -96,7 +96,7 @@ class ClaimController extends Controller
         }
 
         $claim->update(['status' => 'approved']);
-        $claim->foundItem()->update(['status' => 'claimed']);
+        $claim->foundItem()->update(['status' => 'awaiting_pickup']);
         $notificationService->sendToUser($claim->user_id, 'Claim Approved', "Your claim for \"{$claim->foundItem->title}\" has been approved. Please proceed to the Lost and Found Office and bring your school ID.", 'claim', 'claim', $claim->id);
 
         return response()->json($claim->refresh()->load(['user', 'foundItem.category', 'foundItem.user']));

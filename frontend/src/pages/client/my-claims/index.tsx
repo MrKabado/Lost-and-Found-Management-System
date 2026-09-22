@@ -56,7 +56,7 @@ export default function MyClaims() {
                       {claim.foundItem?.title ?? "Found item"}
                     </h3>
                     <p className="mt-1 text-xs text-[#5B6280]">
-                      {claim.foundItem?.category?.name ?? "Uncategorized"}
+                      {(claim.found_item ?? claim.foundItem)?.category?.name ?? "Uncategorized"}
                     </p>
                         <p className="mt-1 text-xs text-[#5B6280]">
                           Found by: {claim.foundItem?.user?.name ?? "Unknown"}

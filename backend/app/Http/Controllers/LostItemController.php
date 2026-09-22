@@ -35,7 +35,7 @@ class LostItemController extends Controller
             'location_lost' => ['required', 'string', 'max:255'],
             'date_lost' => ['required', 'date'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
-            'status' => ['sometimes', 'in:lost'],
+            'status' => ['sometimes', 'in:available'],
         ]);
 
         if ($request->hasFile('image')) {
@@ -71,7 +71,7 @@ class LostItemController extends Controller
             'location_lost' => ['sometimes', 'string', 'max:255'],
             'date_lost' => ['sometimes', 'date'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
-            'status' => ['sometimes', 'in:lost,found,claimed,verified,returned,rejected,closed'],
+            'status' => ['sometimes', 'in:available,awaiting_pickup,returned,unclaimed,archived'],
         ]);
 
         $oldImage = $lostItem->image;

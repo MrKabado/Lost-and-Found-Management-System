@@ -53,13 +53,13 @@ export function EmptyState({ message }: { message: string }) {
 
 export function StatusBadge({ status }: { status: string }) {
   const normalizedStatus = status.toUpperCase()
-  const tone = ["APPROVED", "FOUND", "VERIFIED", "RETURNED"].includes(
+  const tone = ["APPROVED", "AVAILABLE", "RETURNED"].includes(
     normalizedStatus
   )
-    ? "bg-[#F4F4F4] text-[#171717]"
-    : normalizedStatus === "REJECTED"
-      ? "bg-[#F5E7E3] text-[#B6503A]"
-      : "bg-[#F4F4F4] text-[#171717]"
+    ? "border border-[#BBE7D0] bg-[#ECFDF3] text-[#16704A]"
+    : ["UNCLAIMED", "ARCHIVED", "REJECTED"].includes(normalizedStatus)
+      ? "border border-[#F3C1C1] bg-[#FFF1F2] text-[#B42318]"
+      : "border border-[#BFDBFE] bg-[#EFF6FF] text-[#1D4ED8]"
 
   return (
     <span

@@ -18,7 +18,7 @@ class ItemController extends Controller
             'category' => ['sometimes', 'string', 'max:255'],
             'date' => ['sometimes', 'date'],
             'location' => ['sometimes', 'string', 'max:255'],
-            'status' => ['sometimes', 'string', 'in:lost,found,claimed,verified,returned,rejected,closed'],
+            'status' => ['sometimes', 'string', 'in:available,awaiting_pickup,returned,unclaimed'],
         ]);
 
         $lostItems = $this->queryItems(LostItem::query(), $validated, 'lost');
@@ -37,6 +37,7 @@ class ItemController extends Controller
         $dateColumn = $type === 'lost' ? 'date_lost' : 'date_found';
 
         $query->with(['category', 'user']);
+        $query->where('status', '!=', 'archived');
 
         if (isset($filters['search'])) {
             $search = $filters['search'];

@@ -10,6 +10,7 @@ import {
   getApiError,
   getCategories,
   rejectClaim,
+  updateFoundStatus,
   type Category,
   type Claim,
   type AdminStatistics,
@@ -34,6 +35,7 @@ export default function AdminDashboard() {
   const loadDashboard = async () => {
     try {
       setError("")
+      setLoading(true)
       const [nextStatistics, nextClaims, nextCategories] = await Promise.all([
         getAdminStatistics(),
         getAdminClaims(),
@@ -64,6 +66,27 @@ export default function AdminDashboard() {
       await loadDashboard()
     } catch (requestError) {
       const message = getApiError(requestError, "Unable to update this claim.")
+      toast.error(message)
+      setError(message)
+    } finally {
+      setActionId(null)
+    }
+  }
+
+  const markClaimItemReturned = async (claim: Claim) => {
+    const foundItem = claim.found_item ?? claim.foundItem
+    if (!foundItem) return
+
+    try {
+      setActionId(claim.id)
+      await updateFoundStatus(foundItem.id, "returned")
+      toast.success("Item marked as returned.")
+      await loadDashboard()
+    } catch (requestError) {
+      const message = getApiError(
+        requestError,
+        "Unable to mark this item as returned."
+      )
       toast.error(message)
       setError(message)
     } finally {
@@ -196,7 +219,12 @@ export default function AdminDashboard() {
                     .join("")
                     .slice(0, 2)
                     .toUpperCase()
-                  const status = claim.status.toUpperCase()
+                  const foundItem = claim.found_item ?? claim.foundItem
+                  const itemStatus = foundItem?.status.toLowerCase()
+                  const status =
+                    claim.status === "approved" && itemStatus
+                      ? itemStatus.toUpperCase()
+                      : claim.status.toUpperCase()
                   return (
                     <tr
                       key={claim.id}
@@ -211,10 +239,10 @@ export default function AdminDashboard() {
                         </div>
                       </td>
                       <td className="px-[18px] py-[13px]">
-                        {claim.foundItem?.title ?? "Found item"}
+                        {(claim.found_item ?? claim.foundItem)?.title ?? "Found item"}
                       </td>
                       <td className="px-[18px] py-[13px]">
-                        {claim.foundItem?.category?.name ?? "Uncategorized"}
+                        {(claim.found_item ?? claim.foundItem)?.category?.name ?? "Uncategorized"}
                       </td>
                       <td className="px-[18px] py-[13px]">
                         {formatDate(claim.created_at)}
@@ -249,6 +277,17 @@ export default function AdminDashboard() {
                                 <X size={14} />
                               </button>
                             </>
+                          ) : itemStatus === "awaiting_pickup" ? (
+                            <button
+                              type="button"
+                              disabled={actionId === claim.id}
+                              title="Mark item as returned"
+                              onClick={() => void markClaimItemReturned(claim)}
+                              className="flex h-[30px] items-center justify-center rounded-[7px] border border-[#BBE7D0] bg-[#ECFDF3] px-2 text-[11px] font-semibold text-[#16704A] hover:border-[#16704A] disabled:opacity-50"
+                            >
+                              <Check size={14} className="mr-1" />
+                              Mark returned
+                            </button>
                           ) : (
                             <button
                               type="button"
@@ -326,6 +365,9 @@ function StatusBadge({ status }: { status: string }) {
     PENDING: "border border-[#BFDBFE] bg-[#EFF6FF] text-[#1D4ED8]",
     APPROVED: "border border-[#BBE7D0] bg-[#ECFDF3] text-[#16704A]",
     VERIFIED: "border border-[#BBE7D0] bg-[#ECFDF3] text-[#16704A]",
+    AVAILABLE: "border border-[#BBE7D0] bg-[#ECFDF3] text-[#16704A]",
+    AWAITING_PICKUP: "border border-[#BFDBFE] bg-[#EFF6FF] text-[#1D4ED8]",
+    RETURNED: "border border-[#BBE7D0] bg-[#ECFDF3] text-[#16704A]",
     REJECTED: "border border-[#F3C1C1] bg-[#FFF1F2] text-[#B42318]",
   }
   return (

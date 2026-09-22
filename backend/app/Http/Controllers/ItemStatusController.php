@@ -23,17 +23,15 @@ class ItemStatusController extends Controller
     private function updateStatus(Request $request, LostItem|FoundItem $item, NotificationService $notificationService): JsonResponse
     {
         $validated = $request->validate([
-            'status' => ['required', 'in:lost,found,claimed,verified,returned,rejected,closed'],
+            'status' => ['required', 'in:available,awaiting_pickup,returned,unclaimed,archived'],
         ]);
 
         $allowedStatuses = [
-            'lost' => ['found', 'rejected', 'closed'],
-            'found' => ['claimed', 'rejected', 'closed'],
-            'claimed' => ['verified', 'rejected', 'closed'],
-            'verified' => ['returned', 'rejected', 'closed'],
+            'available' => ['awaiting_pickup', 'unclaimed'],
+            'awaiting_pickup' => ['returned'],
             'returned' => [],
-            'rejected' => ['closed'],
-            'closed' => [],
+            'unclaimed' => ['archived'],
+            'archived' => ['available'],
         ];
 
         $nextStatus = $validated['status'];
@@ -46,7 +44,7 @@ class ItemStatusController extends Controller
 
         $item->update(['status' => $nextStatus]);
 
-        if (($item instanceof LostItem && $nextStatus === 'found') || ($item instanceof FoundItem && $nextStatus === 'verified')) {
+        if ($nextStatus === 'available') {
             $reportType = $item instanceof LostItem ? 'lost_item' : 'found_item';
             $reportLabel = $item instanceof LostItem ? 'Lost' : 'Found';
             $notificationService->sendToUser($item->user_id, "{$reportLabel} Report Approved", "Your {$reportLabel} item report for \"{$item->title}\" has been approved.", $reportType, $reportType, $item->id);
