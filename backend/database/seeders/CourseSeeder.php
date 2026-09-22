@@ -12,10 +12,18 @@ class CourseSeeder extends Seeder
      */
     public function run(): void
     {
-        Course::upsert([
+        $courses = [
             ['name' => 'Bachelor of Science in Information Technology'],
-            ['name' => 'Bachelor of Science in Computer Science'],
-            ['name' => 'Bachelor of Science in Information Systems'],
-        ], ['name'], []);
+            ['name' => 'Bachelor of Science in Hospitality Management'],
+            ['name' => 'Bachelor of Elementary Education'],
+            ['name' => 'Bachelor of Secondary Education'],
+        ];
+
+        Course::query()
+            ->whereNotIn('name', array_column($courses, 'name'))
+            ->whereDoesntHave('studentProfiles')
+            ->delete();
+
+        Course::upsert($courses, ['name'], []);
     }
 }
