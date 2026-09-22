@@ -10,6 +10,12 @@ export function AdminState({ children, error = false }: { children: ReactNode; e
 
 export function AdminBadge({ value }: { value: string }) {
   const status = value.toUpperCase()
-  const tone = ["FOUND", "VERIFIED", "RETURNED", "APPROVED", "ADMIN"].includes(status) ? "bg-[#F4F4F4] text-[#171717]" : ["REJECTED", "CLOSED"].includes(status) ? "bg-[#F5E7E3] text-[#B6503A]" : "bg-[#F4F4F4] text-[#171717]"
+  const tone = ["ACTIVE", "FOUND", "VERIFIED", "RETURNED", "APPROVED", "ADMIN"].includes(status)
+    ? "border border-[#BBE7D0] bg-[#ECFDF3] text-[#16704A]"
+    : ["REJECTED", "CLOSED", "INACTIVE", "DEACTIVATED"].includes(status)
+      ? "border border-[#F3C1C1] bg-[#FFF1F2] text-[#B42318]"
+      : ["PENDING", "PROCESSING", "CLAIMED"].includes(status)
+        ? "border border-[#BFDBFE] bg-[#EFF6FF] text-[#1D4ED8]"
+        : "border border-[#E5E7EB] bg-[#F9FAFB] text-[#4B5563]"
   return <span className={`rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide ${tone}`}>{status}</span>
 }

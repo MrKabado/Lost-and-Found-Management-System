@@ -323,14 +323,14 @@ export default function AdminDashboard() {
 
 function StatusBadge({ status }: { status: string }) {
   const styles: Record<string, string> = {
-    PENDING: "bg-[#FFF6D6] text-[#D4A80D]",
-    APPROVED: "bg-[#E8EAF8] text-[#031079]",
-    VERIFIED: "bg-[#E8EAF8] text-[#031079]",
-    REJECTED: "bg-[#F5E7E3] text-[#B6503A]",
+    PENDING: "border border-[#BFDBFE] bg-[#EFF6FF] text-[#1D4ED8]",
+    APPROVED: "border border-[#BBE7D0] bg-[#ECFDF3] text-[#16704A]",
+    VERIFIED: "border border-[#BBE7D0] bg-[#ECFDF3] text-[#16704A]",
+    REJECTED: "border border-[#F3C1C1] bg-[#FFF1F2] text-[#B42318]",
   }
   return (
     <span
-      className={`rounded-full px-[9px] py-[3px] text-[10.5px] font-bold tracking-wide ${styles[status] ?? "bg-[#E7E4DA] text-[#5B6280]"}`}
+      className={`rounded-full px-[9px] py-[3px] text-[10.5px] font-bold tracking-wide ${styles[status] ?? "border border-[#E5E7EB] bg-[#F9FAFB] text-[#4B5563]"}`}
     >
       {status}
     </span>
