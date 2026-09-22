@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router"
 import { Eye, EyeOff } from "lucide-react"
 import { useAuth } from "@/auth/useAuth"
+import { getApiError } from "@/lib/client"
 import { toast } from "sonner"
 import AuthBrandClient from "./AuthBrandClient"
 import AuthLayoutClient from "./AuthLayoutClient"
@@ -32,8 +33,11 @@ export default function LoginClient() {
 
       toast.success("Welcome back!")
       navigate(currentUser.role === "admin" ? "/admin" : "/client")
-    } catch {
-      const message = "Unable to sign in. Please check your credentials."
+    } catch (requestError) {
+      const message = getApiError(
+        requestError,
+        "Unable to sign in. Please check your credentials."
+      )
       toast.error(message)
       setError(message)
     } finally {

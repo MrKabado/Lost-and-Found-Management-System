@@ -4,6 +4,9 @@ export type AuthUser = {
   email: string
   role?: string
   is_verified?: boolean
+  account_status?: "active" | "deactivated"
+  last_login_at?: string | null
+  activity_status?: "active" | "inactive"
   student_profile?: {
     profile_image?: string | null
   } | null

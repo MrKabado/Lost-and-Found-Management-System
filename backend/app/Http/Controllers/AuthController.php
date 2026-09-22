@@ -47,8 +47,16 @@ class AuthController extends Controller
             ]);
         }
 
+        if ($user->account_status === 'deactivated') {
+            return response()->json([
+                'message' => 'Your account has been deactivated. Please contact an administrator.',
+            ], 403);
+        }
+
+        $user->update(['last_login_at' => now()]);
+
         return response()->json([
-            'user' => $user,
+            'user' => $user->refresh(),
             'token' => $user->createToken('auth-token')->plainTextToken,
         ]);
     }

@@ -68,6 +68,8 @@ Route::middleware('auth:sanctum')->group(function (): void {
         Route::post('/admin/claims/{claim}/approve', [ClaimController::class, 'approve']);
         Route::post('/admin/claims/{claim}/reject', [ClaimController::class, 'reject']);
         Route::get('/admin/users', [UserController::class, 'adminIndex']);
+        Route::patch('/admin/users/{user}/deactivate', [UserController::class, 'deactivate']);
+        Route::patch('/admin/users/{user}/reactivate', [UserController::class, 'reactivate']);
         Route::get('/admin/verification-requests', [VerificationRequestController::class, 'adminIndex']);
         Route::get('/admin/verification-requests/{verificationRequest}', [VerificationRequestController::class, 'adminShow']);
         Route::post('/admin/verification-requests/{verificationRequest}/approve', [VerificationRequestController::class, 'approve']);

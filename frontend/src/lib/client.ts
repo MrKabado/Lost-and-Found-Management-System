@@ -42,6 +42,10 @@ export interface AdminUser {
   name: string
   email: string
   role: "user" | "admin"
+  is_verified: boolean
+  account_status: "active" | "deactivated"
+  last_login_at: string | null
+  activity_status: "active" | "inactive"
   created_at: string
   student_profile?: {
     profile_image?: string | null
@@ -146,8 +150,23 @@ export async function rejectClaim(id: number): Promise<Claim> {
   return response.data
 }
 
-export async function getAdminUsers(): Promise<AdminUser[]> {
-  const response = await api.get<AdminUser[]>("/admin/users")
+export async function getAdminUsers(params?: {
+  search?: string
+  verification_status?: "verified" | "unverified"
+  activity_status?: "active" | "inactive"
+  account_status?: "active" | "deactivated"
+}): Promise<AdminUser[]> {
+  const response = await api.get<AdminUser[]>("/admin/users", { params })
+  return response.data
+}
+
+export async function deactivateAdminUser(id: number): Promise<AdminUser> {
+  const response = await api.patch<AdminUser>(`/admin/users/${id}/deactivate`)
+  return response.data
+}
+
+export async function reactivateAdminUser(id: number): Promise<AdminUser> {
+  const response = await api.patch<AdminUser>(`/admin/users/${id}/reactivate`)
   return response.data
 }
 

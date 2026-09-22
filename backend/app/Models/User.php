@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -24,6 +25,8 @@ class User extends Authenticatable
         'email',
         'password',
         'is_verified',
+        'account_status',
+        'last_login_at',
     ];
 
     /**
@@ -34,6 +37,10 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    protected $appends = [
+        'activity_status',
     ];
 
     /**
@@ -47,7 +54,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_verified' => 'boolean',
+            'last_login_at' => 'datetime',
         ];
+    }
+
+    protected function activityStatus(): Attribute
+    {
+        return Attribute::get(fn (): string => $this->last_login_at?->gte(now()->subDays(90)) ? 'active' : 'inactive');
     }
 
     public function lostItems()
