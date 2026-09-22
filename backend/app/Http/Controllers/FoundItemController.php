@@ -109,7 +109,12 @@ class FoundItemController extends Controller
 
     public function adminIndex(): JsonResponse
     {
-        return response()->json(FoundItem::with(['user', 'category'])->latest()->get());
+        return response()->json(
+            FoundItem::with(['user', 'category'])
+                ->latest()
+                ->get()
+                ->each(fn (FoundItem $item) => $item->setAttribute('reporter', $item->user))
+        );
     }
 
     public function adminDestroy(FoundItem $foundItem): JsonResponse

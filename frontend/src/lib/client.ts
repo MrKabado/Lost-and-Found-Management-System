@@ -34,6 +34,7 @@ export interface OwnedItem {
   category?: Category | null
   created_at: string
   user?: { id: number; name: string; email: string } | null
+  reporter?: { id: number; name: string; email: string } | null
 }
 
 export interface AdminUser {

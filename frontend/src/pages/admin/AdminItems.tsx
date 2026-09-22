@@ -134,10 +134,10 @@ export default function AdminItems({ type }: { type: "lost" | "found" }) {
                   </td>
                   <td className="px-5 py-4">
                     <div className="text-[#031079]">
-                      {item.user?.name ?? "Unknown"}
+                      {item.reporter?.name ?? item.user?.name ?? "Unknown"}
                     </div>
                     <div className="text-xs text-[#5B6280]">
-                      {item.user?.email}
+                      {item.reporter?.email ?? item.user?.email}
                     </div>
                   </td>
                   <td className="px-5 py-4 text-[#4A5170]">

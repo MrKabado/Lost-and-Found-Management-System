@@ -109,7 +109,12 @@ class LostItemController extends Controller
 
     public function adminIndex(): JsonResponse
     {
-        return response()->json(LostItem::with(['user', 'category'])->latest()->get());
+        return response()->json(
+            LostItem::with(['user', 'category'])
+                ->latest()
+                ->get()
+                ->each(fn (LostItem $item) => $item->setAttribute('reporter', $item->user))
+        );
     }
 
     public function adminDestroy(LostItem $lostItem): JsonResponse
