@@ -258,7 +258,6 @@ export async function getStudentProfile(): Promise<StudentProfile | null> {
 export async function saveStudentProfile(
   values: { school_id: string; course_id: number; contact_number: string },
   profileImage?: File | null,
-  updating = false,
 ): Promise<StudentProfile> {
   const formData = new FormData()
   formData.append('school_id', values.school_id)
@@ -267,7 +266,7 @@ export async function saveStudentProfile(
   if (profileImage) formData.append('profile_image', profileImage)
 
   const response = await api.request<StudentProfile>({
-    method: updating ? 'PATCH' : 'POST',
+    method: 'POST',
     url: '/profile',
     data: formData,
   })

@@ -15,16 +15,12 @@ class StudentProfileController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        if ($request->user()->studentProfile) {
-            return response()->json(['message' => 'Your student profile already exists.'], 409);
-        }
-
-        return $this->save($request, true);
+        return $this->save($request, ! $request->user()->studentProfile()->exists());
     }
 
     public function update(Request $request): JsonResponse
     {
-        if (! $request->user()->studentProfile) {
+        if (! $request->user()->studentProfile()->exists()) {
             return response()->json(['message' => 'Create your student profile first.'], 404);
         }
 
@@ -40,7 +36,7 @@ class StudentProfileController extends Controller
             'profile_image' => ['sometimes', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
         ]);
 
-        $profile = $request->user()->studentProfile;
+        $profile = $request->user()->studentProfile()->first();
         if ($request->hasFile('profile_image')) {
             if ($profile?->profile_image) {
                 Storage::disk('public')->delete($profile->profile_image);

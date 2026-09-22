@@ -19,7 +19,7 @@ class VerificationRequestController extends Controller
     {
         $user = $request->user();
 
-        if (! $user->studentProfile) {
+        if (! $user->studentProfile()->exists()) {
             return response()->json([
                 'message' => 'Complete your student profile before requesting verification.',
             ], 422);
