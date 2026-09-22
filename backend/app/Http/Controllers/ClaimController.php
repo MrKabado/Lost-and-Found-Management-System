@@ -76,12 +76,12 @@ class ClaimController extends Controller
      */
     public function adminIndex(): JsonResponse
     {
-        return response()->json(Claim::with(['user', 'foundItem.category', 'foundItem.user'])->latest()->get());
+        return response()->json(Claim::with(['user.studentProfile', 'foundItem.category', 'foundItem.user'])->latest()->get());
     }
 
     public function adminShow(Claim $claim): JsonResponse
     {
-        return response()->json($claim->load(['user', 'foundItem.category', 'foundItem.user']));
+        return response()->json($claim->load(['user.studentProfile', 'foundItem.category', 'foundItem.user']));
     }
 
     /**

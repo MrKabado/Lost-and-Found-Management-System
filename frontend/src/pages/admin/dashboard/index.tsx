@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Check, Pencil, Plus, X } from "lucide-react"
+import { Check, Pencil, Plus, RefreshCw, X } from "lucide-react"
 import { toast } from "sonner"
 import { api } from "@/lib/api"
 import {
@@ -10,6 +10,7 @@ import {
   getApiError,
   getCategories,
   rejectClaim,
+  getStorageUrl,
   updateFoundStatus,
   type Category,
   type Claim,
@@ -135,6 +136,10 @@ export default function AdminDashboard() {
       down: statistics.pending_claims > 0,
     },
   ]
+  const hasActions = claims.some((claim) => {
+    const item = claim.found_item ?? claim.foundItem
+    return claim.status === "pending" || item?.status === "awaiting_pickup"
+  })
 
   return (
     <main className="min-w-0 flex-1 bg-[#F5F6FC]">
@@ -167,20 +172,23 @@ export default function AdminDashboard() {
           ))}
         </div>
 
-        <div className="mb-3.5 flex items-baseline justify-between">
+        <div className="mb-3.5 flex items-center justify-between">
           <h2 className="font-sans text-lg font-semibold text-[#031079]">
             Pending claims
           </h2>
           <button
             type="button"
             onClick={() => void loadDashboard()}
-            className="border-b border-dotted border-[#5B6280] text-[12.5px] text-[#5B6280]"
+            disabled={loading}
+            title="Refresh dashboard data"
+            className="inline-flex items-center gap-2 rounded-lg border border-[#C7D2FE] bg-white px-3 py-2 text-xs font-semibold text-[#1D4ED8] shadow-sm transition hover:border-[#1D4ED8] hover:bg-[#EFF6FF] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Refresh data
+            <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
+            {loading ? "Refreshing..." : "Refresh data"}
           </button>
         </div>
         <div className="mb-[30px] overflow-x-auto rounded-xl border border-[#D8DCEF] bg-white">
-          <table className="w-full min-w-[760px] border-collapse text-[13.5px]">
+          <table className={`w-full ${hasActions ? "min-w-[760px]" : "min-w-[650px]"} border-collapse text-[13.5px]`}>
             <thead>
               <tr className="border-b border-[#D8DCEF]">
                 {[
@@ -189,7 +197,7 @@ export default function AdminDashboard() {
                   "Category",
                   "Submitted",
                   "Status",
-                  "Action",
+                  ...(hasActions ? ["Action"] : []),
                 ].map((heading) => (
                   <th
                     key={heading}
@@ -204,7 +212,7 @@ export default function AdminDashboard() {
               {claims.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={6}
+                    colSpan={hasActions ? 6 : 5}
                     className="px-5 py-10 text-center text-sm text-[#5B6280]"
                   >
                     No claims found.
@@ -233,7 +241,13 @@ export default function AdminDashboard() {
                       <td className="px-[18px] py-[13px]">
                         <div className="flex items-center gap-[9px]">
                           <div className="flex h-7 w-7 items-center justify-center rounded-full border border-[#D8DCEF] bg-[#F5F6FC] font-sans text-[11px] text-[#041690]">
-                            {initials}
+                            {claim.user?.student_profile?.profile_image ? (
+                              <img
+                                src={getStorageUrl(claim.user.student_profile.profile_image) ?? undefined}
+                                alt={`${name}'s profile`}
+                                className="h-full w-full rounded-full object-cover"
+                              />
+                            ) : initials}
                           </div>
                           {name}
                         </div>
@@ -250,7 +264,7 @@ export default function AdminDashboard() {
                       <td className="px-[18px] py-[13px]">
                         <StatusBadge status={status} />
                       </td>
-                      <td className="px-[18px] py-[13px]">
+                      {hasActions && (status === "PENDING" || itemStatus === "awaiting_pickup") && <td className="px-[18px] py-[13px]">
                         <div className="flex justify-end gap-2">
                           {status === "PENDING" ? (
                             <>
@@ -299,7 +313,7 @@ export default function AdminDashboard() {
                             </button>
                           )}
                         </div>
-                      </td>
+                      </td>}
                     </tr>
                   )
                 })

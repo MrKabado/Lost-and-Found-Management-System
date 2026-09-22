@@ -17,7 +17,12 @@ export interface Item {
   status: string
   category?: Category | null
   created_at: string
-  user?: { id: number; name: string; email: string } | null
+  user?: {
+    id: number
+    name: string
+    email: string
+    student_profile?: { profile_image?: string | null } | null
+  } | null
 }
 
 export interface OwnedItem {
@@ -60,7 +65,12 @@ export interface Claim {
   created_at: string
   found_item?: OwnedItem | null
   foundItem?: OwnedItem | null
-  user?: { id: number; name: string; email: string } | null
+  user?: {
+    id: number
+    name: string
+    email: string
+    student_profile?: { profile_image?: string | null } | null
+  } | null
 }
 
 export interface AdminStatistics {
