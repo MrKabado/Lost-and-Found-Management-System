@@ -4,22 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\FoundItem;
 use App\Models\LostItem;
+use App\Services\NotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ItemStatusController extends Controller
 {
-    public function updateLost(Request $request, LostItem $lostItem): JsonResponse
+    public function updateLost(Request $request, LostItem $lostItem, NotificationService $notificationService): JsonResponse
     {
-        return $this->updateStatus($request, $lostItem);
+        return $this->updateStatus($request, $lostItem, $notificationService);
     }
 
-    public function updateFound(Request $request, FoundItem $foundItem): JsonResponse
+    public function updateFound(Request $request, FoundItem $foundItem, NotificationService $notificationService): JsonResponse
     {
-        return $this->updateStatus($request, $foundItem);
+        return $this->updateStatus($request, $foundItem, $notificationService);
     }
 
-    private function updateStatus(Request $request, LostItem|FoundItem $item): JsonResponse
+    private function updateStatus(Request $request, LostItem|FoundItem $item, NotificationService $notificationService): JsonResponse
     {
         $validated = $request->validate([
             'status' => ['required', 'in:lost,found,claimed,verified,returned,rejected,closed'],
@@ -44,6 +45,12 @@ class ItemStatusController extends Controller
         }
 
         $item->update(['status' => $nextStatus]);
+
+        if (($item instanceof LostItem && $nextStatus === 'found') || ($item instanceof FoundItem && $nextStatus === 'verified')) {
+            $reportType = $item instanceof LostItem ? 'lost_item' : 'found_item';
+            $reportLabel = $item instanceof LostItem ? 'Lost' : 'Found';
+            $notificationService->sendToUser($item->user_id, "{$reportLabel} Report Approved", "Your {$reportLabel} item report for \"{$item->title}\" has been approved.", $reportType, $reportType, $item->id);
+        }
 
         return response()->json($item->refresh()->load('category'));
     }

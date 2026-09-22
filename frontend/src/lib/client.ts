@@ -329,3 +329,40 @@ export async function rejectVerificationRequest(id: number, rejection_reason: st
   const response = await api.post<VerificationRequest>(`/admin/verification-requests/${id}/reject`, { rejection_reason })
   return response.data
 }
+
+export interface Notification {
+  id: number
+  title: string
+  message: string
+  type: "verification" | "claim" | "lost_item" | "found_item" | "announcement" | "system"
+  is_read: boolean
+  related_type: string | null
+  related_id: number | null
+  navigation_url: string | null
+  created_at: string
+  updated_at: string
+}
+
+export async function getNotifications(unreadOnly = false): Promise<Notification[]> {
+  const response = await api.get<Notification[]>(unreadOnly ? "/notifications/unread" : "/notifications")
+  return response.data
+}
+
+export async function getNotificationCount(): Promise<number> {
+  const response = await api.get<{ count: number }>("/notifications/count")
+  return response.data.count
+}
+
+export async function getNotification(id: number): Promise<Notification> {
+  const response = await api.get<Notification>(`/notifications/${id}`)
+  return response.data
+}
+
+export async function markNotificationAsRead(id: number): Promise<Notification> {
+  const response = await api.patch<Notification>(`/notifications/${id}/read`)
+  return response.data
+}
+
+export async function markAllNotificationsAsRead(): Promise<void> {
+  await api.patch("/notifications/read-all")
+}

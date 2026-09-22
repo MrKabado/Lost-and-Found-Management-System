@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\VerificationRequest;
+use App\Services\NotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -74,7 +75,7 @@ class VerificationRequestController extends Controller
         ]));
     }
 
-    public function approve(Request $request, VerificationRequest $verificationRequest): JsonResponse
+    public function approve(Request $request, VerificationRequest $verificationRequest, NotificationService $notificationService): JsonResponse
     {
         if ($verificationRequest->status !== 'pending') {
             return response()->json(['message' => 'Only pending requests can be approved.'], 422);
@@ -87,6 +88,7 @@ class VerificationRequestController extends Controller
             'rejection_reason' => null,
         ]);
         $verificationRequest->user()->update(['is_verified' => true]);
+        $notificationService->sendToUser($verificationRequest->user_id, 'Verification Approved', 'Your account verification request has been approved.', 'verification', 'verification', $verificationRequest->id);
 
         return response()->json($verificationRequest->refresh()->load([
             'user.studentProfile.course',
@@ -94,7 +96,7 @@ class VerificationRequestController extends Controller
         ]));
     }
 
-    public function reject(Request $request, VerificationRequest $verificationRequest): JsonResponse
+    public function reject(Request $request, VerificationRequest $verificationRequest, NotificationService $notificationService): JsonResponse
     {
         if ($verificationRequest->status !== 'pending') {
             return response()->json(['message' => 'Only pending requests can be rejected.'], 422);
@@ -110,6 +112,7 @@ class VerificationRequestController extends Controller
             'reviewed_by' => $request->user()->id,
             'reviewed_at' => now(),
         ]);
+        $notificationService->sendToUser($verificationRequest->user_id, 'Verification Rejected', "Your account verification request was rejected. Reason: {$validated['rejection_reason']}", 'verification', 'verification', $verificationRequest->id);
 
         return response()->json($verificationRequest->refresh()->load([
             'user.studentProfile.course',

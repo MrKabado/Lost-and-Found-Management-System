@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Claim;
 use App\Models\FoundItem;
+use App\Services\NotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -86,7 +87,7 @@ class ClaimController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function approve(Claim $claim): JsonResponse
+    public function approve(Claim $claim, NotificationService $notificationService): JsonResponse
     {
         if ($claim->status !== 'pending') {
             return response()->json([
@@ -96,11 +97,12 @@ class ClaimController extends Controller
 
         $claim->update(['status' => 'approved']);
         $claim->foundItem()->update(['status' => 'claimed']);
+        $notificationService->sendToUser($claim->user_id, 'Claim Approved', "Your claim for \"{$claim->foundItem->title}\" has been approved. Please proceed to the Lost and Found Office and bring your school ID.", 'claim', 'claim', $claim->id);
 
         return response()->json($claim->refresh()->load(['user', 'foundItem.category', 'foundItem.user']));
     }
 
-    public function reject(Claim $claim): JsonResponse
+    public function reject(Claim $claim, NotificationService $notificationService): JsonResponse
     {
         if ($claim->status !== 'pending') {
             return response()->json([
@@ -109,6 +111,7 @@ class ClaimController extends Controller
         }
 
         $claim->update(['status' => 'rejected']);
+        $notificationService->sendToUser($claim->user_id, 'Claim Rejected', "Your claim for \"{$claim->foundItem->title}\" was rejected. Please contact the Lost and Found Office if you need assistance.", 'claim', 'claim', $claim->id);
 
         return response()->json($claim->refresh()->load(['user', 'foundItem.category', 'foundItem.user']));
     }

@@ -9,6 +9,7 @@ use App\Http\Controllers\FoundItemController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ItemStatusController;
 use App\Http\Controllers\LostItemController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\StudentProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VerificationRequestController;
@@ -29,6 +30,12 @@ Route::get('/courses', [CourseController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function (): void {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::get('/notifications/unread', [NotificationController::class, 'unread']);
+    Route::get('/notifications/count', [NotificationController::class, 'count']);
+    Route::patch('/notifications/read-all', [NotificationController::class, 'markAllAsRead']);
+    Route::get('/notifications/{notification}', [NotificationController::class, 'show']);
+    Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead']);
     Route::get('/user', [AuthController::class, 'user']);
     Route::get('/profile', [StudentProfileController::class, 'show']);
     Route::post('/profile', [StudentProfileController::class, 'store']);
@@ -68,6 +75,7 @@ Route::middleware('auth:sanctum')->group(function (): void {
         Route::post('/admin/claims/{claim}/approve', [ClaimController::class, 'approve']);
         Route::post('/admin/claims/{claim}/reject', [ClaimController::class, 'reject']);
         Route::get('/admin/users', [UserController::class, 'adminIndex']);
+        Route::post('/admin/notifications', [NotificationController::class, 'store']);
         Route::patch('/admin/users/{user}/deactivate', [UserController::class, 'deactivate']);
         Route::patch('/admin/users/{user}/reactivate', [UserController::class, 'reactivate']);
         Route::get('/admin/verification-requests', [VerificationRequestController::class, 'adminIndex']);

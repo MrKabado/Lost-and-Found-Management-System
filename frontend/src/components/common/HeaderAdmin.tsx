@@ -1,5 +1,6 @@
 import { useAuth } from "@/auth/useAuth";
 import { getStorageUrl } from "@/lib/client";
+import NotificationBell from "@/components/common/NotificationBell";
 
 export default function HeaderAdmin() {
   const { user } = useAuth();
@@ -18,6 +19,7 @@ export default function HeaderAdmin() {
       </div>
 
       <div className="flex items-center gap-3">
+        <NotificationBell />
         {/* Avatar */}
         <div className="h-9 w-9 overflow-hidden rounded-full bg-[#0B2A6F] font-sans text-sm text-white">
           {user?.student_profile?.profile_image ? (
