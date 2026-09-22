@@ -215,6 +215,14 @@ export default function BrowseItems() {
                       );
                     }
 
+                    if (!user?.is_verified) {
+                      return (
+                        <div className="mt-5 rounded-lg border border-[#E8D38A] bg-[#FFF9E8] px-4 py-3 text-sm text-[#705B00]">
+                          Your account must be verified before using this feature. <a href="/client/profile" className="font-semibold underline">Open profile</a>
+                        </div>
+                      );
+                    }
+
                     return claimingId === item.id ? (
                     <div className="mt-4 rounded-lg border border-[#D8DCEF] bg-[#F8F9FF] p-3">
                       <textarea

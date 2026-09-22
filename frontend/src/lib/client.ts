@@ -214,3 +214,94 @@ export function setOtpCooldown(email: string, seconds: number): void {
 
   localStorage.setItem(key, String(Date.now() + seconds * 1000))
 }
+
+export interface Course {
+  id: number
+  name: string
+}
+
+export interface StudentProfile {
+  id: number
+  user_id: number
+  school_id: string
+  course_id: number
+  contact_number: string
+  profile_image: string | null
+  course?: Course | null
+}
+
+export interface VerificationRequest {
+  id: number
+  user_id: number
+  school_id_image: string
+  supporting_document: string | null
+  status: "pending" | "approved" | "rejected"
+  rejection_reason: string | null
+  reviewed_by: number | null
+  reviewed_at: string | null
+  created_at: string
+  user?: AdminUser & { student_profile?: StudentProfile | null }
+}
+
+export async function getCourses(): Promise<Course[]> {
+  const response = await api.get<Course[]>('/courses')
+  return response.data
+}
+
+export async function getStudentProfile(): Promise<StudentProfile | null> {
+  const response = await api.get<StudentProfile | null>('/profile')
+  return response.data
+}
+
+export async function saveStudentProfile(
+  values: { school_id: string; course_id: number; contact_number: string },
+  profileImage?: File | null,
+  updating = false,
+): Promise<StudentProfile> {
+  const formData = new FormData()
+  formData.append('school_id', values.school_id)
+  formData.append('course_id', String(values.course_id))
+  formData.append('contact_number', values.contact_number)
+  if (profileImage) formData.append('profile_image', profileImage)
+
+  const response = await api.request<StudentProfile>({
+    method: updating ? 'PATCH' : 'POST',
+    url: '/profile',
+    data: formData,
+  })
+  return response.data
+}
+
+export async function getVerificationRequest(): Promise<VerificationRequest | null> {
+  const response = await api.get<VerificationRequest | null>('/verification-requests')
+  return response.data
+}
+
+export async function submitVerificationRequest(
+  schoolIdImage: File,
+  supportingDocument?: File | null,
+): Promise<VerificationRequest> {
+  const formData = new FormData()
+  formData.append('school_id_image', schoolIdImage)
+  if (supportingDocument) formData.append('supporting_document', supportingDocument)
+
+  const response = await api.post<VerificationRequest>('/verification-requests', formData)
+  return response.data
+}
+
+export async function getAdminVerificationRequests(status?: string): Promise<VerificationRequest[]> {
+  const response = await api.get<VerificationRequest[]>('/admin/verification-requests', {
+    params: status ? { status } : undefined,
+  })
+  return response.data
+}
+
+export async function approveVerificationRequest(id: number): Promise<VerificationRequest> {
+  const response = await api.post<VerificationRequest>(`/admin/verification-requests/${id}/approve`)
+  return response.data
+}
+
+export async function rejectVerificationRequest(id: number, rejection_reason: string): Promise<VerificationRequest> {
+  const response = await api.post<VerificationRequest>(`/admin/verification-requests/${id}/reject`, { rejection_reason })
+  return response.data
+}

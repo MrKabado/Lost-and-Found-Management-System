@@ -19,6 +19,7 @@ import AdminFoundItems from "@/pages/admin/found-items"
 import AdminClaims from "@/pages/admin/claims"
 import AdminCategories from "@/pages/admin/categories"
 import AdminUsers from "@/pages/admin/users"
+import AdminVerification from "@/pages/admin/verification"
 
 import ClientLayout from "@/pages/client/ClientLayout.tsx"
 import ClientDashboard from "@/pages/client/dashboard"
@@ -70,6 +71,7 @@ createRoot(document.getElementById("root")!).render(
               <Route path="claims" element={<AdminClaims />} />
               <Route path="categories" element={<AdminCategories />} />
               <Route path="users" element={<AdminUsers />} />
+              <Route path="verification" element={<AdminVerification />} />
             </Route>
           </Route>
 

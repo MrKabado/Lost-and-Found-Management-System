@@ -6,6 +6,7 @@ import {
   Grid2X2,
   User,
   LogOut,
+  ShieldCheck,
 } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useAuth } from "@/auth/useAuth";
@@ -84,6 +85,7 @@ export default function SidebarAdmin() {
         <SidebarLink icon={<Grid2X2 size={17} />} label="Categories" to="/admin/categories" />
 
         <SidebarLink icon={<User size={17} />} label="Users" to="/admin/users" />
+        <SidebarLink icon={<ShieldCheck size={17} />} label="Verification" to="/admin/verification" />
       </nav>
 
       {/* Bottom */}

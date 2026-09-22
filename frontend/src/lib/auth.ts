@@ -3,6 +3,7 @@ export type AuthUser = {
   name: string
   email: string
   role?: string
+  is_verified?: boolean
 }
 
 const AUTH_TOKEN_KEY = 'auth_token'

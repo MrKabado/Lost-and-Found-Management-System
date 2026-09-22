@@ -5,8 +5,10 @@ import { toast } from "sonner"
 import { api } from "@/lib/api"
 import { getApiError, getCategories, type Category } from "@/lib/client"
 import ClientPage, { ErrorState } from "@/pages/client/ClientPage"
+import { useAuth } from "@/auth/useAuth"
 
 export default function ReportItem({ type }: { type: "lost" | "found" }) {
+  const { user } = useAuth()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [categories, setCategories] = useState<Category[]>([])
@@ -69,7 +71,14 @@ export default function ReportItem({ type }: { type: "lost" | "found" }) {
         </Link>
       }
     >
-      <form
+      {!user?.is_verified ? (
+        <div className="max-w-2xl rounded-xl border border-[#E8D38A] bg-[#FFF9E8] p-6 text-sm text-[#705B00]">
+          <h2 className="font-semibold">Your account must be verified before using this feature.</h2>
+          <p className="mt-2">Complete your student profile and submit your verification request from your profile.</p>
+          <Link to="/client/profile" className="mt-4 inline-flex rounded-lg bg-[#031079] px-4 py-2.5 font-semibold text-white">Open profile</Link>
+        </div>
+      ) : (
+        <form
         onSubmit={handleSubmit}
         className="max-w-2xl rounded-xl border border-[#D8DCEF] bg-white p-6"
       >
@@ -160,7 +169,8 @@ export default function ReportItem({ type }: { type: "lost" | "found" }) {
             </>
           )}
         </button>
-      </form>
+        </form>
+      )}
     </ClientPage>
   )
 }
