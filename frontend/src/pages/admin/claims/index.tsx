@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react"
-import { Check, ExternalLink, Search, X } from "lucide-react"
-import { toast } from "sonner"
+import { ExternalLink, Search, X } from "lucide-react"
 import Pagination from "@/components/common/Pagination"
 import {
-  approveClaim,
   formatDate,
   getAdminClaims,
   getApiError,
   getStorageUrl,
-  rejectClaim,
   type Claim,
 } from "@/lib/client"
 import AdminPage, { AdminBadge, AdminState } from "@/pages/admin/AdminPage"
@@ -19,6 +16,7 @@ export default function AdminClaims() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [page, setPage] = useState(1)
+  const [selectedReason, setSelectedReason] = useState<Claim | null>(null)
   const claimsPerPage = 10
 
   const loadClaims = async () => {
@@ -39,27 +37,6 @@ export default function AdminClaims() {
     setPage(1)
   }, [search, claims.length])
 
-  const updateClaim = async (claim: Claim, action: "approve" | "reject") => {
-    try {
-      const updated =
-        action === "approve"
-          ? await approveClaim(claim.id)
-          : await rejectClaim(claim.id)
-      setClaims((current) =>
-        current.map((currentClaim) =>
-          currentClaim.id === claim.id
-            ? { ...currentClaim, ...updated }
-            : currentClaim
-        )
-      )
-      toast.success(
-        action === "approve" ? "Claim approved." : "Claim rejected."
-      )
-    } catch (requestError) {
-      toast.error(getApiError(requestError, "Unable to update claim."))
-    }
-  }
-
   const visibleClaims = claims.filter((claim) =>
     `${claim.user?.name ?? ""} ${claim.found_item?.title ?? ""} ${claim.claim_reason}`
       .toLowerCase()
@@ -74,7 +51,7 @@ export default function AdminClaims() {
   return (
     <AdminPage
       title="Claims"
-      description="Review ownership claims, proof images, and decide which requests to approve."
+      description="Review ownership claims, proof images, and claim details."
     >
       <div className="mb-5 flex items-center gap-2 rounded-xl border border-[#D8DCEF] bg-white p-4">
         <Search size={16} className="text-[#5B6280]" />
@@ -93,7 +70,7 @@ export default function AdminClaims() {
         <AdminState>No claims found.</AdminState>
       ) : (
         <div className="overflow-x-auto rounded-xl border border-[#D8DCEF] bg-white">
-          <table className="w-full min-w-[1000px] border-collapse text-sm">
+          <table className="w-full min-w-[900px] border-collapse text-sm">
             <thead>
               <tr className="border-b border-[#D8DCEF] text-left text-[11px] tracking-wide text-[#5B6280] uppercase">
                 <th className="px-5 py-3">Claimant</th>
@@ -103,7 +80,6 @@ export default function AdminClaims() {
                 <th className="px-5 py-3">Proof</th>
                 <th className="px-5 py-3">Submitted</th>
                 <th className="px-5 py-3">Status</th>
-                <th className="px-5 py-3">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -132,8 +108,15 @@ export default function AdminClaims() {
                     <div className="text-[#031079]">{claim.found_item?.user?.name ?? "Unknown"}</div>
                     <div className="text-xs text-[#5B6280]">{claim.found_item?.user?.email}</div>
                   </td>
-                  <td className="max-w-xs px-5 py-4 text-xs text-[#4A5170]">
-                    {claim.claim_reason}
+                  <td className="px-5 py-4">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedReason(claim)}
+                      className="max-w-[220px] truncate text-left text-xs font-semibold text-[#1D4ED8] hover:underline"
+                      title="View full claim reason"
+                    >
+                      {claim.claim_reason}
+                    </button>
                   </td>
                   <td className="px-5 py-4">
                     {getStorageUrl(claim.proof) ? (
@@ -157,30 +140,6 @@ export default function AdminClaims() {
                   <td className="px-5 py-4">
                     <AdminBadge value={claim.status} />
                   </td>
-                  <td className="px-5 py-4">
-                    <div className="flex gap-2">
-                      {claim.status === "pending" && (
-                        <>
-                          <button
-                            type="button"
-                            title="Approve claim"
-                            onClick={() => void updateClaim(claim, "approve")}
-                            className="rounded-md border border-[#D8DCEF] p-2 text-[#031079] hover:border-[#031079]"
-                          >
-                            <Check size={15} />
-                          </button>
-                          <button
-                            type="button"
-                            title="Reject claim"
-                            onClick={() => void updateClaim(claim, "reject")}
-                            className="rounded-md border border-[#D8DCEF] p-2 text-[#B6503A] hover:border-[#B6503A]"
-                          >
-                            <X size={15} />
-                          </button>
-                        </>
-                      )}
-                    </div>
-                  </td>
                 </tr>
               ))}
             </tbody>
@@ -191,6 +150,39 @@ export default function AdminClaims() {
             total={visibleClaims.length}
             onPageChange={setPage}
           />
+        </div>
+      )}
+      {selectedReason && (
+        <div
+          className="fixed inset-0 z-40 flex items-center justify-center bg-[#092354]/30 p-4"
+          onClick={() => setSelectedReason(null)}
+        >
+          <div
+            className="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wide text-[#5B6280]">
+                  Claim reason
+                </p>
+                <h2 className="mt-1 text-xl font-semibold text-[#031079]">
+                  {selectedReason.found_item?.title ?? "Claim details"}
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedReason(null)}
+                aria-label="Close claim reason"
+                className="rounded-md p-1 text-[#5B6280] hover:bg-[#F5F6FC]"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <p className="mt-5 whitespace-pre-wrap text-sm leading-6 text-[#4A5170]">
+              {selectedReason.claim_reason}
+            </p>
+          </div>
         </div>
       )}
     </AdminPage>

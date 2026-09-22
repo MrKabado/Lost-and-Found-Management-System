@@ -34,6 +34,10 @@ class ItemStatusController extends Controller
             'archived' => ['available'],
         ];
 
+        if ($item instanceof LostItem) {
+            $allowedStatuses['available'][] = 'returned';
+        }
+
         $nextStatus = $validated['status'];
 
         if (! in_array($nextStatus, $allowedStatuses[$item->status] ?? [], true)) {
