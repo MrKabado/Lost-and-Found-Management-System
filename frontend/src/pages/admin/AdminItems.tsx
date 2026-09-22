@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { Search, Trash2 } from "lucide-react"
 import { toast } from "sonner"
+import Pagination from "@/components/common/Pagination"
 import {
   deleteAdminFoundItem,
   deleteAdminLostItem,
@@ -20,6 +21,8 @@ export default function AdminItems({ type }: { type: "lost" | "found" }) {
   const [search, setSearch] = useState("")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
+  const [page, setPage] = useState(1)
+  const itemsPerPage = 10
 
   const loadItems = useCallback(async () => {
     try {
@@ -37,6 +40,10 @@ export default function AdminItems({ type }: { type: "lost" | "found" }) {
   useEffect(() => {
     void Promise.resolve().then(loadItems)
   }, [loadItems])
+
+  useEffect(() => {
+    setPage(1)
+  }, [search, items.length])
 
   const changeStatus = async (item: OwnedItem, status: string) => {
     try {
@@ -74,6 +81,11 @@ export default function AdminItems({ type }: { type: "lost" | "found" }) {
     `${item.title} ${item.description} ${item.user?.name ?? ""}`
       .toLowerCase()
       .includes(search.toLowerCase())
+  )
+  const pageCount = Math.max(1, Math.ceil(visibleItems.length / itemsPerPage))
+  const paginatedItems = visibleItems.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage,
   )
   const statusOptions = [
     "available",
@@ -117,7 +129,7 @@ export default function AdminItems({ type }: { type: "lost" | "found" }) {
               </tr>
             </thead>
             <tbody>
-              {visibleItems.map((item) => (
+              {paginatedItems.map((item) => (
                 <tr
                   key={item.id}
                   className="border-b border-[#D8DCEF] last:border-0"
@@ -184,6 +196,12 @@ export default function AdminItems({ type }: { type: "lost" | "found" }) {
               ))}
             </tbody>
           </table>
+          <Pagination
+            page={page}
+            pageCount={pageCount}
+            total={visibleItems.length}
+            onPageChange={setPage}
+          />
         </div>
       )}
     </AdminPage>

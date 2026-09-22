@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { Search } from "lucide-react"
+import Pagination from "@/components/common/Pagination"
 import {
   deactivateAdminUser,
   getAdminUsers,
@@ -19,6 +20,8 @@ export default function AdminUsers() {
   const [accountStatus, setAccountStatus] = useState("")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
+  const [page, setPage] = useState(1)
+  const usersPerPage = 10
 
   useEffect(() => {
     getAdminUsers({
@@ -34,6 +37,10 @@ export default function AdminUsers() {
       .finally(() => setLoading(false))
   }, [accountStatus, activityStatus, search, verificationStatus])
 
+  useEffect(() => {
+    setPage(1)
+  }, [accountStatus, activityStatus, search, verificationStatus, users.length])
+
   const updateAccountStatus = async (user: AdminUser) => {
     try {
       const updated = user.account_status === "active"
@@ -46,6 +53,12 @@ export default function AdminUsers() {
       setError(getApiError(requestError, "Unable to update account status."))
     }
   }
+
+  const pageCount = Math.max(1, Math.ceil(users.length / usersPerPage))
+  const paginatedUsers = users.slice(
+    (page - 1) * usersPerPage,
+    page * usersPerPage,
+  )
 
   return (
     <AdminPage
@@ -100,7 +113,7 @@ export default function AdminUsers() {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
+              {paginatedUsers.map((user) => (
                 <tr
                   key={user.id}
                   className="border-b border-[#D8DCEF] last:border-0"
@@ -147,6 +160,12 @@ export default function AdminUsers() {
               ))}
             </tbody>
           </table>
+          <Pagination
+            page={page}
+            pageCount={pageCount}
+            total={users.length}
+            onPageChange={setPage}
+          />
         </div>
       )}
     </AdminPage>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Check, Pencil, Plus, RefreshCw, X } from "lucide-react"
 import { toast } from "sonner"
 import { api } from "@/lib/api"
+import Pagination from "@/components/common/Pagination"
 import {
   approveClaim,
   formatDate,
@@ -32,6 +33,8 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [actionId, setActionId] = useState<number | null>(null)
+  const [claimsPage, setClaimsPage] = useState(1)
+  const claimsPerPage = 10
 
   const loadDashboard = async () => {
     try {
@@ -136,10 +139,23 @@ export default function AdminDashboard() {
       down: statistics.pending_claims > 0,
     },
   ]
-  const hasActions = claims.some((claim) => {
+  const pendingClaims = claims.filter((claim) => {
     const item = claim.found_item ?? claim.foundItem
     return claim.status === "pending" || item?.status === "awaiting_pickup"
   })
+  const claimsPageCount = Math.max(1, Math.ceil(pendingClaims.length / claimsPerPage))
+  const paginatedClaims = pendingClaims.slice(
+    (claimsPage - 1) * claimsPerPage,
+    claimsPage * claimsPerPage,
+  )
+  const hasActions = pendingClaims.some((claim) => {
+    const item = claim.found_item ?? claim.foundItem
+    return claim.status === "pending" || item?.status === "awaiting_pickup"
+  })
+
+  useEffect(() => {
+    setClaimsPage((currentPage) => Math.min(currentPage, claimsPageCount))
+  }, [claimsPageCount])
 
   return (
     <main className="min-w-0 flex-1 bg-[#F5F6FC]">
@@ -209,7 +225,7 @@ export default function AdminDashboard() {
               </tr>
             </thead>
             <tbody>
-              {claims.length === 0 ? (
+              {pendingClaims.length === 0 ? (
                 <tr>
                   <td
                     colSpan={hasActions ? 6 : 5}
@@ -219,7 +235,7 @@ export default function AdminDashboard() {
                   </td>
                 </tr>
               ) : (
-                claims.map((claim) => {
+                paginatedClaims.map((claim) => {
                   const name = claim.user?.name ?? "Unknown claimant"
                   const initials = name
                     .split(" ")
@@ -320,6 +336,12 @@ export default function AdminDashboard() {
               )}
             </tbody>
           </table>
+          <Pagination
+            page={claimsPage}
+            pageCount={claimsPageCount}
+            total={pendingClaims.length}
+            onPageChange={setClaimsPage}
+          />
         </div>
 
         <div className="mb-3.5 flex items-baseline justify-between">

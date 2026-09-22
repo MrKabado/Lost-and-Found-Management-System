@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Check, ExternalLink, Search, X } from "lucide-react"
 import { toast } from "sonner"
+import Pagination from "@/components/common/Pagination"
 import {
   approveClaim,
   formatDate,
@@ -17,6 +18,8 @@ export default function AdminClaims() {
   const [search, setSearch] = useState("")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
+  const [page, setPage] = useState(1)
+  const claimsPerPage = 10
 
   const loadClaims = async () => {
     try {
@@ -31,6 +34,10 @@ export default function AdminClaims() {
   useEffect(() => {
     void Promise.resolve().then(loadClaims)
   }, [])
+
+  useEffect(() => {
+    setPage(1)
+  }, [search, claims.length])
 
   const updateClaim = async (claim: Claim, action: "approve" | "reject") => {
     try {
@@ -57,6 +64,11 @@ export default function AdminClaims() {
     `${claim.user?.name ?? ""} ${claim.found_item?.title ?? ""} ${claim.claim_reason}`
       .toLowerCase()
       .includes(search.toLowerCase())
+  )
+  const pageCount = Math.max(1, Math.ceil(visibleClaims.length / claimsPerPage))
+  const paginatedClaims = visibleClaims.slice(
+    (page - 1) * claimsPerPage,
+    page * claimsPerPage,
   )
 
   return (
@@ -95,7 +107,7 @@ export default function AdminClaims() {
               </tr>
             </thead>
             <tbody>
-              {visibleClaims.map((claim) => (
+              {paginatedClaims.map((claim) => (
                 <tr
                   key={claim.id}
                   className="border-b border-[#D8DCEF] last:border-0"
@@ -173,6 +185,12 @@ export default function AdminClaims() {
               ))}
             </tbody>
           </table>
+          <Pagination
+            page={page}
+            pageCount={pageCount}
+            total={visibleClaims.length}
+            onPageChange={setPage}
+          />
         </div>
       )}
     </AdminPage>
