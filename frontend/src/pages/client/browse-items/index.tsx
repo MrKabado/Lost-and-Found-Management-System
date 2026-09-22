@@ -114,7 +114,7 @@ export default function BrowseItems() {
               setFilters({ ...filters, search: event.target.value })
             }
             placeholder="Search title or description"
-            className="w-full text-sm outline-none"
+            className="w-full bg-white text-sm text-[#031079] outline-none placeholder:text-[#8B92B0]"
           />
         </div>
         <select

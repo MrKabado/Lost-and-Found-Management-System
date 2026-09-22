@@ -41,7 +41,7 @@ export default function AdminUsers() {
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           placeholder="Search name, email, or role"
-          className="w-full text-sm outline-none"
+          className="w-full bg-white text-sm text-[#031079] outline-none placeholder:text-[#8B92B0]"
         />
       </div>
       {loading ? (

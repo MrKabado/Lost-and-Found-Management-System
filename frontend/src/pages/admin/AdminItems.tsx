@@ -91,7 +91,7 @@ export default function AdminItems({ type }: { type: "lost" | "found" }) {
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           placeholder="Search title, description, or reporter"
-          className="w-full text-sm outline-none"
+          className="w-full bg-white text-sm text-[#031079] outline-none placeholder:text-[#8B92B0]"
         />
       </div>
       {loading ? (
