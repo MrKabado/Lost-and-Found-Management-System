@@ -138,7 +138,7 @@ export default function AdminItems({ type }: { type: "lost" | "found" }) {
                 >
                   <td className="px-5 py-4">
                     {getStorageUrl(item.image) && (
-                      <a href={getStorageUrl(item.image) ?? "#"} target="_blank" rel="noreferrer" className="mb-2 block text-xs font-semibold text-[#D4A80D] hover:underline">
+                      <a href={getStorageUrl(item.image) ?? "#"} target="_blank" rel="noreferrer" className="mb-2 block text-xs font-semibold text-[#9A6A08] hover:underline">
                         View uploaded image
                       </a>
                     )}

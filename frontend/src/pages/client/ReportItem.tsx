@@ -74,7 +74,7 @@ export default function ReportItem({ type }: { type: "lost" | "found" }) {
       action={
         <Link
           to="/client"
-          className="flex items-center gap-2 text-sm font-semibold text-[#D4A80D]"
+          className="flex items-center gap-2 text-sm font-semibold text-[#9A6A08]"
         >
           <ArrowLeft size={15} /> Back to dashboard
         </Link>
@@ -105,7 +105,7 @@ export default function ReportItem({ type }: { type: "lost" | "found" }) {
               onChange={(event) =>
                 setForm({ ...form, title: event.target.value })
               }
-              className="mt-2 w-full rounded-lg border border-[#D8DCEF] px-3 py-2.5 font-normal outline-none focus:border-[#F5C518]"
+              className="mt-2 w-full rounded-lg border border-[#D8DCEF] px-3 py-2.5 font-normal outline-none focus:border-[#B88916]"
               placeholder="e.g. Black backpack"
             />
           </label>
@@ -117,7 +117,7 @@ export default function ReportItem({ type }: { type: "lost" | "found" }) {
               onChange={(event) =>
                 setForm({ ...form, category_id: event.target.value })
               }
-              className="mt-2 w-full rounded-lg border border-[#D8DCEF] bg-white px-3 py-2.5 font-normal outline-none focus:border-[#F5C518]"
+              className="mt-2 w-full rounded-lg border border-[#D8DCEF] bg-white px-3 py-2.5 font-normal outline-none focus:border-[#B88916]"
             >
               <option value="">Choose a category</option>
               {categories.map((category) => (
@@ -135,7 +135,7 @@ export default function ReportItem({ type }: { type: "lost" | "found" }) {
               onChange={(event) =>
                 setForm({ ...form, location: event.target.value })
               }
-              className="mt-2 w-full rounded-lg border border-[#D8DCEF] px-3 py-2.5 font-normal outline-none focus:border-[#F5C518]"
+              className="mt-2 w-full rounded-lg border border-[#D8DCEF] px-3 py-2.5 font-normal outline-none focus:border-[#B88916]"
               placeholder="Where was it seen?"
             />
           </label>
@@ -148,7 +148,7 @@ export default function ReportItem({ type }: { type: "lost" | "found" }) {
               onChange={(event) =>
                 setForm({ ...form, date: event.target.value })
               }
-              className="mt-2 w-full rounded-lg border border-[#D8DCEF] px-3 py-2.5 font-normal outline-none focus:border-[#F5C518]"
+              className="mt-2 w-full rounded-lg border border-[#D8DCEF] px-3 py-2.5 font-normal outline-none focus:border-[#B88916]"
             />
           </label>
         </div>
@@ -161,7 +161,7 @@ export default function ReportItem({ type }: { type: "lost" | "found" }) {
               setForm({ ...form, description: event.target.value })
             }
             rows={5}
-            className="mt-2 w-full rounded-lg border border-[#D8DCEF] px-3 py-2.5 font-normal outline-none focus:border-[#F5C518]"
+            className="mt-2 w-full rounded-lg border border-[#D8DCEF] px-3 py-2.5 font-normal outline-none focus:border-[#B88916]"
             placeholder="Add color, brand, identifying marks, and other useful details."
           />
         </label>

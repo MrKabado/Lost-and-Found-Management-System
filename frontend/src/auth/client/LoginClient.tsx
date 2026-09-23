@@ -80,7 +80,7 @@ export default function LoginClient() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="juan.delacruz@email.com"
               required
-              className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] text-[13.5px] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15"
+              className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] text-[13.5px] text-[#031079] outline-none focus:border-[#B88916] focus:ring-4 focus:ring-[#B88916]/15"
             />
           </div>
 
@@ -100,7 +100,7 @@ export default function LoginClient() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] pr-10 text-[13.5px] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15"
+                className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] pr-10 text-[13.5px] text-[#031079] outline-none focus:border-[#B88916] focus:ring-4 focus:ring-[#B88916]/15"
               />
               <button
                 type="button"
@@ -120,12 +120,12 @@ export default function LoginClient() {
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="h-4 w-4 accent-[#F5C518]"
+                className="h-4 w-4 accent-[#B88916]"
               />
               Keep me signed in
             </label>
 
-            <a href="/forgot-password" className="font-semibold text-[#D4A80D]">
+              <a href="/forgot-password" className="font-semibold text-[#9A6A08]">
               Forgot password?
             </a>
           </div>
@@ -140,7 +140,7 @@ export default function LoginClient() {
         </form>
 
         <div className="mt-[22px] text-center text-[13px] text-[#5B6280]">
-          New here? <Link to="/register" className="font-bold text-[#D4A80D]">Create an account</Link>
+          New here? <Link to="/register" className="font-bold text-[#9A6A08]">Create an account</Link>
         </div>
       </div>
     </AuthLayoutClient>

@@ -98,7 +98,7 @@ export default function AdminClaims() {
                   </td>
                   <td className="px-5 py-4 text-[#031079]">
                     {getStorageUrl(claim.found_item?.image) && (
-                      <a href={getStorageUrl(claim.found_item?.image) ?? "#"} target="_blank" rel="noreferrer" className="mb-1 block text-xs font-semibold text-[#D4A80D] hover:underline">
+                      <a href={getStorageUrl(claim.found_item?.image) ?? "#"} target="_blank" rel="noreferrer" className="mb-1 block text-xs font-semibold text-[#9A6A08] hover:underline">
                         View item image
                       </a>
                     )}
@@ -124,7 +124,7 @@ export default function AdminClaims() {
                         href={getStorageUrl(claim.proof) ?? "#"}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#D4A80D] hover:underline"
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#9A6A08] hover:underline"
                       >
                         View proof <ExternalLink size={13} />
                       </a>

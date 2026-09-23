@@ -101,7 +101,7 @@ export default function ForgotPassword() {
       tagline={<>A secure return starts with the right account.</>}
       ticketContent={
         <div className="flex gap-3">
-          <ShieldCheck className="mt-0.5 shrink-0 text-[#F5C518]" size={20} />
+          <ShieldCheck className="mt-0.5 shrink-0 text-[#B88916]" size={20} />
           <p>Use the one-time code sent to your CPC email address to create a new password.</p>
         </div>
       }
@@ -109,7 +109,7 @@ export default function ForgotPassword() {
       <div>
         <AuthBrandClient />
 
-        <Link to="/login" className="mb-6 inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-[#D4A80D]">
+        <Link to="/login" className="mb-6 inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-[#9A6A08]">
           <ArrowLeft size={15} /> Back to sign in
         </Link>
 
@@ -124,9 +124,9 @@ export default function ForgotPassword() {
             <div className="flex gap-2">
               <div className="relative min-w-0 flex-1">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8B93AE]" size={16} />
-                <input id="email" name="email" type="email" value={form.email} onChange={handleChange} placeholder="juan.delacruz@email.com" required className="w-full rounded-lg border border-[#D8DCEF] bg-white py-[11px] pl-9 pr-[13px] text-[13.5px] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15" />
+                <input id="email" name="email" type="email" value={form.email} onChange={handleChange} placeholder="juan.delacruz@email.com" required className="w-full rounded-lg border border-[#D8DCEF] bg-white py-[11px] pl-9 pr-[13px] text-[13.5px] text-[#031079] outline-none focus:border-[#B88916] focus:ring-4 focus:ring-[#B88916]/15" />
               </div>
-              <button type="button" onClick={handleSendOtp} disabled={isSendingOtp || otpCooldown > 0} className="rounded-lg bg-[#D4A80D] px-3 text-[12px] font-bold text-[#031079] transition hover:bg-[#F5C518] disabled:cursor-not-allowed disabled:opacity-60">{isSendingOtp ? "Sending..." : otpCooldown > 0 ? `Wait ${otpCooldown}s` : "Send OTP"}</button>
+              <button type="button" onClick={handleSendOtp} disabled={isSendingOtp || otpCooldown > 0} className="rounded-lg bg-[#B88916] px-3 text-[12px] font-bold text-white transition hover:bg-[#9A6A08] disabled:cursor-not-allowed disabled:opacity-60">{isSendingOtp ? "Sending..." : otpCooldown > 0 ? `Wait ${otpCooldown}s` : "Send OTP"}</button>
             </div>
           </div>
 
@@ -134,7 +134,7 @@ export default function ForgotPassword() {
             <label htmlFor="otp" className="mb-1.5 block text-[12.5px] font-semibold text-[#041690]">Verification code</label>
             <div className="relative">
               <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8B93AE]" size={16} />
-              <input id="otp" name="otp" type="text" inputMode="numeric" maxLength={6} value={form.otp} onChange={handleChange} placeholder="Enter the 6-digit code" required className="w-full rounded-lg border border-[#D8DCEF] bg-white py-[11px] pl-9 pr-[13px] text-[13.5px] tracking-[0.2em] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15" />
+              <input id="otp" name="otp" type="text" inputMode="numeric" maxLength={6} value={form.otp} onChange={handleChange} placeholder="Enter the 6-digit code" required className="w-full rounded-lg border border-[#D8DCEF] bg-white py-[11px] pl-9 pr-[13px] text-[13.5px] tracking-[0.2em] text-[#031079] outline-none focus:border-[#B88916] focus:ring-4 focus:ring-[#B88916]/15" />
             </div>
             <p className="mt-1.5 text-[11.5px] text-[#777F9C]">The code expires in 5 minutes.</p>
           </div>
@@ -143,7 +143,7 @@ export default function ForgotPassword() {
             <div>
               <label htmlFor="password" className="mb-1.5 block text-[12.5px] font-semibold text-[#041690]">New password</label>
               <div className="relative">
-                <input id="password" name="password" type={showPassword ? "text" : "password"} value={form.password} onChange={handleChange} placeholder="At least 8 characters" minLength={8} required className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] pr-10 text-[13.5px] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15" />
+                <input id="password" name="password" type={showPassword ? "text" : "password"} value={form.password} onChange={handleChange} placeholder="At least 8 characters" minLength={8} required className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] pr-10 text-[13.5px] text-[#031079] outline-none focus:border-[#B88916] focus:ring-4 focus:ring-[#B88916]/15" />
                 <button type="button" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? "Hide password" : "Show password"} title={showPassword ? "Hide password" : "Show password"} className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-[#777F9C] transition hover:bg-[#F7F9FC] hover:text-[#031079]">
                   {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
                 </button>
@@ -152,7 +152,7 @@ export default function ForgotPassword() {
             <div>
               <label htmlFor="confirmPassword" className="mb-1.5 block text-[12.5px] font-semibold text-[#041690]">Confirm password</label>
               <div className="relative">
-                <input id="confirmPassword" name="confirmPassword" type={showConfirmPassword ? "text" : "password"} value={form.confirmPassword} onChange={handleChange} placeholder="Repeat password" required className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] pr-10 text-[13.5px] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15" />
+                <input id="confirmPassword" name="confirmPassword" type={showConfirmPassword ? "text" : "password"} value={form.confirmPassword} onChange={handleChange} placeholder="Repeat password" required className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] pr-10 text-[13.5px] text-[#031079] outline-none focus:border-[#B88916] focus:ring-4 focus:ring-[#B88916]/15" />
                 <button type="button" onClick={() => setShowConfirmPassword((visible) => !visible)} aria-label={showConfirmPassword ? "Hide confirmation password" : "Show confirmation password"} title={showConfirmPassword ? "Hide confirmation password" : "Show confirmation password"} className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-[#777F9C] transition hover:bg-[#F7F9FC] hover:text-[#031079]">
                   {showConfirmPassword ? <EyeOff size={17} /> : <Eye size={17} />}
                 </button>

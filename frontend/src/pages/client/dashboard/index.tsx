@@ -63,7 +63,7 @@ export default function ClientDashboard() {
       <div className="mb-6 flex flex-wrap gap-3">
         <Link
           to="/client/report-lost"
-          className="flex items-center gap-2 rounded-lg bg-[#F5C518] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#D4A80D]"
+          className="flex items-center gap-2 rounded-lg bg-[#B88916] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#9A6A08]"
         >
           <Plus size={15} /> Report a lost item
         </Link>
@@ -86,7 +86,7 @@ export default function ClientDashboard() {
             </h2>
             <Link
               to="/client/items"
-              className="text-xs font-semibold text-[#D4A80D]"
+              className="text-xs font-semibold text-[#9A6A08]"
             >
               See all items
             </Link>

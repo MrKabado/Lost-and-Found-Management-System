@@ -107,5 +107,5 @@ export default function AdminVerification() {
 
 function DocumentLink({ label, path }: { label: string; path?: string | null }) {
   const url = getStorageUrl(path)
-  return url ? <a href={url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-lg border border-[#D8DCEF] px-3 py-2 font-semibold text-[#031079] hover:border-[#F5C518]">{label}<ExternalLink size={13} /></a> : <span className="rounded-lg bg-[#F5F6FC] px-3 py-2 text-[#8B92B0]">{label}: none</span>
+  return url ? <a href={url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-lg border border-[#D8DCEF] px-3 py-2 font-semibold text-[#031079] hover:border-[#B88916]">{label}<ExternalLink size={13} /></a> : <span className="rounded-lg bg-[#F5F6FC] px-3 py-2 text-[#8B92B0]">{label}: none</span>
 }

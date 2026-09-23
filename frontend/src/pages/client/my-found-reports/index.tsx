@@ -51,7 +51,7 @@ export default function MyFoundReports() {
       action={
         <Link
           to="/client/report-found"
-          className="flex items-center gap-2 rounded-lg bg-[#F5C518] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#D4A80D]"
+          className="flex items-center gap-2 rounded-lg bg-[#B88916] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#9A6A08]"
         >
           <Plus size={15} /> Report found item
         </Link>
@@ -81,7 +81,7 @@ export default function MyFoundReports() {
               </div>
               <p className="mt-4 text-sm text-[#4A5170]">{item.description}</p>
               {getStorageUrl(item.image) && (
-                <a href={getStorageUrl(item.image) ?? "#"} target="_blank" rel="noreferrer" className="mt-4 inline-block text-xs font-semibold text-[#D4A80D] hover:underline">
+                <a href={getStorageUrl(item.image) ?? "#"} target="_blank" rel="noreferrer" className="mt-4 inline-block text-xs font-semibold text-[#9A6A08] hover:underline">
                   View uploaded image
                 </a>
               )}

@@ -74,7 +74,7 @@ export default function MyClaims() {
                   {formatDate(claim.created_at)}
                 </span>
                 {getStorageUrl(claim.foundItem?.image) && (
-                  <a href={getStorageUrl(claim.foundItem?.image) ?? "#"} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-semibold text-[#D4A80D] hover:underline">
+                  <a href={getStorageUrl(claim.foundItem?.image) ?? "#"} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-semibold text-[#9A6A08] hover:underline">
                     View found item image <ExternalLink size={13} />
                   </a>
                 )}
@@ -83,7 +83,7 @@ export default function MyClaims() {
                     href={getStorageUrl(claim.proof) ?? "#"}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1 font-semibold text-[#D4A80D] hover:underline"
+                    className="inline-flex items-center gap-1 font-semibold text-[#9A6A08] hover:underline"
                   >
                     View submitted proof <ExternalLink size={13} />
                   </a>

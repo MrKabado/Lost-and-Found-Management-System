@@ -323,7 +323,7 @@ export default function AdminDashboard() {
                               type="button"
                               title="Refresh claim status"
                               onClick={() => void loadDashboard()}
-                              className="flex h-[30px] w-[30px] items-center justify-center rounded-[7px] border border-[#D8DCEF] text-[#5B6280] hover:border-[#D4A80D] hover:text-[#D4A80D]"
+                              className="flex h-[30px] w-[30px] items-center justify-center rounded-[7px] border border-[#D8DCEF] text-[#5B6280] hover:border-[#9A6A08] hover:text-[#9A6A08]"
                             >
                               <Pencil size={14} />
                             </button>
@@ -355,7 +355,7 @@ export default function AdminDashboard() {
                 "Category creation will be available in category management."
               )
             }
-            className="flex items-center gap-2 rounded-lg bg-[#F5C518] px-3.5 py-2 text-[12.5px] font-semibold text-white hover:bg-[#D4A80D]"
+            className="flex items-center gap-2 rounded-lg bg-[#B88916] px-3.5 py-2 text-[12.5px] font-semibold text-white hover:bg-[#9A6A08]"
           >
             <Plus size={13} /> Add category
           </button>
@@ -371,7 +371,7 @@ export default function AdminDashboard() {
                 style={{
                   backgroundColor: [
                     "#031079",
-                    "#F5C518",
+                    "#B88916",
                     "#B6503A",
                     "#5B6280",
                     "#031079",

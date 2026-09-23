@@ -318,7 +318,7 @@ export default function ClientProfile() {
               </label>
               <button
                 disabled={submitting}
-                className="rounded-lg bg-[#F5C518] px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-60"
+                className="rounded-lg bg-[#B88916] px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-60"
               >
                 {submitting
                   ? "Submitting..."

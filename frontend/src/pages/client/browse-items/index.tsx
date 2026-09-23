@@ -172,7 +172,7 @@ export default function BrowseItems() {
               </div>
               <p className="mt-4 text-sm text-[#4A5170]">{item.description}</p>
               {getStorageUrl(item.image) && (
-                <a href={getStorageUrl(item.image) ?? "#"} target="_blank" rel="noreferrer" className="mt-3 inline-block text-xs font-semibold text-[#D4A80D] hover:underline">
+                <a href={getStorageUrl(item.image) ?? "#"} target="_blank" rel="noreferrer" className="mt-3 inline-block text-xs font-semibold text-[#9A6A08] hover:underline">
                   View item image
                 </a>
               )}
@@ -239,7 +239,7 @@ export default function BrowseItems() {
                         onChange={(event) => setClaimReason(event.target.value)}
                         rows={3}
                         placeholder="Explain why this item belongs to you"
-                        className="w-full resize-y rounded-lg border border-[#D8DCEF] bg-white p-2.5 text-sm text-[#031079] outline-none placeholder:text-[#8B92B0] focus:border-[#F5C518] focus:ring-2 focus:ring-[#F5C518]/15"
+                        className="w-full resize-y rounded-lg border border-[#D8DCEF] bg-white p-2.5 text-sm text-[#031079] outline-none placeholder:text-[#8B92B0] focus:border-[#B88916] focus:ring-2 focus:ring-[#B88916]/15"
                       />
                       <label className="mt-2 block text-xs font-semibold text-[#4A5170]">
                         Proof image (optional)
@@ -265,7 +265,7 @@ export default function BrowseItems() {
                         <button
                           type="button"
                           onClick={() => void submitClaim(item)}
-                          className="flex items-center gap-2 rounded-lg bg-[#F5C518] px-3 py-2 text-xs font-semibold text-white"
+                          className="flex items-center gap-2 rounded-lg bg-[#B88916] px-3 py-2 text-xs font-semibold text-white"
                         >
                           <Send size={13} /> Submit claim
                         </button>
@@ -282,7 +282,7 @@ export default function BrowseItems() {
                     <button
                       type="button"
                       onClick={() => setClaimingId(item.id)}
-                      className="mt-5 w-full rounded-lg bg-[#031079] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#041690] focus:outline-none focus:ring-2 focus:ring-[#F5C518] focus:ring-offset-2"
+                      className="mt-5 w-full rounded-lg bg-[#031079] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#041690] focus:outline-none focus:ring-2 focus:ring-[#B88916] focus:ring-offset-2"
                     >
                       This is mine
                     </button>

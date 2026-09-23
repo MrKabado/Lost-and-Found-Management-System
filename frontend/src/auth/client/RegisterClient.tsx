@@ -160,7 +160,7 @@ export default function RegisterClient() {
                 onChange={handleChange}
                 placeholder="Juan"
                 required
-                className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] text-[13.5px] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15"
+                className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] text-[13.5px] text-[#031079] outline-none focus:border-[#B88916] focus:ring-4 focus:ring-[#B88916]/15"
               />
             </div>
 
@@ -177,7 +177,7 @@ export default function RegisterClient() {
                 onChange={handleChange}
                 placeholder="Dela Cruz"
                 required
-                className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] text-[13.5px] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15"
+                className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] text-[13.5px] text-[#031079] outline-none focus:border-[#B88916] focus:ring-4 focus:ring-[#B88916]/15"
               />
             </div>
           </div>
@@ -196,13 +196,13 @@ export default function RegisterClient() {
                 onChange={handleChange}
                 placeholder="juan.delacruz@email.com"
                 required
-                className="min-w-0 flex-1 rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] text-[13.5px] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15"
+                className="min-w-0 flex-1 rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] text-[13.5px] text-[#031079] outline-none focus:border-[#B88916] focus:ring-4 focus:ring-[#B88916]/15"
               />
               <button
                 type="button"
                 onClick={handleSendOtp}
                 disabled={isSendingOtp || otpCooldown > 0}
-                className="rounded-lg bg-[#D4A80D] px-3 text-[12px] font-bold text-[#031079] transition hover:bg-[#F5C518] disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-lg bg-[#B88916] px-3 text-[12px] font-bold text-white transition hover:bg-[#9A6A08] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isSendingOtp ? "Sending..." : otpCooldown > 0 ? `Wait ${otpCooldown}s` : "Send OTP"}
               </button>
@@ -223,7 +223,7 @@ export default function RegisterClient() {
               onChange={handleChange}
               placeholder="Enter the 6-digit code"
               required
-              className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] text-[13.5px] tracking-[0.2em] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15"
+              className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] text-[13.5px] tracking-[0.2em] text-[#031079] outline-none focus:border-[#B88916] focus:ring-4 focus:ring-[#B88916]/15"
             />
             <p className="mt-1.5 text-[11.5px] text-[#777F9C]">The code expires in 5 minutes.</p>
           </div>
@@ -244,7 +244,7 @@ export default function RegisterClient() {
                   placeholder="••••••••"
                   minLength={8}
                   required
-                  className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] pr-10 text-[13.5px] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15"
+                  className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] pr-10 text-[13.5px] text-[#031079] outline-none focus:border-[#B88916] focus:ring-4 focus:ring-[#B88916]/15"
                 />
                 <button
                   type="button"
@@ -272,7 +272,7 @@ export default function RegisterClient() {
                   onChange={handleChange}
                   placeholder="••••••••"
                   required
-                  className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] pr-10 text-[13.5px] text-[#031079] outline-none focus:border-[#F5C518] focus:ring-4 focus:ring-[#F5C518]/15"
+                  className="w-full rounded-lg border border-[#D8DCEF] bg-white px-[13px] py-[11px] pr-10 text-[13.5px] text-[#031079] outline-none focus:border-[#B88916] focus:ring-4 focus:ring-[#B88916]/15"
                 />
                 <button
                   type="button"
@@ -294,7 +294,7 @@ export default function RegisterClient() {
               type="checkbox"
               checked={form.agree}
               onChange={handleChange}
-              className="mt-0.5 h-4 w-4 accent-[#F5C518]"
+              className="mt-0.5 h-4 w-4 accent-[#B88916]"
             />
 
             <label htmlFor="agree">
@@ -312,7 +312,7 @@ export default function RegisterClient() {
         </form>
 
         <div className="mt-[22px] text-center text-[13px] text-[#5B6280]">
-          Already registered? <Link to="/login" className="font-bold text-[#D4A80D]">Sign in</Link>
+          Already registered? <Link to="/login" className="font-bold text-[#9A6A08]">Sign in</Link>
         </div>
       </div>
     </AuthLayoutClient>

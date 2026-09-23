@@ -80,12 +80,12 @@ export default function AdminCategories() {
             if (event.key === "Enter") void addCategory()
           }}
           placeholder="New category name"
-          className="flex-1 rounded-lg border border-[#D8DCEF] bg-white px-3 py-2.5 text-sm outline-none focus:border-[#F5C518]"
+          className="flex-1 rounded-lg border border-[#D8DCEF] bg-white px-3 py-2.5 text-sm outline-none focus:border-[#B88916]"
         />
         <button
           type="button"
           onClick={() => void addCategory()}
-          className="flex items-center gap-2 rounded-lg bg-[#F5C518] px-4 py-2.5 text-sm font-semibold text-white"
+          className="flex items-center gap-2 rounded-lg bg-[#B88916] px-4 py-2.5 text-sm font-semibold text-white"
         >
           <Plus size={15} /> Add
         </button>
@@ -125,7 +125,7 @@ export default function AdminCategories() {
                       style={{
                         backgroundColor: [
                           "#031079",
-                          "#F5C518",
+                          "#B88916",
                           "#B6503A",
                           "#5B6280",
                           "#031079",
@@ -142,7 +142,7 @@ export default function AdminCategories() {
                         setEditingId(category.id)
                         setEditingName(category.name)
                       }}
-                      className="p-1.5 text-[#5B6280] hover:text-[#D4A80D]"
+                      className="p-1.5 text-[#5B6280] hover:text-[#9A6A08]"
                     >
                       <Pencil size={14} />
                     </button>
