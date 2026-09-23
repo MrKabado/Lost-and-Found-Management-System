@@ -106,7 +106,7 @@ export default function ClientDashboard() {
                       {item.category?.name ?? "Uncategorized"} · {item.type}
                     </p>
                   </div>
-                  <StatusBadge status={item.status} />
+                  <StatusBadge status={item.status} itemType={item.type} />
                 </div>
                 <div className="mt-4 space-y-2 text-xs text-[#5B6280]">
                   <div className="flex items-center gap-2">

@@ -8,7 +8,7 @@ export function AdminState({ children, error = false }: { children: ReactNode; e
   return <div className={`rounded-xl border p-5 text-sm ${error ? "border-red-200 bg-red-50 text-red-700" : "border-[#E6E6E6] bg-white text-[#6B6B6B]"}`}>{children}</div>
 }
 
-export function AdminBadge({ value }: { value: string }) {
+export function AdminBadge({ value, itemType }: { value: string; itemType?: "lost" | "found" }) {
   const status = value.toUpperCase()
   const tone = ["ACTIVE", "FOUND", "VERIFIED", "RETURNED", "APPROVED", "ADMIN"].includes(status)
     ? "border border-[#BBE7D0] bg-[#ECFDF3] text-[#16704A]"
@@ -17,5 +17,6 @@ export function AdminBadge({ value }: { value: string }) {
       : ["PENDING", "PROCESSING", "CLAIMED", "AWAITING_PICKUP"].includes(status)
         ? "border border-[#BFDBFE] bg-[#EFF6FF] text-[#1D4ED8]"
         : "border border-[#E5E7EB] bg-[#F9FAFB] text-[#4B5563]"
-  return <span className={`rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide ${tone}`}>{status}</span>
+  const label = itemType === "lost" && status === "AVAILABLE" ? "ACTIVE REPORT" : status
+  return <span className={`rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide ${tone}`}>{label}</span>
 }

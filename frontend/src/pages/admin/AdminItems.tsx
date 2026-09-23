@@ -94,6 +94,8 @@ export default function AdminItems({ type }: { type: "lost" | "found" }) {
     "unclaimed",
     "archived",
   ]
+  const getStatusLabel = (status: string) =>
+    type === "lost" && status === "available" ? "active report" : status
 
   return (
     <AdminPage
@@ -162,7 +164,7 @@ export default function AdminItems({ type }: { type: "lost" | "found" }) {
                     {formatDate(item.date_lost ?? item.date_found)}
                   </td>
                   <td className="px-5 py-4">
-                    <AdminBadge value={item.status} />
+                    <AdminBadge value={item.status} itemType={type} />
                   </td>
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-2">
@@ -173,12 +175,12 @@ export default function AdminItems({ type }: { type: "lost" | "found" }) {
                         }
                         className="rounded-md border border-[#D8DCEF] bg-white px-2 py-1.5 text-xs"
                       >
-                        <option value={item.status}>{item.status}</option>
+                        <option value={item.status}>{getStatusLabel(item.status)}</option>
                         {statusOptions
                           .filter((status) => status !== item.status)
                           .map((status) => (
                             <option key={status} value={status}>
-                              {status}
+                              {getStatusLabel(status)}
                             </option>
                           ))}
                       </select>

@@ -75,7 +75,7 @@ export default function MyLostReports() {
                     {item.category?.name ?? "Uncategorized"}
                   </p>
                 </div>
-                <StatusBadge status={item.status} />
+                <StatusBadge status={item.status} itemType="lost" />
               </div>
               <p className="mt-4 text-sm text-[#4A5170]">{item.description}</p>
               {getStorageUrl(item.image) && (

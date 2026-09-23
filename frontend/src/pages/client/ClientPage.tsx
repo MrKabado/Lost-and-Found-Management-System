@@ -51,7 +51,7 @@ export function EmptyState({ message }: { message: string }) {
   )
 }
 
-export function StatusBadge({ status }: { status: string }) {
+export function StatusBadge({ status, itemType }: { status: string; itemType?: "lost" | "found" }) {
   const normalizedStatus = status.toUpperCase()
   const tone = ["APPROVED", "AVAILABLE", "RETURNED"].includes(
     normalizedStatus
@@ -61,11 +61,15 @@ export function StatusBadge({ status }: { status: string }) {
       ? "border border-[#F3C1C1] bg-[#FFF1F2] text-[#B42318]"
       : "border border-[#BFDBFE] bg-[#EFF6FF] text-[#1D4ED8]"
 
+  const label = itemType === "lost" && normalizedStatus === "AVAILABLE"
+    ? "ACTIVE REPORT"
+    : normalizedStatus
+
   return (
     <span
       className={`rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide ${tone}`}
     >
-      {normalizedStatus}
+      {label}
     </span>
   )
 }

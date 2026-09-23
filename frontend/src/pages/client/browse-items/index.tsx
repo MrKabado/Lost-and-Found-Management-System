@@ -168,7 +168,7 @@ export default function BrowseItems() {
                     {item.category?.name ?? "Uncategorized"} · {item.type}
                   </p>
                 </div>
-                <StatusBadge status={item.status} />
+                <StatusBadge status={item.status} itemType={item.type} />
               </div>
               <p className="mt-4 text-sm text-[#4A5170]">{item.description}</p>
               {getStorageUrl(item.image) && (
