@@ -7,6 +7,8 @@ import {
   User,
   LogOut,
   ShieldCheck,
+  BarChart3,
+  Search
 } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useAuth } from "@/auth/useAuth";
@@ -60,9 +62,9 @@ export default function SidebarAdmin() {
         MANAGE
       </div>
 
-      <nav className="flex flex-col gap-0.5">
+      <nav className="flex flex-col gap-0.5 overflow-y-auto scroll-smooth scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">
         <SidebarLink
-          icon={<Heart size={17} />}
+          icon={<  Search size={17} />}
           label="Lost Items"
           to="/admin/lost-items"
           count={String(counts.lost)}
@@ -86,6 +88,7 @@ export default function SidebarAdmin() {
 
         <SidebarLink icon={<User size={17} />} label="Users" to="/admin/users" />
         <SidebarLink icon={<ShieldCheck size={17} />} label="Verification" to="/admin/verification" />
+        <SidebarLink icon={<BarChart3 size={17} />} label="Reports & Analytics" to="/admin/reports-analytics" />
       </nav>
 
       {/* Bottom */}

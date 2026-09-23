@@ -20,6 +20,7 @@ import AdminClaims from "@/pages/admin/claims"
 import AdminCategories from "@/pages/admin/categories"
 import AdminUsers from "@/pages/admin/users"
 import AdminVerification from "@/pages/admin/verification"
+import ReportsAnalytics from "@/pages/admin/reports-analytics"
 
 import ClientLayout from "@/pages/client/ClientLayout.tsx"
 import ClientDashboard from "@/pages/client/dashboard"
@@ -72,6 +73,7 @@ createRoot(document.getElementById("root")!).render(
               <Route path="categories" element={<AdminCategories />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="verification" element={<AdminVerification />} />
+              <Route path="reports-analytics" element={<ReportsAnalytics />} />
             </Route>
           </Route>
 
