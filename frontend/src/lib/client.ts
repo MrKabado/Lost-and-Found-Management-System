@@ -306,6 +306,15 @@ export async function saveStudentProfile(
   return response.data
 }
 
+export async function changePassword(values: {
+  current_password: string
+  password: string
+  password_confirmation: string
+}): Promise<string> {
+  const response = await api.patch<{ message: string }>('/password', values)
+  return response.data.message
+}
+
 export async function getVerificationRequest(): Promise<VerificationRequest | null> {
   const response = await api.get<VerificationRequest | null>('/verification-requests')
   return response.data

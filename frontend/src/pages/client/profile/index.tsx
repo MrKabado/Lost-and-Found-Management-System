@@ -1,9 +1,10 @@
 import { useEffect, useState, type FormEvent } from "react"
-import { CheckCircle2, FileCheck2, UserRound } from "lucide-react"
+import { CheckCircle2, FileCheck2, KeyRound, UserRound } from "lucide-react"
 import { toast } from "sonner"
 import { useAuth } from "@/auth/useAuth"
 import {
   getApiError,
+  changePassword,
   getCourses,
   getStorageUrl,
   getStudentProfile,
@@ -36,6 +37,14 @@ export default function ClientProfile() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [showPasswordForm, setShowPasswordForm] = useState(false)
+  const [changingPassword, setChangingPassword] = useState(false)
+  const [passwordError, setPasswordError] = useState("")
+  const [passwordForm, setPasswordForm] = useState({
+    current_password: "",
+    password: "",
+    password_confirmation: "",
+  })
   const [error, setError] = useState("")
   const initials =
     user?.name
@@ -122,6 +131,37 @@ export default function ClientProfile() {
     }
   }
 
+  const submitPasswordChange = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setPasswordError("")
+
+    if (passwordForm.password !== passwordForm.password_confirmation) {
+      setPasswordError("The new passwords do not match.")
+      return
+    }
+
+    setChangingPassword(true)
+    try {
+      const message = await changePassword(passwordForm)
+      setPasswordForm({
+        current_password: "",
+        password: "",
+        password_confirmation: "",
+      })
+      setShowPasswordForm(false)
+      toast.success(message)
+    } catch (requestError) {
+      const message = getApiError(
+        requestError,
+        "Unable to change your password."
+      )
+      setPasswordError(message)
+      toast.error(message)
+    } finally {
+      setChangingPassword(false)
+    }
+  }
+
   return (
     <ClientPage
       title="Profile"
@@ -181,6 +221,85 @@ export default function ClientProfile() {
                 {user?.is_verified ? "Verified account" : "Unverified account"}
               </div>
             </div>
+          </div>
+          <div className="mt-7 border-t border-[#D8DCEF] pt-6">
+            <button
+              type="button"
+              onClick={() => {
+                setShowPasswordForm((current) => !current)
+                setPasswordError("")
+              }}
+              className="inline-flex items-center gap-2 rounded-lg border border-[#D8DCEF] px-4 py-2.5 text-sm font-semibold text-[#031079] transition hover:border-[#B88916] hover:text-[#9A6A08]"
+            >
+              <KeyRound size={16} />
+              {showPasswordForm ? "Cancel password change" : "Change password"}
+            </button>
+            {showPasswordForm && (
+              <form onSubmit={submitPasswordChange} className="mt-4 space-y-4">
+                {passwordError && (
+                  <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
+                    {passwordError}
+                  </p>
+                )}
+                <label className="block text-sm font-semibold text-[#041690]">
+                  Current password
+                  <input
+                    required
+                    type="password"
+                    autoComplete="current-password"
+                    value={passwordForm.current_password}
+                    onChange={(event) =>
+                      setPasswordForm({
+                        ...passwordForm,
+                        current_password: event.target.value,
+                      })
+                    }
+                    className="mt-2 w-full rounded-lg border border-[#D8DCEF] px-3 py-2.5 font-normal outline-none focus:border-[#B88916]"
+                  />
+                </label>
+                <label className="block text-sm font-semibold text-[#041690]">
+                  New password
+                  <input
+                    required
+                    minLength={8}
+                    type="password"
+                    autoComplete="new-password"
+                    value={passwordForm.password}
+                    onChange={(event) =>
+                      setPasswordForm({
+                        ...passwordForm,
+                        password: event.target.value,
+                      })
+                    }
+                    className="mt-2 w-full rounded-lg border border-[#D8DCEF] px-3 py-2.5 font-normal outline-none focus:border-[#B88916]"
+                  />
+                </label>
+                <label className="block text-sm font-semibold text-[#041690]">
+                  Confirm new password
+                  <input
+                    required
+                    minLength={8}
+                    type="password"
+                    autoComplete="new-password"
+                    value={passwordForm.password_confirmation}
+                    onChange={(event) =>
+                      setPasswordForm({
+                        ...passwordForm,
+                        password_confirmation: event.target.value,
+                      })
+                    }
+                    className="mt-2 w-full rounded-lg border border-[#D8DCEF] px-3 py-2.5 font-normal outline-none focus:border-[#B88916]"
+                  />
+                </label>
+                <button
+                  type="submit"
+                  disabled={changingPassword}
+                  className="rounded-lg bg-[#B88916] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#9A6A08] disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {changingPassword ? "Changing password..." : "Update password"}
+                </button>
+              </form>
+            )}
           </div>
           <form
             onSubmit={saveProfile}

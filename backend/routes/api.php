@@ -37,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::get('/notifications/{notification}', [NotificationController::class, 'show']);
     Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead']);
     Route::get('/user', [AuthController::class, 'user']);
+    Route::patch('/password', [AuthController::class, 'changePassword']);
     Route::get('/profile', [StudentProfileController::class, 'show']);
     Route::post('/profile', [StudentProfileController::class, 'store']);
     Route::match(['put', 'patch'], '/profile', [StudentProfileController::class, 'update']);

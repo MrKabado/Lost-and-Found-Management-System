@@ -98,3 +98,30 @@ it('blocks deactivated accounts before issuing a token', function () {
         'message' => 'Your account has been deactivated. Please contact an administrator.',
     ])->assertJsonMissingPath('token');
 });
+
+it('changes the authenticated user password after checking the current password', function () {
+    /** @var TestCase $this */
+    $user = User::factory()->create(['password' => 'old-password']);
+
+    $this->actingAs($user, 'sanctum')
+        ->patchJson('/api/password', [
+            'current_password' => 'wrong-password',
+            'password' => 'new-password',
+            'password_confirmation' => 'new-password',
+        ])
+        ->assertUnprocessable()
+        ->assertJson(['message' => 'The current password is incorrect.']);
+
+    expect(password_verify('old-password', $user->fresh()->password))->toBeTrue();
+
+    $this->actingAs($user, 'sanctum')
+        ->patchJson('/api/password', [
+            'current_password' => 'old-password',
+            'password' => 'new-password',
+            'password_confirmation' => 'new-password',
+        ])
+        ->assertOk()
+        ->assertJson(['message' => 'Password changed successfully.']);
+
+    expect(password_verify('new-password', $user->fresh()->password))->toBeTrue();
+});

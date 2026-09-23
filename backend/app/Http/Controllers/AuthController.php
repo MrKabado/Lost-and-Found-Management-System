@@ -77,6 +77,28 @@ class AuthController extends Controller
         return response()->json($request->user()->load('studentProfile'));
     }
 
+    public function changePassword(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'current_password' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        if (! Hash::check($validated['current_password'], $request->user()->password)) {
+            return response()->json([
+                'message' => 'The current password is incorrect.',
+            ], 422);
+        }
+
+        $request->user()->update([
+            'password' => $validated['password'],
+        ]);
+
+        return response()->json([
+            'message' => 'Password changed successfully.',
+        ]);
+    }
+
     public function sendRegisterOtp(Request $request)
     {
         $request->validate([
