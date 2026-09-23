@@ -99,7 +99,7 @@ export default function AdminUsers() {
         <AdminState>No users found.</AdminState>
       ) : (
         <div className="overflow-x-auto rounded-xl border border-[#D8DCEF] bg-white">
-          <table className="w-full min-w-[650px] border-collapse text-sm">
+          <table className="w-full min-w-[1050px] whitespace-nowrap border-collapse text-sm">
             <thead>
               <tr className="border-b border-[#D8DCEF] text-left text-[11px] tracking-wide text-[#5B6280] uppercase">
                 <th className="px-5 py-3">User</th>

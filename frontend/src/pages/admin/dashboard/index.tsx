@@ -204,7 +204,7 @@ export default function AdminDashboard() {
           </button>
         </div>
         <div className="mb-[30px] overflow-x-auto rounded-xl border border-[#D8DCEF] bg-white">
-          <table className={`w-full ${hasActions ? "min-w-[760px]" : "min-w-[650px]"} border-collapse text-[13.5px]`}>
+          <table className={`w-full ${hasActions ? "min-w-[900px]" : "min-w-[800px]"} whitespace-nowrap border-collapse text-[13.5px]`}>
             <thead>
               <tr className="border-b border-[#D8DCEF]">
                 {[

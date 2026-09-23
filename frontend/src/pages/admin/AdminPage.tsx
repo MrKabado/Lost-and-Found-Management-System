@@ -18,5 +18,5 @@ export function AdminBadge({ value, itemType }: { value: string; itemType?: "los
         ? "border border-[#BFDBFE] bg-[#EFF6FF] text-[#1D4ED8]"
         : "border border-[#E5E7EB] bg-[#F9FAFB] text-[#4B5563]"
   const label = itemType === "lost" && status === "AVAILABLE" ? "ACTIVE REPORT" : status
-  return <span className={`rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide ${tone}`}>{label}</span>
+  return <span className={`inline-block min-w-[96px] whitespace-nowrap rounded-full px-3 py-1 text-center text-[10px] font-bold tracking-wide ${tone}`}>{label}</span>
 }

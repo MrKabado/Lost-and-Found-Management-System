@@ -67,7 +67,7 @@ export function StatusBadge({ status, itemType }: { status: string; itemType?: "
 
   return (
     <span
-      className={`rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide ${tone}`}
+      className={`inline-block min-w-[96px] whitespace-nowrap rounded-full px-3 py-1 text-center text-[10px] font-bold tracking-wide ${tone}`}
     >
       {label}
     </span>
